@@ -2,36 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+}
+
 :root {
-  --color-amber-gold: #f59e0b;
-  --color-amber-glow: #d97706;
-  --color-black-deep: #0a0a0a;
+  color-scheme: dark;
 }
 
 body {
-  @apply bg-black text-amber-500 font-mono;
+  margin: 0;
+  background-color: #0a0a0a;
+  color: #e5e5e5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-.arena-panel {
-  @apply border border-amber-900/30 bg-black/40 backdrop-blur-sm rounded-lg overflow-hidden;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
 
-.arena-header {
-  @apply border-b border-amber-900/50 px-4 py-2 bg-amber-900/10 text-xs font-bold tracking-widest uppercase text-amber-400;
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.01);
 }
 
-.glow-amber {
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
 }
 
-.neuron-ladder-segment {
-  @apply h-2 w-full mb-1 rounded-sm transition-all duration-300;
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.3);
 }
 
-.neuron-ladder-segment.active {
-  @apply bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)];
+/* Scientific Background Grid */
+.scientific-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-size: 32px 32px;
 }
 
-.neuron-ladder-segment.inactive {
-  @apply bg-amber-900/20;
+/* Utility Animations */
+@keyframes pulse-emerald {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.animate-pulse-emerald {
+  animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Typography Overrides */
+.font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* High-Density Panel Blur */
+.glass-blur {
+  backdrop-filter: blur(20px) saturate(180%);
 }
