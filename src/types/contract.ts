@@ -9,6 +9,8 @@ export interface ArenaStatus {
   persistence: Persistence;
   research: {
     neuron_count: number;
+    active_target?: number;
+    mission_topic?: string;
     pass_network: string | null;
     active_patch: string | null;
     omissions: number;

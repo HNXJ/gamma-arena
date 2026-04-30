@@ -58,6 +58,12 @@ const Overview: React.FC = () => {
             <h1 className="text-3xl font-black tracking-tighter uppercase italic">Mission Overview</h1>
           </div>
           <p className="text-gray-500 text-sm font-medium tracking-wide">Hardened Observability Surface for Amber Arena v1.6</p>
+          {status?.research.mission_topic && (
+            <div className="pt-4 flex items-center space-x-3">
+              <span className="text-[10px] font-black uppercase text-amber-500/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 tracking-widest">Active Mission</span>
+              <span className="text-xs font-bold text-gray-300 italic tracking-tight underline decoration-amber-500/30 underline-offset-4">{status.research.mission_topic}</span>
+            </div>
+          )}
         </div>
         <div className="text-right">
           <div className={`flex items-center space-x-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border transition-all ${
@@ -97,6 +103,15 @@ const Overview: React.FC = () => {
           icon={Clock}
           color="blue"
           source="Process Lifetime"
+        />
+        <StatusCard 
+          title="Active Target" 
+          value={status?.research.active_target || status?.research.neuron_count} 
+          label="Next Research Milestone"
+          truthClass="GROUNDED"
+          icon={Activity}
+          color="emerald"
+          source="Active Patch Manifest"
         />
         <StatusCard 
           title="Compute Load" 
