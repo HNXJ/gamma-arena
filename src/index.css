@@ -60,5 +60,6 @@ body {
 
 /* High-Density Panel Blur */
 .glass-blur {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   backdrop-filter: blur(20px) saturate(180%);
 }
