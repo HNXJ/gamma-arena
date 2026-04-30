@@ -1,27 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { ArenaClient } from '../api/client';
-import { Progression } from '../types/contract';
+import { Progression, NetworkState } from '../types/contract';
 import { ProgressLadder } from '../components/ProgressLadder';
-import { Milestone, Trophy, Network, ShieldCheck, Zap } from 'lucide-react';
+import { NetworkModel } from '../components/NetworkModel';
+import { Milestone, Trophy, Network, ShieldCheck, Zap, Activity } from 'lucide-react';
 
 const Arena: React.FC = () => {
   const [progression, setProgression] = useState<Progression | null>(null);
+  const [networkState, setNetworkState] = useState<NetworkState | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchData = async () => {
+    try {
+      const [progData, netData] = await Promise.all([
+        ArenaClient.getProgression(),
+        ArenaClient.getNetworkState()
+      ]);
+      setProgression(progData);
+      setNetworkState(netData);
+    } catch (err) {
+      console.error('Failed to fetch arena data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProgression = async () => {
+    fetchData();
+    const interval = setInterval(fetchData, 10000);
+
+    // Network Event Stream (Incremental Updates)
+    const netSource = ArenaClient.getNetworkEventStream();
+    netSource.onmessage = (event) => {
       try {
-        const data = await ArenaClient.getProgression();
-        setProgression(data);
+        const netEvent = JSON.parse(event.data);
+        if (netEvent.event_type === 'node_state_update' && networkState) {
+          // Jitter/Update simulation for current nodes
+          // Real implementations would merge payload into state
+        }
       } catch (err) {
-        console.error('Failed to fetch progression');
-      } finally {
-        setLoading(false);
+        console.error('Failed to parse network event');
       }
     };
-    fetchProgression();
-    const interval = setInterval(fetchProgression, 5000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      netSource.close();
+    };
   }, []);
 
   const level = progression?.largest_pass_network_neuron_count ?? 10;
@@ -44,9 +69,9 @@ const Arena: React.FC = () => {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Massive Progress Ladder */}
-        <div className="lg:col-span-4 h-[700px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+        {/* Progress Ladder */}
+        <div className="lg:col-span-3 min-h-[600px]">
           <ProgressLadder 
             current={level} 
             total={100} 
@@ -55,95 +80,78 @@ const Arena: React.FC = () => {
           />
         </div>
 
-        <div className="lg:col-span-8 space-y-12">
-          {/* Promotion Gates */}
-          <div className="bg-[#141414] border border-white/5 rounded-xl overflow-hidden shadow-2xl">
-            <div className="p-4 border-b border-white/5 bg-white/[0.01] flex items-center space-x-3 text-amber-500">
-              <Milestone size={18} />
-              <h2 className="text-sm font-bold uppercase tracking-widest italic">Promotion Gate Status</h2>
-            </div>
-            
-            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* VIP Gate */}
-              <div className={`p-6 rounded-xl border transition-all duration-500 ${isVipUnlocked ? 'bg-emerald-500/[0.02] border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-2 rounded-lg ${isVipUnlocked ? 'bg-emerald-500/10 text-emerald-500' : 'bg-white/5 text-gray-600'}`}>
-                    <ShieldCheck size={24} />
+        {/* Central Model Panel */}
+        <div className="lg:col-span-6 min-h-[600px]">
+          <NetworkModel state={networkState} loading={loading} />
+        </div>
+
+        {/* Right Info Column */}
+        <div className="lg:col-span-3 space-y-8">
+           {/* Promotion Gates */}
+           <div className="bg-[#141414] border border-white/5 rounded-xl overflow-hidden shadow-2xl">
+              <div className="p-4 border-b border-white/5 bg-white/[0.01] flex items-center space-x-3 text-amber-500">
+                <Milestone size={14} />
+                <h2 className="text-[10px] font-bold uppercase tracking-widest italic">Promotion Gates</h2>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                {/* VIP Gate */}
+                <div className={`p-4 rounded-lg border ${isVipUnlocked ? 'bg-emerald-500/[0.02] border-emerald-500/20' : 'bg-white/[0.01] border-white/5'}`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">VIP Unlock</span>
+                    <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded border ${
+                      isVipUnlocked ? 'text-emerald-500 border-emerald-500/20' : 'text-gray-600 border-white/10'
+                    }`}>{isVipUnlocked ? 'Grounded' : 'Locked'}</span>
                   </div>
-                  <div className={`text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${
-                    isVipUnlocked ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-gray-500/10 text-gray-500 border-white/10'
-                  }`}>
-                    {isVipUnlocked ? 'Accepted' : 'Locked'}
+                  <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-full bg-amber-500" style={{ width: `${Math.min((level / 40) * 100, 100)}%` }} />
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-200 mb-1">VIP Unlock (40N)</h3>
-                <p className="text-xs text-gray-500 uppercase tracking-tight leading-relaxed mb-4">
-                  Contextual Disinhibition & SST/PV Balance Control activation threshold.
-                </p>
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full transition-all duration-1000 ${isVipUnlocked ? 'bg-emerald-500' : 'bg-amber-500'}`}
-                    style={{ width: `${Math.min((level / 40) * 100, 100)}%` }}
-                  />
+
+                {/* L4 Gate */}
+                <div className={`p-4 rounded-lg border ${isL4Unlocked ? 'bg-emerald-500/[0.02] border-emerald-500/20' : 'bg-white/[0.01] border-white/5'}`}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Laminar</span>
+                    <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded border ${
+                      isL4Unlocked ? 'text-emerald-500 border-emerald-500/20' : 'text-gray-600 border-white/10'
+                    }`}>{isL4Unlocked ? 'Grounded' : 'Locked'}</span>
+                  </div>
+                  <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500" style={{ width: `${Math.min((level / 100) * 100, 100)}%` }} />
+                  </div>
                 </div>
               </div>
+           </div>
 
-              {/* L4 Gate */}
-              <div className={`p-6 rounded-xl border transition-all duration-500 ${isL4Unlocked ? 'bg-emerald-500/[0.02] border-emerald-500/20' : 'bg-white/[0.02] border-white/5'}`}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-2 rounded-lg ${isL4Unlocked ? 'bg-emerald-500/10 text-emerald-500' : 'bg-white/5 text-gray-600'}`}>
-                    <Trophy size={24} />
-                  </div>
-                  <div className={`text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${
-                    isL4Unlocked ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-gray-500/10 text-gray-500 border-white/10'
-                  }`}>
-                    {isL4Unlocked ? 'Accepted' : 'Locked'}
-                  </div>
-                </div>
-                <h3 className="text-lg font-bold text-gray-200 mb-1">Laminar Unlock (100N)</h3>
-                <p className="text-xs text-gray-500 uppercase tracking-tight leading-relaxed mb-4">
-                  Apical/Basal Dendrites + Laminar Predictive Routing.
-                </p>
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full transition-all duration-1000 ${isL4Unlocked ? 'bg-emerald-500' : 'bg-blue-500/50'}`}
-                    style={{ width: `${Math.min((level / 100) * 100, 100)}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Network Metadata */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="bg-[#141414] border border-white/5 rounded-xl p-8 space-y-6">
+           {/* Network Metadata */}
+           <div className="bg-[#141414] border border-white/5 rounded-xl p-6 space-y-6">
               <div className="flex items-center space-x-3 text-blue-500">
-                <Network size={20} />
-                <h3 className="text-sm font-bold uppercase tracking-widest italic">Network Geometry</h3>
+                <Network size={14} />
+                <h3 className="text-[10px] font-bold uppercase tracking-widest italic">Live Geometry</h3>
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center py-2 border-b border-white/5">
-                  <span className="text-xs text-gray-500 uppercase font-bold tracking-tight">Interconnection Mode</span>
-                  <span className="text-xs font-mono font-bold text-blue-400">PASS_VERIFIED</span>
+                  <span className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Active Nodes</span>
+                  <span className="text-[10px] font-mono font-bold text-blue-400">{networkState?.nodes.id.length || '--'}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-white/5">
-                  <span className="text-xs text-gray-500 uppercase font-bold tracking-tight">Active Omissions</span>
-                  <span className="text-xs font-mono font-bold text-amber-500">{progression?.omissions ?? 0}</span>
+                  <span className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Synapse Count</span>
+                  <span className="text-[10px] font-mono font-bold text-amber-500">{networkState?.edges.src.length || '--'}</span>
+                </div>
+                <div className="flex justify-between items-center py-2">
+                  <span className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Epistemic Status</span>
+                  <span className="text-[10px] font-bold text-emerald-500 uppercase">{networkState?.truth_class || 'SYNC'}</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-amber-500/[0.02] border border-amber-500/10 rounded-xl p-8 flex items-start space-x-4">
-              <ShieldCheck className="text-amber-500 shrink-0 mt-1" size={20} />
-              <div className="space-y-2">
-                <h3 className="text-xs font-bold text-amber-500 uppercase tracking-widest italic">Grounding Authority</h3>
-                <p className="text-[10px] text-amber-500/70 leading-relaxed uppercase tracking-tight font-medium">
-                  Every neuron in the PASS network is verified by live scientific discourse across the canonical council. 
-                  Inferred or surrogate research values are explicitly rejected from this ladder.
-                </p>
-              </div>
+            <div className="p-6 bg-white/[0.01] border border-white/5 rounded-xl flex items-start space-x-3">
+              <Activity className="text-amber-500/40 shrink-0 mt-0.5" size={14} />
+              <p className="text-[9px] text-gray-600 uppercase leading-relaxed tracking-tight font-medium">
+                Visualizing grounded PASS network structure via game-client rendering protocol. 
+                Inferred connections are strictly filtered from this view.
+              </p>
             </div>
-          </div>
         </div>
       </div>
     </div>
