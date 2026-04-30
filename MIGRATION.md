@@ -14,15 +14,28 @@ Move the Arena UI out of `gamma` and into `gamma-arena`, keeping `gamma` as the 
 - No new write controls in the legacy UI.
 - Mark terminal execution as non-migratable.
 
-## Phase 1: Contract Inventory (`gamma`)
-Authoritative endpoints to be exposed by the `gamma` runtime:
-1. `/api/status`: Master snapshot.
-2. `/api/progression`: Grounded level and unlock manifests.
-3. `/api/agents`: Grounded activity and evidence.
-4. `/api/persistence`: Checkpoint and resume metadata.
-5. `/api/health`: Heartbeat and zero-idle status.
-6. `/api/events/stream`: Live structured events.
-7. `/api/logs/raw`: Raw tail for debugging.
+## PHASE 1.5 — VERIFIED CONTRACT FREEZE (COMPLETED)
+
+All backend endpoints in `gamma` (Office Mac) have been audited and verified.
+
+### Verified Surfaces
+
+| Endpoint | Schema Type | Grounded Fields | Inferred/Degraded | Source |
+| :--- | :--- | :--- | :--- | :--- |
+| `/api/status` | Object | research, progression, persistence | uptime, slots | Integrated |
+| `/api/progression` | Object | official_level, patches | omissions | patch_board.json |
+| `/api/agents` | Array | id, role, truth_class | status, last_active | Log Tailer |
+| `/api/persistence` | Object | boot_type, resume_count | last_checkpoint | runtime_state.json |
+| `/api/health` | Object | status, zero_idle | heartbeat | Monitor |
+| `/api/logs/raw` | Object | content, path | N/A | FS Tail |
+
+### Grounding Rules
+- **GROUNDED**: Data sourced directly from `arena_patch_board.json`, `arena_runtime_state.json`, or a verified log tail.
+- **DEGRADED**: Placeholder values or empty strings when the underlying source is unavailable or disconnected.
+- **INFERRED**: Heuristic-based metrics (e.g., active slots) that lack direct biophysical grounding.
+
+### Contract Freeze
+The schemas returned by these endpoints are now **FROZEN**. The `gamma-arena` app shell must be built against these exact keys.
 
 ## Phase 2: App Shell (`gamma-arena`)
 - Standalone React/Vite app skeleton.
