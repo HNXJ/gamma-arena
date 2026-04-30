@@ -1,108 +1,146 @@
-import React, { useState, useEffect } from 'react'
-import { ArenaClient } from '../api/client'
-import { Agent } from '../types/contract'
-import { Shield, Monitor, Zap, FileSearch, UserCheck } from 'lucide-react'
+import React, { useState, useEffect } from 'react';
+import { ArenaClient } from '../api/client';
+import { Agent, AgentLogResponse } from '../types/contract';
+import { AgentCard } from '../components/AgentCard';
+import { ShieldCheck, History, Info, Terminal } from 'lucide-react';
 
-const AgentCard: React.FC<{ agent: Agent }> = ({ agent }) => {
-  const isActive = agent.status === 'ACTIVE'
-  const isGrounded = agent.truth_class === 'GROUNDED'
-  
-  return (
-    <div className={`bg-[#141414] border rounded-xl p-6 transition-all duration-300 ${isActive ? 'border-amber-500/30' : 'border-white/5 opacity-80'}`}>
-      <div className="flex justify-between items-start mb-6">
-        <div className={`p-3 rounded-lg ${isActive ? 'bg-amber-500/10 text-amber-500' : 'bg-white/5 text-gray-500'}`}>
-          {agent.role === 'Monitor' && <Monitor size={24} />}
-          {agent.role === 'Optimizer' && <Zap size={24} />}
-          {agent.role === 'Analyst' && <FileSearch size={24} />}
-          {agent.role === 'Manager' && <UserCheck size={24} />}
-        </div>
-        <div className="text-right">
-          <div className="text-xl font-bold font-mono tracking-tighter">{agent.id}</div>
-          <div className={`text-[10px] font-bold uppercase tracking-widest ${isActive ? 'text-amber-500' : 'text-gray-600'}`}>
-            {agent.status}
-          </div>
-        </div>
-      </div>
+const AgentLogPanel: React.FC<{ agentId: string, role: string }> = ({ agentId, role }) => {
+  const [logData, setLogData] = useState<AgentLogResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
-      <div className="space-y-4">
-        <div>
-          <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Identity/Role</h4>
-          <div className="text-sm font-semibold text-gray-200">{agent.role}</div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Truth Class</h4>
-            <div className={`text-[10px] font-bold font-mono ${isGrounded ? 'text-green-500' : 'text-gray-600'}`}>
-              {agent.truth_class}
-            </div>
-          </div>
-          <div>
-            <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Evidence</h4>
-            <div className="text-[10px] font-mono text-gray-400 truncate">
-              {agent.grounded_evidence ? 'LOGGED' : 'NONE'}
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-4 border-t border-white/5">
-          <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Last Heartbeat</h4>
-          <div className="text-[10px] font-mono text-gray-400 truncate">
-            {agent.last_active || 'NEVER'}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default function Agents() {
-  const [agents, setAgents] = useState<Agent[]>([])
-  const [loading, setLoading] = useState(true)
+  const fetchLogs = async () => {
+    try {
+      const data = await ArenaClient.getAgentLogs(agentId);
+      setLogData(data);
+    } catch (err) {
+      console.error(`Failed to fetch logs for ${agentId}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await ArenaClient.getAgents()
-        setAgents(data)
-      } catch (err) {
-        console.error('Agents Fetch Error:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-    const interval = setInterval(fetchData, 5000)
-    return () => clearInterval(interval)
-  }, [])
+    fetchLogs();
+    const interval = setInterval(fetchLogs, 5000);
+    return () => clearInterval(interval);
+  }, [agentId]);
 
   return (
-    <div className="p-12 space-y-12 max-w-7xl mx-auto animate-in fade-in duration-700">
-      <header className="space-y-2 border-l-4 border-amber-500 pl-6 py-2">
-        <h1 className="text-3xl font-bold tracking-tight text-white uppercase italic">Council Roster</h1>
-        <p className="text-gray-400 text-sm tracking-wide">Grounded Agent Activity & Observability Evidence</p>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {!loading ? (
-          agents.map(agent => <AgentCard key={agent.id} agent={agent} />)
-        ) : (
-          Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-64 bg-[#141414] border border-white/5 rounded-xl animate-pulse" />
-          ))
-        )}
+    <div className="bg-[#0d0d0d] border border-white/5 rounded-xl overflow-hidden shadow-xl h-64 flex flex-col group">
+      <div className="px-4 py-2 border-b border-white/5 bg-white/[0.01] flex items-center justify-between">
+        <div className="flex items-center space-x-2 text-gray-500">
+          <Terminal size={12} className="group-hover:text-amber-500 transition-colors" />
+          <span className="text-[10px] font-bold uppercase tracking-widest">{agentId} Evidence</span>
+        </div>
+        <span className="text-[8px] font-bold text-gray-700 uppercase tracking-tighter italic">{role}</span>
       </div>
       
-      <div className="bg-amber-500/[0.02] border border-amber-500/10 p-8 rounded-xl flex items-start space-x-6 relative overflow-hidden group">
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <Shield className="text-amber-500 shrink-0 mt-1" size={24} />
-        <div className="relative z-10">
-          <h3 className="text-sm font-bold text-amber-500 uppercase tracking-widest mb-2">Security Verification Protocol</h3>
-          <p className="text-xs text-amber-500/70 leading-relaxed uppercase tracking-tight font-medium max-w-3xl">
-            Terminal-driven agent mutation is disabled in this console. This roster provides read-only scientific grounding of active host processes only. Every agent status displayed is verified against live research logs on the Office Mac.
-          </p>
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono">
+        {loading && !logData ? (
+          <div className="h-full flex items-center justify-center">
+            <div className="w-4 h-4 border border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
+          </div>
+        ) : logData?.logs.length ? (
+          logData.logs.map((entry, i) => (
+            <div key={i} className="text-[10px] leading-relaxed border-l border-white/5 pl-3 py-1 hover:border-amber-500/30 transition-colors">
+              <span className="text-gray-600 mr-2">[{entry.time.split(' ')[1]}]</span>
+              <span className="text-gray-300">{entry.msg}</span>
+            </div>
+          ))
+        ) : (
+          <div className="h-full flex flex-col items-center justify-center opacity-20 grayscale scale-75">
+            <History size={32} />
+            <span className="text-[8px] font-bold uppercase tracking-widest mt-2">No Grounded Evidence</span>
+          </div>
+        )}
+      </div>
+
+      <div className="px-4 py-2 border-t border-white/5 bg-black/40 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+           <div className={`w-1.5 h-1.5 rounded-full ${logData?.truth_class === 'GROUNDED' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-gray-700'}`} />
+           <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{logData?.truth_class || 'SYNCING'}</span>
+        </div>
+        <span className="text-[8px] text-gray-700 uppercase tracking-tighter truncate max-w-[100px]">Src: {logData?.source || '---'}</span>
+      </div>
+    </div>
+  );
+};
+
+const Agents: React.FC = () => {
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchAgents = async () => {
+    try {
+      const data = await ArenaClient.getAgents();
+      setAgents(data);
+    } catch (err) {
+      console.error('Failed to fetch agents');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgents();
+    const interval = setInterval(fetchAgents, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="p-12 space-y-12 max-w-[1600px] mx-auto animate-in fade-in duration-700">
+      <header className="flex justify-between items-end border-b border-white/5 pb-8">
+        <div className="space-y-2">
+          <div className="flex items-center space-x-3 text-amber-500">
+            <ShieldCheck size={24} />
+            <h1 className="text-3xl font-black tracking-tighter uppercase italic">Council Roster</h1>
+          </div>
+          <p className="text-gray-500 text-sm font-medium tracking-wide">Verified Scientific Agency & Evidence Surfaces</p>
+        </div>
+        <div className="text-right">
+          <div className="text-[10px] text-gray-600 uppercase tracking-[0.2em] font-bold">Protocol Status</div>
+          <div className="text-sm font-mono font-bold text-emerald-500 uppercase tracking-tighter">SDE Consensus Active</div>
+        </div>
+      </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        {/* Left Column: Active Roster */}
+        <div className="lg:col-span-4 space-y-8">
+          <div className="bg-[#141414] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="p-6 border-b border-white/5 bg-white/[0.01]">
+              <h2 className="text-xs font-bold text-gray-400 uppercase tracking-[0.3em] italic">Grounded Agents</h2>
+            </div>
+            <div className="p-8 space-y-6">
+              {loading && !agents.length ? (
+                <div className="h-48 flex items-center justify-center opacity-20"><ShieldCheck className="animate-spin" size={48} /></div>
+              ) : agents.map(agent => (
+                <AgentCard key={agent.id} agent={agent} />
+              ))}
+            </div>
+          </div>
+
+          <div className="p-8 bg-amber-500/[0.02] border border-amber-500/10 rounded-2xl flex items-start space-x-4">
+            <Info className="text-amber-500/50 shrink-0 mt-1" size={20} />
+            <div className="space-y-2">
+               <h3 className="text-xs font-bold text-amber-500 uppercase tracking-widest italic">Agency Mandate</h3>
+               <p className="text-[10px] text-amber-500/70 leading-relaxed uppercase tracking-tight font-medium">
+                 Every agent listed here represents a discrete research process. Evidence is filtered in real-time from the 
+                 canonical orchestrator logs on the Office Mac.
+               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Evidence Surfaces */}
+        <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8 h-fit">
+          <AgentLogPanel agentId="G01" role="Monitor" />
+          <AgentLogPanel agentId="G02" role="Optimizer" />
+          <AgentLogPanel agentId="G03" role="Analyst" />
+          <AgentLogPanel agentId="G04" role="Manager" />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default Agents;
