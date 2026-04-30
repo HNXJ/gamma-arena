@@ -59,13 +59,13 @@ const Overview = () => {
         />
         <StatusCard 
           title="Uptime" 
-          value={status?.system.uptime_seconds ? `${Math.floor(status.system.uptime_seconds / 60)}m` : '---'} 
+          value={status?.system.monitor_uptime_seconds ? `${Math.floor(status.system.monitor_uptime_seconds / 60)}m` : '---'} 
           label="Monitor Session Duration"
           truthClass="GROUNDED"
         />
         <StatusCard 
           title="Active Slots" 
-          value={status?.system.backend_active_slots} 
+          value={status?.system.backend_model_slots_occupied} 
           label="Backend Resource Usage"
           truthClass="INFERRED"
         />

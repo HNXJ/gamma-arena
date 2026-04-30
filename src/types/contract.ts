@@ -1,7 +1,7 @@
 export interface SystemStatus {
   status: string;
-  uptime_seconds: number | null;
-  backend_active_slots: string;
+  monitor_uptime_seconds: number | null;
+  backend_model_slots_occupied: string;
   heartbeat: string;
 }
 
