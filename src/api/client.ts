@@ -1,6 +1,6 @@
 import { ArenaStatus, Progression, Agent, RawLog, NetworkState, AgentLogResponse } from '../types/contract';
 
-const BASE_URL = 'http://localhost:3012';
+const BASE_URL = import.meta.env.VITE_GAMMA_API_BASE || 'http://localhost:3013';
 
 export const ArenaClient = {
   async getStatus(): Promise<ArenaStatus> {
