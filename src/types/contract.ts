@@ -1,9 +1,10 @@
 export interface ArenaStatus {
   system: {
-    status: 'ONLINE' | 'STANDBY';
+    status: 'ONLINE' | 'STANDBY' | 'CRASHED';
     monitor_uptime_seconds: number;
     backend_model_slots_occupied: string;
     heartbeat: string;
+    council_chat_activity?: string;
   };
   progression: Progression;
   persistence: Persistence;
@@ -36,7 +37,8 @@ export interface Persistence {
 export interface Agent {
   id: string;
   role: string;
-  status: 'ACTIVE' | 'IDLE';
+  status: 'ACTIVE' | 'IDLE' | 'STANDBY' | 'QUEUED' | 'BLOCKED_BY_LMS';
+  system_blocker?: string;
   last_active: string;
   grounded_evidence: boolean;
   truth_class: 'GROUNDED' | 'INFERRED' | 'DEGRADED';
@@ -102,7 +104,7 @@ export interface NetworkEvent {
   event_type: 'node_state_update' | 'edge_weight_update' | 'network_growth' | 'patch_activation' | 'milestone_reached' | 'snapshot_replaced';
   snapshot_version: number;
   time: string;
-  payload: any;
+  payload: Record<string, unknown>;
 }
 
 export interface RawLog {

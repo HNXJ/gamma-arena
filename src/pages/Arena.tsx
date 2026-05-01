@@ -26,6 +26,7 @@ const Arena: React.FC = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
     const interval = setInterval(fetchData, 10000);
 
@@ -34,11 +35,27 @@ const Arena: React.FC = () => {
     netSource.onmessage = (event) => {
       try {
         const netEvent = JSON.parse(event.data);
-        if (netEvent.event_type === 'node_state_update' && networkState) {
-          // Jitter/Update simulation for current nodes
-          // Real implementations would merge payload into state
+        if (netEvent.event_type === 'node_state_update') {
+          setNetworkState(prev => {
+            if (!prev) return prev;
+            const updatedNodes = { ...prev.nodes };
+            const payload = netEvent.payload as Record<string, any>; 
+            
+            const nodeIdx = updatedNodes.id.indexOf(payload.node_id);
+            if (nodeIdx !== -1) {
+              const nodes = { ...updatedNodes };
+              if (payload.status) nodes.status = [...nodes.status];
+              if (payload.truth_class) nodes.truth_class = [...nodes.truth_class];
+              
+              if (payload.status) nodes.status[nodeIdx] = payload.status;
+              if (payload.truth_class) nodes.truth_class[nodeIdx] = payload.truth_class;
+              
+              return { ...prev, nodes };
+            }
+            return prev;
+          });
         }
-      } catch (err) {
+      } catch (_err) {
         console.error('Failed to parse network event');
       }
     };
@@ -49,9 +66,10 @@ const Arena: React.FC = () => {
     };
   }, []);
 
-  const level = progression?.largest_pass_network_neuron_count ?? 10;
-  const isVipUnlocked = level >= 40;
-  const isL4Unlocked = level >= 100;
+  const level = progression?.largest_pass_network_neuron_count ?? 0;
+  const threshold = progression?.next_unlock_threshold ?? 0;
+  const isVipUnlocked = level >= threshold && threshold > 0;
+  const isL4Unlocked = level >= 100; // L4 remains at 100 as per doctrine, but level is dynamic
 
   return (
     <div className="p-12 space-y-12 max-w-[1600px] mx-auto animate-in fade-in duration-700">

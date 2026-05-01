@@ -66,12 +66,18 @@ const Overview: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="text-right">
-          <div className={`flex items-center space-x-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border transition-all ${
-            error ? 'bg-rose-500/10 text-rose-500 border-rose-500/20 animate-pulse' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+        <div className="text-right flex flex-col items-end space-y-2">
+          <div className="flex items-center space-x-2">
+            <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Sys Status:</span>
+            <span className={`text-xs font-black uppercase ${status?.system.status === 'CRASHED' ? 'text-rose-500' : 'text-emerald-500'}`}>
+              {status?.system.status || 'OFFLINE'}
+            </span>
+          </div>
+          <div className={`flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${
+            error || status?.system.heartbeat === 'DEGRADED' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
           }`}>
-            <div className={`w-2 h-2 rounded-full ${error ? 'bg-rose-500' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'}`} />
-            <span>{error || 'Telemetry Active'}</span>
+            <div className={`w-1.5 h-1.5 rounded-full ${error || status?.system.heartbeat === 'DEGRADED' ? 'bg-rose-500' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'}`} />
+            <span>Heartbeat: {status?.system.heartbeat || 'Unknown'}</span>
           </div>
         </div>
       </header>

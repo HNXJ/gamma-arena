@@ -133,10 +133,9 @@ const Agents: React.FC = () => {
 
         {/* Right Column: Evidence Surfaces */}
         <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8 h-fit">
-          <AgentLogPanel agentId="G01" role="Monitor" />
-          <AgentLogPanel agentId="G02" role="Optimizer" />
-          <AgentLogPanel agentId="G03" role="Analyst" />
-          <AgentLogPanel agentId="G04" role="Manager" />
+          {agents.map(agent => (
+            <AgentLogPanel key={agent.id} agentId={agent.id} role={agent.role} />
+          ))}
         </div>
       </div>
     </div>

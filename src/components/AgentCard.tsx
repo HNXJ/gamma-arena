@@ -11,6 +11,11 @@ export const AgentCard = ({ agent }: { agent: Agent }) => (
         <div className="text-[10px] text-amber-700 uppercase tracking-widest">
           {agent.status} {agent.last_active && `• ${agent.last_active}`}
         </div>
+        {agent.system_blocker && (
+          <div className="mt-1 text-[8px] font-black text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded border border-rose-500/20 uppercase">
+            Blocker: {agent.system_blocker}
+          </div>
+        )}
       </div>
     </div>
     <div className="text-right">
