@@ -7,6 +7,8 @@ export type UISlot =
   | 'AGENT_STRIP' 
   | 'SYSTEM_NOTICES' 
   | 'ARENA_OVERLAY' 
+  | 'ARENA_SIDEBAR'
+  | 'SYSTEM_FEED'
   | 'DETAIL_DRAWER' 
   | 'LOG_INSPECTOR';
 
@@ -15,8 +17,8 @@ export interface UIRegistryItem {
   slot: UISlot;
   label: string;
   priority: number;
-  visibilityRule?: (state: any) => boolean;
-  render: (props: { data: any }) => React.ReactNode;
+  visibilityRule?: (state: unknown) => boolean;
+  render: (props: { data: unknown }) => React.ReactNode;
   interaction?: {
     mode: 'STATIC' | 'EXPANDABLE' | 'DETAIL_LINK';
     linkTo?: string;

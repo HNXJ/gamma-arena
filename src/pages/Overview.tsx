@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ArenaClient } from '../api/client';
 import type { ArenaStatus, Agent } from '../types/contract';
-import { StatusCard } from '../components/StatusCard';
-import { ProgressLadder } from '../components/ProgressLadder';
-import { AgentCard } from '../components/AgentCard';
-import { LayoutDashboard, Activity, Clock, ShieldCheck, HardDrive, AlertTriangle } from 'lucide-react';
+import { SlotRenderer } from '../registry/index';
+import { mapSystemState, mapResearchState, mapAgentState } from '../view-models/mappers';
+import { LayoutDashboard, Activity } from 'lucide-react';
 
 const Overview: React.FC = () => {
   const [status, setStatus] = useState<ArenaStatus | null>(null);
@@ -36,6 +35,12 @@ const Overview: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const viewModels = useMemo(() => ({
+    system: mapSystemState(status),
+    research: mapResearchState(status),
+    agents: agents.map(mapAgentState)
+  }), [status, agents]);
+
   if (loading && !status) {
     return (
       <div className="h-full flex items-center justify-center bg-[#0a0a0a]">
@@ -47,10 +52,6 @@ const Overview: React.FC = () => {
     );
   }
 
-  const uptime = status?.system.monitor_uptime_seconds 
-    ? `${Math.floor(status.system.monitor_uptime_seconds / 60)}m ${status.system.monitor_uptime_seconds % 60}s` 
-    : '---';
-
   return (
     <div className="p-12 space-y-12 max-w-[1600px] mx-auto animate-in fade-in zoom-in-95 duration-700">
       <header className="flex justify-between items-end border-b border-white/5 pb-8">
@@ -60,150 +61,45 @@ const Overview: React.FC = () => {
             <h1 className="text-3xl font-black tracking-tighter uppercase italic">Mission Overview</h1>
           </div>
           <p className="text-gray-500 text-sm font-medium tracking-wide">Hardened Observability Surface for Amber Arena v1.6</p>
-          {status?.research.mission_topic && (
+          {viewModels.research.topic && (
             <div className="pt-4 flex items-center space-x-3">
               <span className="text-[10px] font-black uppercase text-amber-500/80 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 tracking-widest">Active Mission</span>
-              <span className="text-xs font-bold text-gray-300 italic tracking-tight underline decoration-amber-500/30 underline-offset-4">{status.research.mission_topic}</span>
+              <span className="text-xs font-bold text-gray-300 italic tracking-tight underline decoration-amber-500/30 underline-offset-4">{viewModels.research.topic}</span>
             </div>
           )}
         </div>
         <div className="text-right flex flex-col items-end space-y-2">
           <div className="flex items-center space-x-2">
             <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">Sys Status:</span>
-            <span className={`text-xs font-black uppercase ${status?.system.status === 'CRASHED' ? 'text-rose-500' : 'text-emerald-500'}`}>
-              {status?.system.status || 'OFFLINE'}
+            <span className={`text-xs font-black uppercase ${viewModels.system.statusSeverity === 'CRITICAL' ? 'text-rose-500' : 'text-emerald-500'}`}>
+              {viewModels.system.status}
             </span>
           </div>
           <div className={`flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border ${
-            error || status?.system.heartbeat === 'DEGRADED' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+            error || viewModels.system.statusSeverity === 'WARNING' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
           }`}>
-            <div className={`w-1.5 h-1.5 rounded-full ${error || status?.system.heartbeat === 'DEGRADED' ? 'bg-rose-500' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'}`} />
-            <span>Heartbeat: {status?.system.heartbeat || 'Unknown'}</span>
+            <div className={`w-1.5 h-1.5 rounded-full ${error || viewModels.system.statusSeverity === 'WARNING' ? 'bg-rose-500' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]'}`} />
+            <span>Heartbeat: {viewModels.system.heartbeat}</span>
           </div>
         </div>
       </header>
 
-      {/* Top Level Metrics */}
+      {/* Top Level Summary Cards Slot */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-        <StatusCard 
-          title="Grounded Level" 
-          value={status?.research.neuron_count} 
-          label="Confirmed Neuronal Integration"
-          truthClass={status?.progression.truth_class}
-          icon={Activity}
-          color="amber"
-          source="Arena World State"
-        />
-        <StatusCard 
-          title="System Heartbeat" 
-          value={status?.system.heartbeat} 
-          label="Operational Compliance"
-          truthClass="GROUNDED"
-          icon={Activity}
-          color={status?.system.heartbeat === 'OK' ? 'emerald' : 'rose'}
-          source="GLLM Local Health"
-        />
-        <StatusCard 
-          title="Console Uptime" 
-          value={uptime} 
-          label="Active Monitor Session"
-          truthClass="GROUNDED"
-          icon={Clock}
-          color="blue"
-          source="Process Lifetime"
-        />
-        <StatusCard 
-          title="Active Target" 
-          value={status?.research.active_target || status?.research.neuron_count} 
-          label="Next Research Milestone"
-          truthClass="GROUNDED"
-          icon={Activity}
-          color="emerald"
-          source="Active Patch Manifest"
-        />
-        <StatusCard 
-          title="Compute Load" 
-          value={status?.system.backend_model_slots_occupied} 
-          label="Infrastructure Resource Utilization"
-          truthClass="INFERRED"
-          icon={HardDrive}
-          color="gray"
-          source="System Registry"
-        />
+        <SlotRenderer slot="TOP_SUMMARY" data={viewModels.system} state={viewModels} />
+        {/* We can also pass different data to different slots or use a unified 'data' prop if needed */}
+        {/* For now, let's just use the viewModels as needed in the renderers */}
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
-        {/* Progress Sidebar */}
-        <div className="xl:col-span-3 h-full">
-          <ProgressLadder 
-            current={status?.research.neuron_count ?? 10} 
-            total={100} 
-            threshold={status?.progression.next_unlock_threshold}
-            truthClass={status?.progression.truth_class}
-          />
+        {/* Main Feed Column */}
+        <div className="xl:col-span-8 space-y-12">
+          <SlotRenderer slot="MAIN_FEED" data={viewModels.agents} state={viewModels} />
         </div>
 
-        {/* Central Intelligence Panels */}
-        <div className="xl:col-span-9 space-y-12">
-          {/* Agent Grid */}
-          <div className="bg-[#141414] border border-white/5 rounded-xl shadow-2xl overflow-hidden">
-            <div className="p-4 border-b border-white/5 bg-white/[0.01] flex justify-between items-center">
-              <div className="flex items-center space-x-3 text-amber-500">
-                <ShieldCheck size={18} />
-                <h2 className="text-sm font-bold uppercase tracking-widest italic">Verified Council Evidence</h2>
-              </div>
-              <span className="text-[10px] font-mono text-gray-600 uppercase tracking-tighter">Active Standalone Agents</span>
-            </div>
-            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              {agents.map(agent => <AgentCard key={agent.id} agent={agent} />)}
-            </div>
-          </div>
-
-          {/* Configuration & Patches */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="bg-[#141414] border border-white/5 rounded-xl overflow-hidden">
-               <div className="p-4 border-b border-white/5 bg-white/[0.01] text-[10px] font-bold text-gray-400 uppercase tracking-widest italic flex items-center space-x-2">
-                 <AlertTriangle size={14} className="text-blue-500" />
-                 <span>Persistence Integrity</span>
-               </div>
-               <div className="p-8 space-y-6">
-                 <div className="flex justify-between items-center py-2 border-b border-white/5">
-                   <span className="text-xs text-gray-500 uppercase font-bold tracking-tight">Recovery Type</span>
-                   <span className="text-xs font-mono font-bold text-blue-400">{status?.persistence.boot_type}</span>
-                 </div>
-                 <div className="flex justify-between items-center py-2 border-b border-white/5">
-                   <span className="text-xs text-gray-500 uppercase font-bold tracking-tight">Session Resumes</span>
-                   <span className="text-xs font-mono font-bold text-amber-500">{status?.persistence.resume_count}</span>
-                 </div>
-                 <div className="text-[10px] text-gray-600 leading-relaxed uppercase font-medium">
-                   Namespaced State: <code className="bg-white/5 px-1 rounded text-blue-300">local/game001/arena_runtime_state.json</code>
-                 </div>
-               </div>
-            </div>
-
-            <div className="bg-[#141414] border border-white/5 rounded-xl overflow-hidden">
-               <div className="p-4 border-b border-white/5 bg-white/[0.01] text-[10px] font-bold text-gray-400 uppercase tracking-widest italic flex items-center space-x-2">
-                 <Activity size={14} className="text-emerald-500" />
-                 <span>Active Scientific Patches</span>
-               </div>
-               <div className="p-8">
-                {status?.progression.active_patches.length ? (
-                    <div className="flex flex-wrap gap-3">
-                      {status.progression.active_patches.map(p => (
-                        <div key={p} className="bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg flex items-center space-x-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                          <span className="text-xs font-mono font-bold text-emerald-500 uppercase tracking-tighter">{p}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="h-24 flex items-center justify-center border border-dashed border-white/10 rounded-xl text-gray-600 uppercase tracking-widest text-[10px] font-bold">
-                      Baseline Research Cycle
-                    </div>
-                  )}
-               </div>
-            </div>
-          </div>
+        {/* Right Rail Column */}
+        <div className="xl:col-span-4 space-y-12">
+          <SlotRenderer slot="RIGHT_RAIL" data={viewModels.system} state={viewModels} />
         </div>
       </div>
     </div>

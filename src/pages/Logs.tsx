@@ -1,40 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArenaClient } from '../api/client';
 import type { CouncilEvent, RawLog } from '../types/contract';
-import { FileText, Terminal, Activity, Info, Clock, AlertCircle } from 'lucide-react';
-
-const EventItem: React.FC<{ event: CouncilEvent }> = ({ event }) => {
-  const { time, agent, msg } = event.data;
-  
-  return (
-    <div className="flex space-x-6 p-6 border-b border-white/5 hover:bg-white/[0.02] transition-all group relative overflow-hidden">
-      <div className="absolute inset-y-0 left-0 w-1 bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-      
-      <div className="text-[10px] font-mono text-gray-600 pt-1 shrink-0 font-bold tracking-tighter">
-        {time.split(' ')[1] || '---'}
-      </div>
-      
-      <div className="space-y-2 overflow-hidden flex-1">
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-2 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">{agent}</span>
-          </div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600 italic">Research Log</span>
-        </div>
-        <div className="text-sm text-gray-300 font-mono leading-relaxed break-words selection:bg-amber-500/30">
-          {msg}
-        </div>
-      </div>
-    </div>
-  );
-};
+import { SlotRenderer } from '../registry/index';
+import { FileText, Activity, Terminal, Info, Clock, AlertCircle } from 'lucide-react';
 
 const Logs: React.FC = () => {
   const [logs, setLogs] = useState<RawLog | null>(null);
   const [events, setEvents] = useState<CouncilEvent[]>([]);
   const [activeTab, setActiveTab] = useState<'RAW' | 'STREAM'>('STREAM');
   const [error, setError] = useState<boolean>(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   const fetchLogs = async () => {
     try {
@@ -75,13 +49,6 @@ const Logs: React.FC = () => {
       source.close();
     };
   }, [activeTab]);
-
-  useEffect(() => {
-    if (activeTab === 'STREAM' && scrollRef.current) {
-      // For streaming events, we often want to stay at the top or show new ones
-      // But let's follow the standard "newest at top" logic for this density
-    }
-  }, [events, activeTab]);
 
   return (
     <div className="p-12 space-y-12 max-w-[1600px] mx-auto h-screen flex flex-col animate-in fade-in duration-700">
@@ -138,9 +105,7 @@ const Logs: React.FC = () => {
         <div className="flex-1 overflow-auto scrollbar-thin scrollbar-thumb-white/10 scroll-smooth">
           {activeTab === 'STREAM' ? (
             events.length > 0 ? (
-              <div className="divide-y divide-white/[0.03]">
-                {events.map((ev, i) => <EventItem key={i} event={ev} />)}
-              </div>
+              <SlotRenderer slot="SYSTEM_FEED" data={events} />
             ) : (
               <div className="h-full flex flex-col items-center justify-center space-y-4 opacity-30 grayscale">
                 <Clock size={48} className="animate-pulse" />

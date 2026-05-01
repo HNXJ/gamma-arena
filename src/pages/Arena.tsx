@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ArenaClient } from '../api/client';
-import type { Progression, NetworkState } from '../types/contract';
+import type { Progression, NetworkState, ArenaStatus } from '../types/contract';
 import { ProgressLadder } from '../components/ProgressLadder';
 import { NetworkModel } from '../components/NetworkModel';
-import { Milestone, Network, Zap, Activity } from 'lucide-react';
+import { SlotRenderer } from '../registry/index';
+import { mapResearchState } from '../view-models/mappers';
+import { Zap, Activity } from 'lucide-react';
 
 const Arena: React.FC = () => {
   const [progression, setProgression] = useState<Progression | null>(null);
@@ -66,10 +68,7 @@ const Arena: React.FC = () => {
     };
   }, []);
 
-  const level = progression?.largest_pass_network_neuron_count ?? 0;
-  const threshold = progression?.next_unlock_threshold ?? 0;
-  const isVipUnlocked = level >= threshold && threshold > 0;
-  const isL4Unlocked = level >= 100; // L4 remains at 100 as per doctrine, but level is dynamic
+  const researchViewModel = useMemo(() => mapResearchState({ progression } as ArenaStatus), [progression]);
 
   return (
     <div className="p-12 space-y-12 max-w-[1600px] mx-auto animate-in fade-in duration-700">
@@ -91,77 +90,25 @@ const Arena: React.FC = () => {
         {/* Progress Ladder */}
         <div className="lg:col-span-3 min-h-[600px]">
           <ProgressLadder 
-            current={level} 
+            current={researchViewModel.neuronCount} 
             total={100} 
-            threshold={threshold}
-            truthClass={progression?.truth_class}
+            threshold={researchViewModel.targetCount}
+            truthClass={researchViewModel.truthClass}
           />
         </div>
 
         {/* Central Model Panel */}
-        <div className="lg:col-span-6 min-h-[600px]">
+        <div className="lg:col-span-6 min-h-[600px] relative">
           <NetworkModel state={networkState} loading={loading} />
+          {/* Slot for future overlays on top of the model */}
+          <div className="absolute top-4 left-4 z-10 pointer-events-none">
+            <SlotRenderer slot="ARENA_OVERLAY" data={networkState} />
+          </div>
         </div>
 
-        {/* Right Info Column */}
+        {/* Right Info Column Sidebar */}
         <div className="lg:col-span-3 space-y-8">
-           {/* Promotion Gates */}
-           <div className="bg-[#141414] border border-white/5 rounded-xl overflow-hidden shadow-2xl">
-              <div className="p-4 border-b border-white/5 bg-white/[0.01] flex items-center space-x-3 text-amber-500">
-                <Milestone size={14} />
-                <h2 className="text-[10px] font-bold uppercase tracking-widest italic">Promotion Gates</h2>
-              </div>
-              
-              <div className="p-6 space-y-6">
-                {/* VIP Gate */}
-                <div className={`p-4 rounded-lg border ${isVipUnlocked ? 'bg-emerald-500/[0.02] border-emerald-500/20' : 'bg-white/[0.01] border-white/5'}`}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">VIP Unlock</span>
-                    <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded border ${
-                      isVipUnlocked ? 'text-emerald-500 border-emerald-500/20' : 'text-gray-600 border-white/10'
-                    }`}>{isVipUnlocked ? 'Grounded' : 'Locked'}</span>
-                  </div>
-                  <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div className="h-full bg-amber-500" style={{ width: `${Math.min((level / (threshold || 1)) * 100, 100)}%` }} />
-                  </div>
-                </div>
-
-                {/* L4 Gate */}
-                <div className={`p-4 rounded-lg border ${isL4Unlocked ? 'bg-emerald-500/[0.02] border-emerald-500/20' : 'bg-white/[0.01] border-white/5'}`}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Laminar</span>
-                    <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded border ${
-                      isL4Unlocked ? 'text-emerald-500 border-emerald-500/20' : 'text-gray-600 border-white/10'
-                    }`}>{isL4Unlocked ? 'Grounded' : 'Locked'}</span>
-                  </div>
-                  <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500" style={{ width: `${Math.min((level / 100) * 100, 100)}%` }} />
-                  </div>
-                </div>
-              </div>
-           </div>
-
-           {/* Network Metadata */}
-           <div className="bg-[#141414] border border-white/5 rounded-xl p-6 space-y-6">
-              <div className="flex items-center space-x-3 text-blue-500">
-                <Network size={14} />
-                <h3 className="text-[10px] font-bold uppercase tracking-widest italic">Live Geometry</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-2 border-b border-white/5">
-                  <span className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Active Nodes</span>
-                  <span className="text-[10px] font-mono font-bold text-blue-400">{networkState?.nodes.id.length || '--'}</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-white/5">
-                  <span className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Synapse Count</span>
-                  <span className="text-[10px] font-mono font-bold text-amber-500">{networkState?.edges.src.length || '--'}</span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Epistemic Status</span>
-                  <span className="text-[10px] font-bold text-emerald-500 uppercase">{networkState?.truth_class || 'SYNC'}</span>
-                </div>
-              </div>
-            </div>
+           <SlotRenderer slot="ARENA_SIDEBAR" data={researchViewModel} state={networkState} />
 
             <div className="p-6 bg-white/[0.01] border border-white/5 rounded-xl flex items-start space-x-3">
               <Activity className="text-amber-500/40 shrink-0 mt-0.5" size={14} />

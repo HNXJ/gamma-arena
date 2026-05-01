@@ -1,5 +1,5 @@
-import { ArenaStatus, Agent, Progression } from '../types/contract';
-import { SystemViewModel, ResearchViewModel, AgentViewModel } from '../types/ui';
+import type { ArenaStatus, Agent, Progression } from '../types/contract';
+import type { SystemViewModel, ResearchViewModel, AgentViewModel } from '../types/ui';
 
 export const mapStatusToSeverity = (status: string): 'NORMAL' | 'WARNING' | 'CRITICAL' | 'OFFLINE' => {
   switch (status) {
@@ -51,7 +51,7 @@ export const mapResearchState = (status: ArenaStatus | null): ResearchViewModel 
   const defaultProg: Progression = {
     largest_pass_network_neuron_count: 0,
     active_patches: [],
-    next_unlock_threshold: 1,
+    next_unlock_threshold: 0,
     truth_class: 'DEGRADED',
     omissions: 0,
     canonical_ladder: '---'
@@ -60,14 +60,17 @@ export const mapResearchState = (status: ArenaStatus | null): ResearchViewModel 
   const prog = status?.progression || defaultProg;
   const research = status?.research;
 
+  const neuronCount = prog.largest_pass_network_neuron_count;
+  const targetCount = prog.next_unlock_threshold;
+  
   return {
-    neuronCount: prog.largest_pass_network_neuron_count,
-    targetCount: prog.next_unlock_threshold,
-    topic: research?.mission_topic || 'Initializing...',
-    progressPercent: Math.min((prog.largest_pass_network_neuron_count / (prog.next_unlock_threshold || 1)) * 100, 100),
-    truthClass: prog.truth_class,
-    truthSeverity: prog.truth_class as any,
-    activePatch: research?.active_patch || null
+    neuronCount,
+    targetCount,
+    progressPercent: targetCount > 0 ? Math.min((neuronCount / targetCount) * 100, 100) : 0,
+    topic: research?.mission_topic || 'Unknown Research Path',
+    activePatch: research?.active_patch || '---',
+    truthClass: prog.truth_class || 'SYNC',
+    truthSeverity: prog.truth_class === 'GROUNDED' ? 'GROUNDED' : 'INFERRED'
   };
 };
 
