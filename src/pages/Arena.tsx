@@ -93,7 +93,7 @@ const Arena: React.FC = () => {
           <ProgressLadder 
             current={level} 
             total={100} 
-            threshold={progression?.next_unlock_threshold || 40}
+            threshold={threshold}
             truthClass={progression?.truth_class}
           />
         </div>
@@ -122,7 +122,7 @@ const Arena: React.FC = () => {
                     }`}>{isVipUnlocked ? 'Grounded' : 'Locked'}</span>
                   </div>
                   <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                    <div className="h-full bg-amber-500" style={{ width: `${Math.min((level / 40) * 100, 100)}%` }} />
+                    <div className="h-full bg-amber-500" style={{ width: `${Math.min((level / (threshold || 1)) * 100, 100)}%` }} />
                   </div>
                 </div>
 
