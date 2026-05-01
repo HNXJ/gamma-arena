@@ -40,13 +40,14 @@ const Logs: React.FC = () => {
     try {
       const data = await ArenaClient.getRawLogs(100);
       setLogs(data);
-    } catch (err) {
+    } catch {
       console.error('Failed to fetch raw logs');
       setError(true);
     }
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (activeTab === 'RAW') fetchLogs();
     
     const interval = setInterval(() => {
@@ -60,8 +61,8 @@ const Logs: React.FC = () => {
         const councilEvent = JSON.parse(event.data) as CouncilEvent;
         setEvents(prev => [councilEvent, ...prev].slice(0, 100));
         setError(false);
-      } catch (err) {
-        console.error('Failed to parse SSE event', err);
+      } catch (_err) {
+        console.error('Failed to parse SSE event', _err);
       }
     };
 

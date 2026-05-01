@@ -11,7 +11,7 @@ const GammaGlyph = () => (
   <span className="text-[32px] font-bold font-serif leading-none select-none">Γ</span>
 );
 
-const SidebarItem: React.FC<{ to: string, icon: any, label: string }> = ({ to, icon: Icon, label }) => (
+const SidebarItem: React.FC<{ to: string, icon: React.ElementType, label: string }> = ({ to, icon: Icon, label }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>

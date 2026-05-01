@@ -22,14 +22,15 @@ const Overview: React.FC = () => {
       setAgents(agentsData);
       setLoading(false);
       setError(null);
-    } catch (err) {
-      console.error('Fetch error details:', err);
+    } catch (_err) {
+      console.error('Fetch error details:', _err);
       setError('Connection Interrupted - Attempting Re-sync');
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
     const interval = setInterval(fetchData, 2000);
     return () => clearInterval(interval);

@@ -18,7 +18,7 @@ const Arena: React.FC = () => {
       ]);
       setProgression(progData);
       setNetworkState(netData);
-    } catch (err) {
+    } catch {
       console.error('Failed to fetch arena data');
     } finally {
       setLoading(false);
@@ -39,23 +39,23 @@ const Arena: React.FC = () => {
           setNetworkState(prev => {
             if (!prev) return prev;
             const updatedNodes = { ...prev.nodes };
-            const payload = netEvent.payload as Record<string, any>; 
+            const payload = netEvent.payload as Record<string, unknown>; 
             
-            const nodeIdx = updatedNodes.id.indexOf(payload.node_id);
+            const nodeIdx = updatedNodes.id.indexOf(payload.node_id as string);
             if (nodeIdx !== -1) {
               const nodes = { ...updatedNodes };
               if (payload.status) nodes.status = [...nodes.status];
               if (payload.truth_class) nodes.truth_class = [...nodes.truth_class];
               
-              if (payload.status) nodes.status[nodeIdx] = payload.status;
-              if (payload.truth_class) nodes.truth_class[nodeIdx] = payload.truth_class;
+              if (payload.status) nodes.status[nodeIdx] = payload.status as string;
+              if (payload.truth_class) nodes.truth_class[nodeIdx] = payload.truth_class as string;
               
               return { ...prev, nodes };
             }
             return prev;
           });
         }
-      } catch (_err) {
+      } catch {
         console.error('Failed to parse network event');
       }
     };

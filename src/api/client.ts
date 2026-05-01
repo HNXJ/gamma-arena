@@ -1,4 +1,4 @@
-import type { ArenaStatus, Progression, Agent, RawLog, NetworkState, AgentLogResponse } from '../types/contract';
+import type { ArenaStatus, Progression, Agent, RawLog, NetworkState, AgentLogResponse, Persistence } from '../types/contract';
 
 const BASE_URL = import.meta.env.VITE_GAMMA_API_BASE || 'http://localhost:3013';
 
@@ -23,7 +23,7 @@ export const ArenaClient = {
     return res.json();
   },
 
-  async getPersistence(): Promise<any> {
+  async getPersistence(): Promise<Persistence> {
     const res = await fetch(`${BASE_URL}/api/persistence`);
     return res.json();
   },

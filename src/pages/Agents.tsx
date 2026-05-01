@@ -8,22 +8,23 @@ const AgentLogPanel: React.FC<{ agentId: string, role: string }> = ({ agentId, r
   const [logData, setLogData] = useState<AgentLogResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchLogs = async () => {
+  const fetchLogs = React.useCallback(async () => {
     try {
       const data = await ArenaClient.getAgentLogs(agentId);
       setLogData(data);
-    } catch (err) {
+    } catch {
       console.error(`Failed to fetch logs for ${agentId}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, [agentId]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchLogs();
     const interval = setInterval(fetchLogs, 5000);
     return () => clearInterval(interval);
-  }, [agentId]);
+  }, [fetchLogs]);
 
   return (
     <div className="bg-[#0d0d0d] border border-white/5 rounded-xl overflow-hidden shadow-xl h-64 flex flex-col group">
@@ -74,7 +75,7 @@ const Agents: React.FC = () => {
     try {
       const data = await ArenaClient.getAgents();
       setAgents(data);
-    } catch (err) {
+    } catch {
       console.error('Failed to fetch agents');
     } finally {
       setLoading(false);
@@ -82,6 +83,7 @@ const Agents: React.FC = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAgents();
     const interval = setInterval(fetchAgents, 5000);
     return () => clearInterval(interval);
