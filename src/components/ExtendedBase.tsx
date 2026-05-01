@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useArena } from '../context/ArenaContext';
 import { registry } from '../registry/core';
+import type { UISlot } from '../types/ui';
 import { SlotRenderer } from '../registry/index';
 import * as LucideIcons from 'lucide-react';
 
