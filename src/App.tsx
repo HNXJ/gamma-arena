@@ -6,7 +6,10 @@ import Agents from './pages/Agents';
 import Persistence from './pages/Persistence';
 import Logs from './pages/Logs';
 import { LayoutDashboard, Activity, Users, Database, FileText, Terminal } from 'lucide-react';
-import './registry/items';
+import { initializeRegistry } from './registry/setup';
+
+// Initialize the UI registry fragments
+initializeRegistry();
 
 const GammaGlyph = () => (
   <span className="text-[32px] font-bold font-serif leading-none select-none">Γ</span>

@@ -11,7 +11,11 @@ class UIRegistry {
     return Array.from(this.items.values())
       .filter(item => item.slot === slot)
       .filter(item => !item.visibilityRule || item.visibilityRule(state))
-      .sort((a, b) => a.priority - b.priority);
+      .sort((a, b) => {
+        if (a.stickiness === 'PINNED' && b.stickiness !== 'PINNED') return -1;
+        if (a.stickiness !== 'PINNED' && b.stickiness === 'PINNED') return 1;
+        return a.priority - b.priority;
+      });
   }
 }
 

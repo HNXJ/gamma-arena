@@ -16,7 +16,9 @@ export interface UIRegistryItem {
   key: string;
   slot: UISlot;
   label: string;
-  priority: number;
+  priority: number; // Higher number = lower in feed
+  stickiness?: 'PINNED' | 'NORMAL'; // PINNED items stay at top
+  timestamp?: string; // Optional for chronological sorting
   visibilityRule?: (state: unknown) => boolean;
   render: (props: { data: unknown }) => React.ReactNode;
   interaction?: {
