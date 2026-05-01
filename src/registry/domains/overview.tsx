@@ -1,6 +1,6 @@
 
 import { registry } from '../core';
-import { ShieldAlert } from 'lucide-react';
+import { ShieldAlert, Activity } from 'lucide-react';
 import { FeedCard } from '../../components/ui/FeedCard';
 import type { ArenaViewModelBundle } from '../../types/ui';
 
@@ -11,9 +11,28 @@ export const registerOverviewItems = () => {
     label: 'System Status Strip',
     priority: 10,
     render: ({ data }: { data: ArenaViewModelBundle }) => {
-      const bundle = data;
-      const { system, research } = bundle;
+      const { system, research, transport } = data;
       
+      const statusState = transport.endpointStates.find(s => s.name === 'System Status');
+      const isUnavailable = statusState?.kind === 'http_error' || statusState?.kind === 'network_error';
+
+      if (isUnavailable) {
+        return (
+          <div className="p-8 border border-rose-500/20 bg-rose-500/5 rounded-2xl flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Activity className="text-rose-500 animate-pulse" size={24} />
+              <div className="space-y-1">
+                <div className="text-sm font-black text-rose-500 uppercase tracking-widest">Core Telemetry Offline</div>
+                <div className="text-[10px] text-rose-500/60 font-bold uppercase">Substrate heartbeat unreachable :: {statusState?.detail}</div>
+              </div>
+            </div>
+            <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest border border-white/5 px-3 py-1 rounded">
+              Awaiting Recovery
+            </div>
+          </div>
+        );
+      }
+
       return (
         <div className="space-y-8">
           <div className="flex items-center justify-between border-b border-white/5 pb-4">

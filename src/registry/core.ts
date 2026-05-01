@@ -24,7 +24,12 @@ class UIRegistry {
         // PINNED items first
         if (a.stickiness === 'PINNED' && b.stickiness !== 'PINNED') return -1;
         if (a.stickiness !== 'PINNED' && b.stickiness === 'PINNED') return 1;
-        return b.priority - a.priority;
+        
+        // Secondary sort by priority
+        if (b.priority !== a.priority) return b.priority - a.priority;
+        
+        // Key-based tie-breaker for stable ordering under HMR
+        return a.key.localeCompare(b.key);
       });
   }
 

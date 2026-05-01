@@ -10,7 +10,7 @@ import type {
   ArenaViewModelBundle, 
   FetchEnvelope, 
 } from '../types/ui';
-import type { ArenaStatus, Agent, Persistence } from '../types/contract';
+import type { ArenaStatus, Agent, Persistence, RawLog } from '../types/contract';
 
 interface ArenaContextType {
   viewModels: ArenaViewModelBundle;
@@ -18,6 +18,7 @@ interface ArenaContextType {
     status: FetchEnvelope<ArenaStatus> | null;
     agents: FetchEnvelope<Agent[]> | null;
     persistence: FetchEnvelope<Persistence> | null;
+    logs: FetchEnvelope<RawLog[]> | null;
   };
   isLoading: boolean;
   refresh: () => Promise<void>;
@@ -29,19 +30,22 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [statusEnv, setStatusEnv] = useState<FetchEnvelope<ArenaStatus> | null>(null);
   const [agentsEnv, setAgentsEnv] = useState<FetchEnvelope<Agent[]> | null>(null);
   const [persistenceEnv, setPersistenceEnv] = useState<FetchEnvelope<Persistence> | null>(null);
+  const [logsEnv, setLogsEnv] = useState<FetchEnvelope<RawLog[]> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const refresh = async () => {
     try {
-      const [s, a, p] = await Promise.all([
+      const [s, a, p, l] = await Promise.all([
         arenaClient.getStatus(),
         arenaClient.getAgents(),
-        arenaClient.getPersistence()
+        arenaClient.getPersistence(),
+        arenaClient.getRawLogs()
       ]);
       
       setStatusEnv(s);
       setAgentsEnv(a);
       setPersistenceEnv(p);
+      setLogsEnv(l);
     } catch (err) {
       console.error('Fatal fetch orchestration error:', err);
     } finally {
@@ -65,7 +69,8 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const transport = mapTransportState({
       status: statusEnv,
       agents: agentsEnv,
-      persistence: persistenceEnv
+      persistence: persistenceEnv,
+      logs: logsEnv
     });
 
     return {
@@ -73,14 +78,20 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       research,
       agents,
       persistence,
-      transport
+      transport,
+      logs: logsEnv?.data || []
     };
-  }, [statusEnv, agentsEnv, persistenceEnv]);
+  }, [statusEnv, agentsEnv, persistenceEnv, logsEnv]);
 
   return (
     <ArenaContext.Provider value={{ 
       viewModels: bundle, 
-      envelopes: { status: statusEnv, agents: agentsEnv, persistence: persistenceEnv },
+      envelopes: { 
+        status: statusEnv, 
+        agents: agentsEnv, 
+        persistence: persistenceEnv,
+        logs: logsEnv
+      },
       isLoading, 
       refresh 
     }}>

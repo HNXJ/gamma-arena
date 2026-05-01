@@ -17,35 +17,41 @@ export const registerLogItems = () => {
     label: 'Event Stream',
     priority: 10,
     render: ({ data }: { data: ArenaViewModelBundle }) => {
-      const { transport, research, system } = data;
+      const { transport, logs } = data;
       
-      const isDegraded = transport.endpointStates.find(s => s.name === 'System Status')?.kind !== 'success_populated';
+      const logState = transport.endpointStates.find(s => s.name === 'Provenance Rail');
+      const isUnavailable = logState?.kind === 'http_error' || logState?.kind === 'network_error';
+      const isLoading = logState?.kind === 'loading';
 
       return (
         <div className="bg-black/40 rounded-2xl border border-white/5 p-8">
           <div className="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] mb-8">
             System Provenance Stream
           </div>
+          
           <div className="space-y-4 font-mono text-[11px]">
-            {isDegraded ? (
-              <div className="text-rose-500/80 italic font-bold">
-                [TRANSPORT_DEGRADED] :: AUTHORITATIVE PROVENANCE FEED UNAVAILABLE
+            {isLoading ? (
+              <div className="text-gray-500 animate-pulse">[LOADING] :: INITIALIZING PROVENANCE STREAM...</div>
+            ) : isUnavailable ? (
+              <div className="p-4 border border-rose-500/20 bg-rose-500/5 text-rose-500/80 italic font-bold">
+                [TRANSPORT_DEGRADED] :: AUTHORITATIVE PROVENANCE FEED UNAVAILABLE :: {logState?.detail}
+              </div>
+            ) : logs.length === 0 ? (
+              <div className="text-gray-600 italic">
+                [SUBSTRATE_EMPTY] :: NO RAW EVENTS RECORDED IN CURRENT SESSION
               </div>
             ) : (
-              <>
-                <div className="text-gray-500 font-bold">
-                  [CONSOLIDATED_TRUTH] :: {research.truthClass} STATE CONFIRMED
-                </div>
-                <div className="text-emerald-500/80">
-                  [OBSERVATION] :: Official Substrate at {research.officialNeuronCount}N
-                </div>
-                <div className="text-amber-500/80">
-                  [PROGRESSION] :: PASS Network at {research.largestGroundedPassNetwork}N
-                </div>
-                <div className="text-gray-500 italic">
-                  [SYSTEM] :: Heartbeat {system.heartbeat} :: Uptime {system.uptime}
-                </div>
-              </>
+              <div className="space-y-2 max-h-[600px] overflow-auto scrollbar-thin scrollbar-thumb-white/5">
+                {logs.map((log, i) => (
+                  <div key={i} className="group flex space-x-4 border-b border-white/[0.02] pb-2">
+                    <span className="text-gray-600 shrink-0 select-none">[{i.toString().padStart(4, '0')}]</span>
+                    <div className="space-y-1">
+                       <div className="text-gray-500 group-hover:text-gray-400">{log.path}</div>
+                       <div className="text-gray-300 whitespace-pre-wrap break-all leading-relaxed">{log.content}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

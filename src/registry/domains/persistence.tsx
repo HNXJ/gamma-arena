@@ -1,6 +1,6 @@
 
 import { registry } from '../core';
-import { RefreshCw, CheckCircle, Clock } from 'lucide-react';
+import { RefreshCw, CheckCircle, Clock, Database } from 'lucide-react';
 import { FeedCard } from '../../components/ui/FeedCard';
 import type { ArenaViewModelBundle } from '../../types/ui';
 
@@ -19,7 +19,22 @@ export const registerPersistenceItems = () => {
     label: 'Persistence Metrics',
     priority: 10,
     render: ({ data }: { data: ArenaViewModelBundle }) => {
-      const { persistence } = data;
+      const { persistence, transport } = data;
+      
+      const persistState = transport.endpointStates.find(s => s.name === 'Persistence');
+      const isUnavailable = persistState?.kind === 'http_error' || persistState?.kind === 'network_error' || persistState?.kind === 'payload_error';
+
+      if (isUnavailable) {
+        return (
+          <div className="p-12 border border-rose-500/20 bg-rose-500/5 rounded-2xl flex flex-col items-center space-y-4">
+            <Database className="text-rose-500" size={32} />
+            <div className="text-center space-y-1">
+              <div className="text-sm font-black text-rose-500 uppercase tracking-widest">Recovery Substrate Unreachable</div>
+              <div className="text-[10px] text-rose-500/60 font-bold uppercase">Persistence layer requires authoritative link for attestation</div>
+            </div>
+          </div>
+        );
+      }
       
       return (
         <div className="space-y-8">
@@ -82,7 +97,19 @@ export const registerPersistenceItems = () => {
     label: 'Persistence Summary',
     priority: 50,
     render: ({ data }: { data: ArenaViewModelBundle }) => {
-      const { persistence } = data;
+      const { persistence, transport } = data;
+      
+      const persistState = transport.endpointStates.find(s => s.name === 'Persistence');
+      const isUnavailable = persistState?.kind === 'http_error' || persistState?.kind === 'network_error';
+
+      if (isUnavailable) {
+        return (
+          <div className="p-4 border border-rose-500/10 bg-rose-500/5 rounded space-y-1">
+            <div className="opacity-40 uppercase tracking-tighter">Persistence</div>
+            <div className="text-[10px] font-black text-rose-500 uppercase">LINK_FAILURE</div>
+          </div>
+        );
+      }
       
       return (
         <div className="p-4 border border-emerald-500/10 bg-emerald-500/5 rounded space-y-2">

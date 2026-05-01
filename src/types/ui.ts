@@ -1,5 +1,6 @@
 
 import React from 'react';
+import type { RawLog } from './contract';
 
 export type UISlot = 
   | 'TOP_SUMMARY' 
@@ -117,4 +118,5 @@ export interface ArenaViewModelBundle {
   agents: AgentViewModel[];
   persistence: PersistenceViewModel;
   transport: TransportViewModel;
+  logs: RawLog[];
 }

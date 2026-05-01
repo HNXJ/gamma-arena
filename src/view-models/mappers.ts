@@ -1,4 +1,4 @@
-import type { ArenaStatus, Agent, Persistence } from '../types/contract';
+import type { ArenaStatus, Agent, Persistence, RawLog } from '../types/contract';
 import type { 
   SystemViewModel, 
   ResearchViewModel, 
@@ -70,11 +70,13 @@ export const mapTransportState = (envelopes: {
   status: FetchEnvelope<ArenaStatus> | null;
   agents: FetchEnvelope<Agent[]> | null;
   persistence: FetchEnvelope<Persistence> | null;
+  logs: FetchEnvelope<RawLog[]> | null;
 }): TransportViewModel => {
   const states = [
     { name: 'System Status', env: envelopes.status },
     { name: 'Agent Roster', env: envelopes.agents },
-    { name: 'Persistence', env: envelopes.persistence }
+    { name: 'Persistence', env: envelopes.persistence },
+    { name: 'Provenance Rail', env: envelopes.logs }
   ];
 
   const endpointStates = states.map(s => ({
