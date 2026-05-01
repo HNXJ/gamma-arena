@@ -11,7 +11,7 @@ export const SlotRenderer: React.FC<{ slot: UISlot, data: unknown, state?: unkno
     <>
       {items.map(item => (
         <React.Fragment key={item.key}>
-          {item.render({ data })}
+          {item.render({ data, state })}
         </React.Fragment>
       ))}
     </>

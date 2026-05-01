@@ -1,52 +1,36 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { registry } from '../core';
-import { FeedCard } from '../../components/ui/FeedCard';
-import { Users } from 'lucide-react';
 import type { AgentViewModel } from '../../types/ui';
-import { AgentLogPanel } from '../../components/AgentLogPanel';
+import { AgentCard } from '../../components/AgentCard';
 
 export const registerAgentItems = () => {
-  // --- AGENT_STRIP ---
-  registry.register({
-    key: 'agent-roster-sidebar',
-    slot: 'AGENT_STRIP',
+  // Register the Agents Tab
+  registry.registerTab({
+    id: 'agents',
     label: 'Council Roster',
-    priority: 10,
-    render: ({ data }: { data: unknown }) => {
-      const agents = data as AgentViewModel[];
-      return (
-        <div className="space-y-6">
-          {agents.map(agent => (
-            <FeedCard
-              key={agent.id}
-              title={agent.id}
-              subtitle={agent.role}
-              severity={agent.statusSeverity === 'ACTIVE' ? 'NORMAL' : agent.statusSeverity === 'IDLE' ? 'NORMAL' : agent.statusSeverity === 'WARNING' ? 'WARNING' : 'CRITICAL'}
-              icon={Users}
-            >
-               <div className="flex items-center space-x-3">
-                 <div className={`w-2 h-2 rounded-full ${agent.statusSeverity === 'ACTIVE' ? 'bg-emerald-500 animate-pulse' : 'bg-gray-600'}`} />
-                 <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{agent.status}</span>
-               </div>
-            </FeedCard>
-          ))}
-        </div>
-      );
-    }
+    icon: 'Users',
+    priority: 30,
+    domain: 'AGENTS'
   });
 
-  // --- LOG_INSPECTOR ---
   registry.register({
-    key: 'agent-evidence-grid',
-    slot: 'LOG_INSPECTOR',
-    label: 'Council Evidence',
+    key: 'agent-roster-grid',
+    slot: 'AGENTS',
+    label: 'Active Council',
     priority: 10,
-    render: ({ data }: { data: unknown }) => {
-      const agents = data as AgentViewModel[];
+    render: ({ data }: { data: any }) => {
+      const agents = data.agents as AgentViewModel[];
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {agents.map(agent => (
-            <AgentLogPanel key={agent.id} agentId={agent.id} role={agent.role} />
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {agents.length > 0 ? (
+            agents.map(agent => (
+              <AgentCard key={agent.id} agent={agent} />
+            ))
+          ) : (
+            <div className="p-12 border border-white/5 bg-white/[0.02] rounded-2xl text-center text-gray-500 font-bold uppercase tracking-widest col-span-full">
+              No Agents Detected in Current Substrate
+            </div>
+          )}
         </div>
       );
     }

@@ -1,125 +1,45 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import Overview from './pages/Overview';
-import Arena from './pages/Arena';
-import Agents from './pages/Agents';
-import Persistence from './pages/Persistence';
-import Logs from './pages/Logs';
-import { LayoutDashboard, Activity, Users, Database, FileText, Terminal } from 'lucide-react';
+import { useState } from 'react'
+import { ArenaProvider } from './context/ArenaContext';
+import { SafeBase } from './components/SafeBase';
+import { ExtendedBase } from './components/ExtendedBase';
 import { initializeRegistry } from './registry/setup';
+import { Terminal, Layout } from 'lucide-react';
 
 // Initialize the UI registry fragments
 initializeRegistry();
 
-const GammaGlyph = () => (
-  <span className="text-[32px] font-bold font-serif leading-none select-none">Γ</span>
-);
-
-const SidebarItem: React.FC<{ to: string, icon: React.ElementType, label: string }> = ({ to, icon: Icon, label }) => (
-  <NavLink
-    to={to}
-    className={({ isActive }) =>
-      `flex items-center space-x-4 px-6 py-4 transition-all duration-300 group border-r-2 ${
-        isActive 
-          ? 'bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37] shadow-[inset_-10px_0_20px_-10px_rgba(212,175,55,0.2)]' 
-          : 'text-gray-500 border-transparent hover:bg-white/5 hover:text-gray-200'
-      }`
-    }
-  >
-    <Icon size={20} className="shrink-0 transition-transform group-hover:scale-110" />
-    <span className="text-xs font-black uppercase tracking-[0.2em]">{label}</span>
-  </NavLink>
-)
-
 function App() {
+  const [mode, setMode] = useState<'SAFE' | 'EXTENDED'>('EXTENDED');
+
   return (
-    <Router>
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '40px',
-        background: '#171a1d',
-        color: '#00e0e0',
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        borderBottom: '1px solid #D4AF37',
-        letterSpacing: '0.2em'
-      }}>
-        SYSTEM MOUNTED :: OPERATIONAL
+    <ArenaProvider>
+      <div className="relative">
+        {/* Universal Mode Toggle (Operator Only) */}
+        <div className="fixed bottom-6 right-6 z-[9999] flex items-center bg-black/80 backdrop-blur border border-white/10 rounded-full p-1 shadow-2xl">
+          <button 
+            onClick={() => setMode('SAFE')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
+              mode === 'SAFE' ? 'bg-emerald-500 text-black font-black' : 'text-gray-500 hover:text-gray-300'
+            }`}
+          >
+            <Terminal size={14} />
+            <span className="text-[10px] uppercase tracking-widest">Safe Base</span>
+          </button>
+          <button 
+            onClick={() => setMode('EXTENDED')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
+              mode === 'EXTENDED' ? 'bg-[#D4AF37] text-black font-black' : 'text-gray-500 hover:text-gray-300'
+            }`}
+          >
+            <Layout size={14} />
+            <span className="text-[10px] uppercase tracking-widest">Extended</span>
+          </button>
+        </div>
+
+        {/* Content Layer */}
+        {mode === 'SAFE' ? <SafeBase /> : <ExtendedBase />}
       </div>
-      <div className="flex h-screen bg-[#101214] text-[#c8d0d8] overflow-hidden selection:bg-[#800080]/30">
-        {/* Sidebar */}
-        <aside className="w-80 bg-[#0d0d0d] border-r border-white/5 flex flex-col shrink-0 shadow-2xl relative z-10">
-          <div className="p-10 border-b border-white/5 flex flex-col space-y-2">
-            <div className="flex items-center space-x-3 text-[#D4AF37]">
-              <GammaGlyph />
-              <div className="flex flex-col">
-                <span className="text-2xl font-black tracking-tighter leading-none italic uppercase">Gamma</span>
-                <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-[0.4em] leading-none ml-1">Arena</span>
-              </div>
-            </div>
-            <div className="pt-4 flex items-center space-x-2">
-               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-               <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest italic">Link: Grounded</span>
-            </div>
-          </div>
-          
-          <nav className="flex-1 py-8 flex flex-col">
-            <SidebarItem to="/" icon={LayoutDashboard} label="Mission Overview" />
-            <SidebarItem to="/arena" icon={Activity} label="Scientific Arena" />
-            <SidebarItem to="/agents" icon={Users} label="Council Roster" />
-            <SidebarItem to="/persistence" icon={Database} label="World Registry" />
-            <SidebarItem to="/logs" icon={FileText} label="Provenance Rail" />
-          </nav>
-
-          <div className="p-8 border-t border-white/5 space-y-4">
-            <div className="flex items-center space-x-3 text-gray-600 group hover:text-gray-400 transition-colors cursor-help">
-              <Terminal size={14} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Operator Console v1.6</span>
-            </div>
-            <p className="text-[9px] text-gray-700 uppercase leading-relaxed font-medium">
-              Read-only scientific interface. Grounded world-state enforced by BASTOS LAB.
-            </p>
-          </div>
-        </aside>
-
-        {/* Main Workspace */}
-        <main className="flex-1 overflow-auto relative bg-black scientific-grid">
-           {/* Global Background Grid logic from index.css */}
-           <div className="relative z-10 min-h-full flex flex-col">
-             <div className="flex-1">
-                <Routes>
-                    <Route path="/" element={<Overview />} />
-                    <Route path="/arena" element={<Arena />} />
-                    <Route path="/agents" element={<Agents />} />
-                    <Route path="/persistence" element={<Persistence />} />
-                    <Route path="/logs" element={<Logs />} />
-                </Routes>
-             </div>
-
-             <footer className="shrink-0 p-8 pt-0 mt-auto opacity-40 hover:opacity-100 transition-opacity duration-500">
-               <div className="flex justify-between items-center text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] border-t border-white/5 pt-6">
-                 <div className="flex items-center space-x-4">
-                    <span>BASTOS LAB / VANDERBILT</span>
-                    <span className="text-gray-800">|</span>
-                    <span>© 2026</span>
-                 </div>
-                 <div className="flex items-center space-x-4">
-                    <span className="italic">Grounded: {new Date().toLocaleDateString()}</span>
-                    <span className="text-amber-500/50">Contract: Hardened</span>
-                 </div>
-               </div>
-             </footer>
-           </div>
-        </main>
-      </div>
-    </Router>
+    </ArenaProvider>
   );
 }
 

@@ -3,39 +3,60 @@ import type { ArenaStatus, Progression, Agent, RawLog, NetworkState, AgentLogRes
 const BASE_URL = import.meta.env.VITE_GAMMA_API_BASE || 'http://localhost:3013';
 
 export const ArenaClient = {
-  async getStatus(): Promise<ArenaStatus> {
-    const res = await fetch(`${BASE_URL}/api/status`);
-    return res.json();
+  async getStatus(): Promise<ArenaStatus | null> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/status`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
   },
 
-  async getProgression(): Promise<Progression> {
-    const res = await fetch(`${BASE_URL}/api/progression`);
-    return res.json();
+  async getProgression(): Promise<Progression | null> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/progression`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
   },
 
   async getAgents(): Promise<Agent[]> {
-    const res = await fetch(`${BASE_URL}/api/agents`);
-    return res.json();
+    try {
+      const res = await fetch(`${BASE_URL}/api/agents`);
+      if (!res.ok) return [];
+      return await res.json();
+    } catch { return []; }
   },
 
-  async getAgentLogs(agentId: string): Promise<AgentLogResponse> {
-    const res = await fetch(`${BASE_URL}/api/agents/${agentId}/logs`);
-    return res.json();
+  async getAgentLogs(agentId: string): Promise<AgentLogResponse | null> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/agents/${agentId}/logs`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
   },
 
-  async getPersistence(): Promise<Persistence> {
-    const res = await fetch(`${BASE_URL}/api/persistence`);
-    return res.json();
+  async getPersistence(): Promise<Persistence | null> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/persistence`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
   },
 
-  async getRawLogs(lines: number = 100): Promise<RawLog> {
-    const res = await fetch(`${BASE_URL}/api/logs/raw?lines=${lines}`);
-    return res.json();
+  async getRawLogs(lines: number = 100): Promise<RawLog | null> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/logs/raw?lines=${lines}`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
   },
 
-  async getNetworkState(): Promise<NetworkState> {
-    const res = await fetch(`${BASE_URL}/api/network/state`);
-    return res.json();
+  async getNetworkState(): Promise<NetworkState | null> {
+    try {
+      const res = await fetch(`${BASE_URL}/api/network/state`);
+      if (!res.ok) return null;
+      return await res.json();
+    } catch { return null; }
   },
 
   getEventStream(): EventSource {

@@ -9,7 +9,7 @@ import type { SystemViewModel, ResearchViewModel, AgentViewModel } from '../type
 
 const SAFE_SYSTEM_DEFAULTS: SystemViewModel = {
   status: 'DEGRADED',
-  statusSeverity: 'OFFLINE',
+  statusSeverity: 'CRITICAL',
   heartbeat: 'STALLED',
   uptime: '---',
   slots: '---',
@@ -35,7 +35,7 @@ const SAFE_AGENT_DEFAULTS: Partial<AgentViewModel> = {
   source: 'Unknown'
 };
 
-export const mapStatusToSeverity = (status: string): 'NORMAL' | 'WARNING' | 'CRITICAL' | 'OFFLINE' => {
+export const mapStatusToSeverity = (status: string): 'NORMAL' | 'WARNING' | 'CRITICAL' => {
   const normalized = (status || '').toUpperCase();
   switch (normalized) {
     case 'ONLINE': 
@@ -46,8 +46,10 @@ export const mapStatusToSeverity = (status: string): 'NORMAL' | 'WARNING' | 'CRI
       return 'WARNING';
     case 'CRASHED': 
     case 'FAILED': 
+    case 'OFFLINE':
+    case 'DISCONNECTED':
       return 'CRITICAL';
-    default: return 'OFFLINE';
+    default: return 'CRITICAL';
   }
 };
 
@@ -73,7 +75,6 @@ export const mapSystemState = (status: ArenaStatus | null): SystemViewModel => {
     heartbeat: status.system.heartbeat || 'STALLED',
     uptime: status.system.monitor_uptime_seconds ? `${status.system.monitor_uptime_seconds}s` : '---',
     slots: status.system.backend_model_slots_occupied || '---',
-    councilActivity: status.system.council_chat_activity,
     blockers: status.system.status === 'CRASHED' ? ['SYSTEM_CRASH'] : []
   };
 };

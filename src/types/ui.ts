@@ -1,60 +1,74 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
 export type UISlot = 
   | 'TOP_SUMMARY' 
   | 'MAIN_FEED' 
   | 'RIGHT_RAIL' 
-  | 'AGENT_STRIP' 
-  | 'SYSTEM_NOTICES' 
-  | 'ARENA_OVERLAY' 
-  | 'ARENA_SIDEBAR'
-  | 'SYSTEM_FEED'
-  | 'DETAIL_DRAWER' 
-  | 'LOG_INSPECTOR';
+  | 'SAFE_STATUS' 
+  | 'SAFE_BLOCKERS' 
+  | 'SAFE_NOTICES'
+  | 'LOBBY_OVERLAY'
+  | 'LOBBY'
+  | 'RESEARCH'
+  | 'AGENTS'
+  | 'ARENA'
+  | 'LOGS'
+  | 'SYSTEM_FEED';
+
+export type UIBaseMode = 'SAFE' | 'EXTENDED';
+
+export interface UITab {
+  id: string;
+  label: string;
+  icon: string; // Lucide icon name
+  priority: number;
+  domain: string;
+}
 
 export interface UIRegistryItem {
   key: string;
   slot: UISlot;
   label: string;
-  priority: number; // Higher number = lower in feed
+  priority: number;
+  timestamp?: string;
+  metadata?: Record<string, unknown>;
+  render: (props: { data: any; state?: any }) => React.ReactNode;
   stickiness?: 'PINNED' | 'NORMAL'; // PINNED items stay at top
-  timestamp?: string; // Optional for chronological sorting
-  visibilityRule?: (state: unknown) => boolean;
-  render: (props: { data: unknown }) => React.ReactNode;
+  visibilityRule?: (state: any) => boolean;
   interaction?: {
     mode: 'STATIC' | 'EXPANDABLE' | 'DETAIL_LINK';
     linkTo?: string;
   };
-  fallbackLabel?: string;
 }
 
 export interface SystemViewModel {
   status: string;
-  statusSeverity: 'NORMAL' | 'WARNING' | 'CRITICAL' | 'OFFLINE';
+  statusSeverity: 'NORMAL' | 'WARNING' | 'CRITICAL';
   heartbeat: string;
   uptime: string;
   slots: string;
-  councilActivity?: string;
   blockers: string[];
 }
 
 export interface ResearchViewModel {
   neuronCount: number;
   targetCount: number;
-  topic: string;
-  progressPercent: number;
   truthClass: string;
-  truthSeverity: 'GROUNDED' | 'INFERRED' | 'DEGRADED';
-  activePatch: string | null;
+  truthSeverity: 'GROUNDED' | 'UNVERIFIED' | 'STALLED' | 'INFERRED';
+  progressPercent: number;
+  topic: string;
+  activePatch: string;
+  lastBlock?: string;
 }
 
 export interface AgentViewModel {
   id: string;
   role: string;
   status: string;
-  statusSeverity: 'ACTIVE' | 'IDLE' | 'WARNING' | 'CRITICAL';
-  blocker?: string;
-  lastActive: string;
+  statusSeverity: 'ACTIVE' | 'IDLE' | 'CRITICAL';
   truthClass: string;
+  lastActive: string;
+  blocker?: string;
   source: string;
 }
