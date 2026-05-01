@@ -1,25 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { registry } from '../core';
-import type { AgentViewModel } from '../../types/ui';
 import { AgentCard } from '../../components/AgentCard';
+import type { ArenaViewModelBundle } from '../../types/ui';
 
 export const registerAgentItems = () => {
-  // Register the Agents Tab
   registry.registerTab({
     id: 'agents',
-    label: 'Council Roster',
+    label: 'Agent Roster',
     icon: 'Users',
-    priority: 30,
+    priority: 10,
     domain: 'AGENTS'
   });
 
   registry.register({
-    key: 'agent-roster-grid',
+    key: 'agents-main-feed',
     slot: 'AGENTS',
-    label: 'Active Council',
+    label: 'Active Agents',
     priority: 10,
-    render: ({ data }: { data: any }) => {
-      const agents = data.agents as AgentViewModel[];
+    render: ({ data }: { data: ArenaViewModelBundle }) => {
+      const agents = data.agents;
+      
       return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {agents.length > 0 ? (

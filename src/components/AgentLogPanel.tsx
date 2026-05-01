@@ -1,66 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { ArenaClient } from '../api/client';
+import { arenaClient as ArenaClient } from '../api/client';
 import type { AgentLogResponse } from '../types/contract';
-import { Terminal, History } from 'lucide-react';
+import { Terminal, History, AlertTriangle, Loader2 } from 'lucide-react';
+import type { FetchEnvelope } from '../types/ui';
 
-export const AgentLogPanel: React.FC<{ agentId: string, role: string }> = ({ agentId, role }) => {
-  const [logData, setLogData] = useState<AgentLogResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+interface AgentLogPanelProps {
+  agentId: string;
+}
 
-  const fetchLogs = React.useCallback(async () => {
-    try {
-      const data = await ArenaClient.getAgentLogs(agentId);
-      setLogData(data);
-    } catch {
-      console.error(`Failed to fetch logs for ${agentId}`);
-    } finally {
-      setLoading(false);
-    }
-  }, [agentId]);
+export const AgentLogPanel: React.FC<AgentLogPanelProps> = ({ agentId }) => {
+  const [envelope, setEnvelope] = useState<FetchEnvelope<AgentLogResponse> | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const fetchLogs = async () => {
+      setIsLoading(true);
+      const res = await ArenaClient.getAgentLogs(agentId);
+      setEnvelope(res);
+      setIsLoading(false);
+    };
     fetchLogs();
-    const interval = setInterval(fetchLogs, 5000);
-    return () => clearInterval(interval);
-  }, [fetchLogs]);
+  }, [agentId]);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 space-y-4">
+        <Loader2 size={24} className="text-[#D4AF37] animate-spin" />
+        <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Inverting Agent Provenance...</span>
+      </div>
+    );
+  }
+
+  if (envelope?.kind === 'http_error' || envelope?.kind === 'network_error' || envelope?.kind === 'payload_error') {
+    return (
+      <div className="p-8 border border-rose-500/20 bg-rose-500/5 rounded-2xl space-y-4">
+        <div className="flex items-center space-x-3 text-rose-500">
+          <AlertTriangle size={18} />
+          <h3 className="text-sm font-black uppercase tracking-widest">Provenance Failure</h3>
+        </div>
+        <p className="text-xs text-rose-500/60 font-bold leading-relaxed">
+          {envelope.error || 'The agent provenance stream is currently unreachable.'}
+        </p>
+      </div>
+    );
+  }
+
+  const logs = envelope?.data?.logs || [];
 
   return (
-    <div className="bg-[#0d0d0d] border border-white/5 rounded-xl overflow-hidden shadow-xl h-64 flex flex-col group">
-      <div className="px-4 py-2 border-b border-white/5 bg-white/[0.01] flex items-center justify-between">
-        <div className="flex items-center space-x-2 text-gray-500">
-          <Terminal size={12} className="group-hover:text-amber-500 transition-colors" />
-          <span className="text-[10px] font-bold uppercase tracking-widest">{agentId} Evidence</span>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <History size={18} className="text-[#D4AF37]" />
+          <h2 className="text-sm font-black text-gray-100 uppercase tracking-widest italic">Agent Interaction Log</h2>
         </div>
-        <span className="text-[8px] font-bold text-gray-700 uppercase tracking-tighter italic">{role}</span>
-      </div>
-      
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono">
-        {loading && !logData ? (
-          <div className="h-full flex items-center justify-center">
-            <div className="w-4 h-4 border border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
-          </div>
-        ) : logData?.logs.length ? (
-          logData.logs.map((entry, i) => (
-            <div key={i} className="text-[10px] leading-relaxed border-l border-white/5 pl-3 py-1 hover:border-amber-500/30 transition-colors">
-              <span className="text-gray-600 mr-2">[{entry.time.split(' ')[1]}]</span>
-              <span className="text-gray-300">{entry.msg}</span>
-            </div>
-          ))
-        ) : (
-          <div className="h-full flex flex-col items-center justify-center opacity-20 grayscale scale-75">
-            <History size={32} />
-            <span className="text-[8px] font-bold uppercase tracking-widest mt-2">No Grounded Evidence</span>
-          </div>
-        )}
+        <div className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">
+          ID: <span className="text-[#D4AF37]">{agentId}</span>
+        </div>
       </div>
 
-      <div className="px-4 py-2 border-t border-white/5 bg-black/40 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-           <div className={`w-1.5 h-1.5 rounded-full ${logData?.truth_class === 'GROUNDED' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-gray-700'}`} />
-           <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{logData?.truth_class || 'SYNCING'}</span>
+      <div className="bg-[#0d0d0d] rounded-2xl border border-white/5 overflow-hidden">
+        <div className="p-4 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Terminal size={14} className="text-emerald-500" />
+            <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-widest">Encrypted Stream</span>
+          </div>
+          <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Authoritative: {envelope?.data?.truth_class || 'UNKNOWN'}</span>
         </div>
-        <span className="text-[8px] text-gray-700 uppercase tracking-tighter truncate max-w-[100px]">Src: {logData?.source || '---'}</span>
+        
+        <div className="max-h-[400px] overflow-auto p-6 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
+          {logs.length > 0 ? (
+            logs.map((log, i) => (
+              <div key={i} className="flex space-x-4 group">
+                <div className="text-[10px] font-mono text-gray-600 pt-1 shrink-0 group-hover:text-gray-400 transition-colors">
+                  {new Date(log.time).toLocaleTimeString([], { hour12: false })}
+                </div>
+                <div className="space-y-1">
+                  <div className="text-[10px] font-black text-[#D4AF37] uppercase tracking-wider">{log.agent}</div>
+                  <div className="text-xs text-gray-300 leading-relaxed font-medium group-hover:text-white transition-colors">
+                    {log.msg}
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-12 text-center space-y-2">
+              <div className="text-[10px] font-black text-gray-600 uppercase tracking-widest">No Events Recorded</div>
+              <div className="text-[10px] font-bold text-gray-700 uppercase">Awaiting Substrate Interaction</div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

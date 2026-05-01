@@ -1,69 +1,75 @@
-import type { ArenaStatus, Progression, Agent, RawLog, NetworkState, AgentLogResponse, Persistence } from '../types/contract';
+import type { ArenaStatus, Agent, Persistence, RawLog, AgentLogResponse } from '../types/contract';
+import type { FetchEnvelope } from '../types/ui';
 
-const BASE_URL = import.meta.env.VITE_GAMMA_API_BASE || 'http://localhost:3013';
+const BASE_URL = 'http://localhost:3013';
 
-export const ArenaClient = {
-  async getStatus(): Promise<ArenaStatus | null> {
+async function wrapFetch<T>(path: string): Promise<FetchEnvelope<T>> {
+  const timestamp = new Date().toISOString();
+  try {
+    const response = await fetch(`${BASE_URL}${path}`);
+    
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: response.status,
+        kind: 'http_error',
+        data: null,
+        error: `HTTP ${response.status}: ${response.statusText}`,
+        receivedAt: timestamp
+      };
+    }
+
     try {
-      const res = await fetch(`${BASE_URL}/api/status`);
-      if (!res.ok) return null;
-      return await res.json();
-    } catch { return null; }
+      const data = await response.json();
+      const isEmpty = Array.isArray(data) ? data.length === 0 : !data;
+      
+      return {
+        ok: true,
+        status: response.status,
+        kind: isEmpty ? 'success_empty' : 'success_populated',
+        data,
+        receivedAt: timestamp
+      };
+    } catch {
+      return {
+        ok: false,
+        status: response.status,
+        kind: 'payload_error',
+        data: null,
+        error: 'Malformed JSON payload',
+        receivedAt: timestamp
+      };
+    }
+  } catch {
+    return {
+      ok: false,
+      status: null,
+      kind: 'network_error',
+      data: null,
+      error: 'Network failure',
+      receivedAt: timestamp
+    };
+  }
+}
+
+export const arenaClient = {
+  async getStatus(): Promise<FetchEnvelope<ArenaStatus>> {
+    return wrapFetch<ArenaStatus>('/api/status');
   },
 
-  async getProgression(): Promise<Progression | null> {
-    try {
-      const res = await fetch(`${BASE_URL}/api/progression`);
-      if (!res.ok) return null;
-      return await res.json();
-    } catch { return null; }
+  async getAgents(): Promise<FetchEnvelope<Agent[]>> {
+    return wrapFetch<Agent[]>('/api/agents');
   },
 
-  async getAgents(): Promise<Agent[]> {
-    try {
-      const res = await fetch(`${BASE_URL}/api/agents`);
-      if (!res.ok) return [];
-      return await res.json();
-    } catch { return []; }
+  async getPersistence(): Promise<FetchEnvelope<Persistence>> {
+    return wrapFetch<Persistence>('/api/persistence');
   },
 
-  async getAgentLogs(agentId: string): Promise<AgentLogResponse | null> {
-    try {
-      const res = await fetch(`${BASE_URL}/api/agents/${agentId}/logs`);
-      if (!res.ok) return null;
-      return await res.json();
-    } catch { return null; }
+  async getRawLogs(): Promise<FetchEnvelope<RawLog[]>> {
+    return wrapFetch<RawLog[]>('/api/logs/raw');
   },
 
-  async getPersistence(): Promise<Persistence | null> {
-    try {
-      const res = await fetch(`${BASE_URL}/api/persistence`);
-      if (!res.ok) return null;
-      return await res.json();
-    } catch { return null; }
-  },
-
-  async getRawLogs(lines: number = 100): Promise<RawLog | null> {
-    try {
-      const res = await fetch(`${BASE_URL}/api/logs/raw?lines=${lines}`);
-      if (!res.ok) return null;
-      return await res.json();
-    } catch { return null; }
-  },
-
-  async getNetworkState(): Promise<NetworkState | null> {
-    try {
-      const res = await fetch(`${BASE_URL}/api/network/state`);
-      if (!res.ok) return null;
-      return await res.json();
-    } catch { return null; }
-  },
-
-  getEventStream(): EventSource {
-    return new EventSource(`${BASE_URL}/api/events/stream`);
-  },
-
-  getNetworkEventStream(): EventSource {
-    return new EventSource(`${BASE_URL}/api/network/events/stream`);
+  async getAgentLogs(agentId: string): Promise<FetchEnvelope<AgentLogResponse>> {
+    return wrapFetch<AgentLogResponse>(`/api/logs/agent/${agentId}`);
   }
 };

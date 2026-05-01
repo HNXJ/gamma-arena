@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from 'react';
 
 export type UISlot = 
@@ -14,9 +14,37 @@ export type UISlot =
   | 'AGENTS'
   | 'ARENA'
   | 'LOGS'
+  | 'PERSISTENCE'
   | 'SYSTEM_FEED';
 
 export type UIBaseMode = 'SAFE' | 'EXTENDED';
+
+export type TransportStateKind = 
+  | 'loading'
+  | 'success_empty'
+  | 'success_populated'
+  | 'http_error'
+  | 'network_error'
+  | 'payload_error';
+
+export interface FetchEnvelope<T> {
+  ok: boolean;
+  status: number | null;
+  kind: TransportStateKind;
+  data: T | null;
+  error?: string;
+  receivedAt: string | null;
+}
+
+export interface TransportViewModel {
+  linkState: 'CONNECTED' | 'PARTIAL' | 'DEGRADED' | 'UNREACHABLE';
+  summary: string;
+  endpointStates: Array<{
+    name: string;
+    kind: TransportStateKind;
+    detail: string;
+  }>;
+}
 
 export interface UITab {
   id: string;
@@ -33,9 +61,9 @@ export interface UIRegistryItem {
   priority: number;
   timestamp?: string;
   metadata?: Record<string, unknown>;
-  render: (props: { data: any; state?: any }) => React.ReactNode;
+  render: (props: { data: ArenaViewModelBundle; state?: ArenaViewModelBundle }) => React.ReactNode;
   stickiness?: 'PINNED' | 'NORMAL'; // PINNED items stay at top
-  visibilityRule?: (state: any) => boolean;
+  visibilityRule?: (state?: ArenaViewModelBundle) => boolean;
   interaction?: {
     mode: 'STATIC' | 'EXPANDABLE' | 'DETAIL_LINK';
     linkTo?: string;
@@ -52,8 +80,10 @@ export interface SystemViewModel {
 }
 
 export interface ResearchViewModel {
-  neuronCount: number;
-  targetCount: number;
+  officialNeuronCount: number;
+  largestGroundedPassNetwork: number;
+  nextUnlockThreshold: number;
+  activeTargetCount?: number;
   truthClass: string;
   truthSeverity: 'GROUNDED' | 'UNVERIFIED' | 'STALLED' | 'INFERRED';
   progressPercent: number;
@@ -71,4 +101,20 @@ export interface AgentViewModel {
   lastActive: string;
   blocker?: string;
   source: string;
+}
+
+export interface PersistenceViewModel {
+  bootType: string;
+  freshness: string;
+  resumeCount: number;
+  lastCheckpoint: string;
+  status: string;
+}
+
+export interface ArenaViewModelBundle {
+  system: SystemViewModel;
+  research: ResearchViewModel;
+  agents: AgentViewModel[];
+  persistence: PersistenceViewModel;
+  transport: TransportViewModel;
 }

@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { registry } from '../core';
+import type { ArenaViewModelBundle } from '../../types/ui';
 
 export const registerLogItems = () => {
-  // Register the Logs Tab
   registry.registerTab({
     id: 'logs',
     label: 'Provenance Rail',
@@ -16,16 +16,40 @@ export const registerLogItems = () => {
     slot: 'LOGS',
     label: 'Event Stream',
     priority: 10,
-    render: () => (
-      <div className="bg-black/40 rounded-2xl border border-white/5 p-8">
-        <div className="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] mb-8">System Provenance Stream</div>
-        <div className="space-y-4 font-mono text-[11px]">
-          <div className="text-gray-500">[2026-05-01 12:13:45] :: SYS :: Registry decentralized</div>
-          <div className="text-gray-500">[2026-05-01 12:13:46] :: SYS :: Two-Base architecture mounted</div>
-          <div className="text-emerald-500/80">[2026-05-01 12:13:47] :: INFO :: ExtendedBase initialized</div>
-          <div className="text-amber-500/80">[2026-05-01 12:13:48] :: WARN :: Awaiting backend contract sync</div>
+    render: ({ data }: { data: ArenaViewModelBundle }) => {
+      const { transport, research, system } = data;
+      
+      const isDegraded = transport.endpointStates.find(s => s.name === 'System Status')?.kind !== 'success_populated';
+
+      return (
+        <div className="bg-black/40 rounded-2xl border border-white/5 p-8">
+          <div className="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] mb-8">
+            System Provenance Stream
+          </div>
+          <div className="space-y-4 font-mono text-[11px]">
+            {isDegraded ? (
+              <div className="text-rose-500/80 italic font-bold">
+                [TRANSPORT_DEGRADED] :: AUTHORITATIVE PROVENANCE FEED UNAVAILABLE
+              </div>
+            ) : (
+              <>
+                <div className="text-gray-500 font-bold">
+                  [CONSOLIDATED_TRUTH] :: {research.truthClass} STATE CONFIRMED
+                </div>
+                <div className="text-emerald-500/80">
+                  [OBSERVATION] :: Official Substrate at {research.officialNeuronCount}N
+                </div>
+                <div className="text-amber-500/80">
+                  [PROGRESSION] :: PASS Network at {research.largestGroundedPassNetwork}N
+                </div>
+                <div className="text-gray-500 italic">
+                  [SYSTEM] :: Heartbeat {system.heartbeat} :: Uptime {system.uptime}
+                </div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    )
+      );
+    }
   });
 };

@@ -1,0 +1,59 @@
+
+/Users/hamednejat/workspace/computational/gamma-arena/src/api/client.ts
+  33:14  error  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/hamednejat/workspace/computational/gamma-arena/src/components/ExtendedBase.tsx
+  23:77  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/hamednejat/workspace/computational/gamma-arena/src/components/SafeBase.tsx
+  36:14  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+/Users/hamednejat/workspace/computational/gamma-arena/src/components/SafeBase.tsx:36:14
+  34 |         <div className="flex items-center space-x-4">
+  35 |           <div className="flex items-center space-x-2">
+> 36 |             <StatusIcon />
+     |              ^^^^^^^^^^ This component is created during render
+  37 |             <span className={`uppercase tracking-widest font-black ${getStatusColor()}`}>
+  38 |               {transport.summary}
+  39 |             </span>
+
+/Users/hamednejat/workspace/computational/gamma-arena/src/components/SafeBase.tsx:20:22
+  18 |   };
+  19 |
+> 20 |   const StatusIcon = () => {
+     |                      ^^^^^^^
+> 21 |     if (transport.linkState === 'CONNECTED') return <Wifi size={12} className="text-emerald-500" />;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 22 |     if (transport.linkState === 'UNREACHABLE') return <AlertCircle size={12} className="text-rose-500 animate-pulse" />;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 23 |     return <AlertTriangle size={12} className="text-amber-500" />;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 24 |   };
+     | ^^^^ The component is created during render here
+  25 |
+  26 |   return (
+  27 |     <div className="min-h-screen bg-[#080808] text-emerald-500/80 font-mono p-4 space-y-4 text-xs selection:bg-emerald-500/20">  react-hooks/static-components
+
+/Users/hamednejat/workspace/computational/gamma-arena/src/context/ArenaContext.tsx
+  53:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/hamednejat/workspace/computational/gamma-arena/src/context/ArenaContext.tsx:53:5
+  51 |
+  52 |   useEffect(() => {
+> 53 |     refresh();
+     |     ^^^^^^^ Avoid calling setState() directly within an effect
+  54 |     const interval = setInterval(refresh, 2000);
+  55 |     return () => clearInterval(interval);
+  56 |   }, []);  react-hooks/set-state-in-effect
+  89:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react-refresh/only-export-components
+
+✖ 5 problems (5 errors, 0 warnings)
+

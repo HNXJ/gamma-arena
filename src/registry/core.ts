@@ -1,39 +1,41 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { UIRegistryItem, UISlot, UITab } from '../types/ui';
+
+import type { ArenaViewModelBundle, UIRegistryItem, UISlot, UITab } from '../types/ui';
 
 class UIRegistry {
-  private items: UIRegistryItem[] = [];
-  private tabs: UITab[] = [];
+  private items: Map<string, UIRegistryItem> = new Map();
+  private tabs: Map<string, UITab> = new Map();
 
   register(item: UIRegistryItem) {
-    this.items.push(item);
+    this.items.set(item.key, item);
   }
 
   registerTab(tab: UITab) {
-    this.tabs.push(tab);
+    this.tabs.set(tab.id, tab);
   }
 
-  getItemsForSlot(slot: UISlot, state?: any): UIRegistryItem[] {
-    return this.items
-      .filter(item => item.slot === slot)
-      .filter(item => !item.visibilityRule || item.visibilityRule(state))
+  getItemsForSlot(slot: UISlot, state?: ArenaViewModelBundle): UIRegistryItem[] {
+    return Array.from(this.items.values())
+      .filter(item => {
+        if (item.slot !== slot) return false;
+        if (item.visibilityRule) return item.visibilityRule(state);
+        return true;
+      })
       .sort((a, b) => {
-        // 1. PINNED items first
+        // PINNED items first
         if (a.stickiness === 'PINNED' && b.stickiness !== 'PINNED') return -1;
-        if (b.stickiness === 'PINNED' && a.stickiness !== 'PINNED') return 1;
-        
-        // 2. Numerical priority (lowest first)
-        return a.priority - b.priority;
+        if (a.stickiness !== 'PINNED' && b.stickiness === 'PINNED') return 1;
+        return b.priority - a.priority;
       });
   }
 
   getTabs(): UITab[] {
-    return [...this.tabs].sort((a, b) => a.priority - b.priority);
+    return Array.from(this.tabs.values())
+      .sort((a, b) => b.priority - a.priority);
   }
 
   clear() {
-    this.items = [];
-    this.tabs = [];
+    this.items.clear();
+    this.tabs.clear();
   }
 }
 

@@ -9,7 +9,7 @@ import { Terminal, Layout } from 'lucide-react';
 initializeRegistry();
 
 function App() {
-  const [mode, setMode] = useState<'SAFE' | 'EXTENDED'>('EXTENDED');
+  const [mode, setMode] = useState<'SAFE' | 'EXTENDED'>('SAFE');
 
   return (
     <ArenaProvider>

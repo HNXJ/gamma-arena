@@ -1,117 +1,100 @@
-import type { ArenaStatus, Agent } from '../types/contract';
-import type { SystemViewModel, ResearchViewModel, AgentViewModel } from '../types/ui';
+import type { ArenaStatus, Agent, Persistence } from '../types/contract';
+import type { 
+  SystemViewModel, 
+  ResearchViewModel, 
+  AgentViewModel, 
+  PersistenceViewModel,
+  TransportViewModel,
+  FetchEnvelope,
+  TransportStateKind
+} from '../types/ui';
 
-/**
- * FALLBACK DOCTRINE:
- * Every mapper must provide a documented "Safe State" for missing or unsupported data.
- * Ad hoc conditionals are replaced by explicit default objects.
- */
-
-const SAFE_SYSTEM_DEFAULTS: SystemViewModel = {
-  status: 'DEGRADED',
-  statusSeverity: 'CRITICAL',
-  heartbeat: 'STALLED',
-  uptime: '---',
-  slots: '---',
-  blockers: ['SOURCE_UNREACHABLE']
-};
-
-const SAFE_RESEARCH_DEFAULTS: ResearchViewModel = {
-  neuronCount: 0,
-  targetCount: 0,
-  progressPercent: 0,
-  topic: 'Unknown Mission',
-  activePatch: '---',
-  truthClass: 'DEGRADED',
-  truthSeverity: 'INFERRED'
-};
-
-const SAFE_AGENT_DEFAULTS: Partial<AgentViewModel> = {
-  role: 'Generic Agent',
-  status: 'IDLE',
-  statusSeverity: 'IDLE',
-  lastActive: '---',
-  truthClass: 'DEGRADED',
-  source: 'Unknown'
-};
-
-export const mapStatusToSeverity = (status: string): 'NORMAL' | 'WARNING' | 'CRITICAL' => {
-  const normalized = (status || '').toUpperCase();
-  switch (normalized) {
-    case 'ONLINE': 
-    case 'NORMAL': 
-      return 'NORMAL';
-    case 'STANDBY': 
-    case 'DEGRADED': 
-      return 'WARNING';
-    case 'CRASHED': 
-    case 'FAILED': 
-    case 'OFFLINE':
-    case 'DISCONNECTED':
-      return 'CRITICAL';
-    default: return 'CRITICAL';
-  }
-};
-
-export const mapAgentStatusToSeverity = (status: string, blocker?: string): 'ACTIVE' | 'IDLE' | 'WARNING' | 'CRITICAL' => {
-  if (blocker) return 'CRITICAL';
-  const normalized = (status || '').toUpperCase();
-  switch (normalized) {
-    case 'ACTIVE': return 'ACTIVE';
-    case 'IDLE': return 'IDLE';
-    case 'STANDBY': return 'WARNING';
-    case 'BLOCKED_BY_LMS': return 'CRITICAL';
-    default: return 'IDLE';
-  }
-};
-
-export const mapSystemState = (status: ArenaStatus | null): SystemViewModel => {
-  if (!status || !status.system) return SAFE_SYSTEM_DEFAULTS;
-
-  return {
-    ...SAFE_SYSTEM_DEFAULTS,
-    status: status.system.status || 'UNKNOWN',
-    statusSeverity: mapStatusToSeverity(status.system.status),
-    heartbeat: status.system.heartbeat || 'STALLED',
-    uptime: status.system.monitor_uptime_seconds ? `${status.system.monitor_uptime_seconds}s` : '---',
-    slots: status.system.backend_model_slots_occupied || '---',
-    blockers: status.system.status === 'CRASHED' ? ['SYSTEM_CRASH'] : []
-  };
-};
-
-export const mapResearchState = (status: ArenaStatus | null): ResearchViewModel => {
-  const prog = status?.progression;
+export const mapArenaState = (status: ArenaStatus | null): { system: SystemViewModel, research: ResearchViewModel } => {
+  const safeStatus = status?.system?.status || 'STALLED';
   const research = status?.research;
+  const progression = status?.progression;
 
-  if (!prog) return SAFE_RESEARCH_DEFAULTS;
+  const systemVM: SystemViewModel = {
+    status: safeStatus,
+    statusSeverity: safeStatus === 'ONLINE' ? 'NORMAL' : safeStatus === 'STANDBY' ? 'WARNING' : 'CRITICAL',
+    heartbeat: status?.system?.heartbeat || 'STALLED',
+    uptime: status?.system?.monitor_uptime_seconds ? `${status.system.monitor_uptime_seconds}s` : '---',
+    slots: status?.system?.backend_model_slots_occupied || '---',
+    blockers: safeStatus === 'CRASHED' ? ['SYSTEM_CRASH'] : []
+  };
 
-  const neuronCount = prog.largest_pass_network_neuron_count || 0;
-  const targetCount = prog.next_unlock_threshold || 0;
-  
-  return {
-    ...SAFE_RESEARCH_DEFAULTS,
-    neuronCount,
-    targetCount,
-    progressPercent: targetCount > 0 ? Math.min((neuronCount / targetCount) * 100, 100) : 0,
+  const researchVM: ResearchViewModel = {
+    officialNeuronCount: research?.neuron_count || 0,
+    largestGroundedPassNetwork: progression?.largest_pass_network_neuron_count || 0,
+    nextUnlockThreshold: progression?.next_unlock_threshold || 0,
+    activeTargetCount: research?.active_target,
+    truthClass: progression?.truth_class || 'DEGRADED',
+    truthSeverity: progression?.truth_class === 'GROUNDED' ? 'GROUNDED' : 
+                   progression?.truth_class === 'INFERRED' ? 'INFERRED' : 'STALLED',
+    progressPercent: (research?.neuron_count && progression?.next_unlock_threshold) 
+      ? Math.min((research.neuron_count / progression.next_unlock_threshold) * 100, 100) 
+      : 0,
     topic: research?.mission_topic || 'Unknown Research Path',
     activePatch: research?.active_patch || '---',
-    truthClass: prog.truth_class || 'DEGRADED',
-    truthSeverity: prog.truth_class === 'GROUNDED' ? 'GROUNDED' : 'INFERRED'
+    lastBlock: status?.persistence?.last_checkpoint
+  };
+
+  return { system: systemVM, research: researchVM };
+};
+
+export const mapAgentsState = (agents: Agent[] | null): AgentViewModel[] => {
+  if (!agents) return [];
+  return agents.map(a => ({
+    id: a.id,
+    role: a.role,
+    status: a.status,
+    statusSeverity: a.status === 'ACTIVE' ? 'ACTIVE' : a.status === 'IDLE' ? 'IDLE' : 'CRITICAL',
+    truthClass: a.truth_class,
+    lastActive: a.last_active,
+    blocker: a.system_blocker,
+    source: a.source || 'Unknown'
+  }));
+};
+
+export const mapPersistenceState = (p: Persistence | null): PersistenceViewModel => {
+  return {
+    bootType: p?.boot_type || 'Unknown',
+    freshness: p?.freshness || 'Unknown',
+    resumeCount: p?.resume_count || 0,
+    lastCheckpoint: p?.last_checkpoint || 'None',
+    status: p ? 'GROUNDED' : 'UNAVAILABLE'
   };
 };
 
-export const mapAgentState = (agent: Agent): AgentViewModel => {
-  if (!agent) return { id: 'unknown-agent', ...SAFE_AGENT_DEFAULTS } as AgentViewModel;
+export const mapTransportState = (envelopes: {
+  status: FetchEnvelope<ArenaStatus> | null;
+  agents: FetchEnvelope<Agent[]> | null;
+  persistence: FetchEnvelope<Persistence> | null;
+}): TransportViewModel => {
+  const states = [
+    { name: 'System Status', env: envelopes.status },
+    { name: 'Agent Roster', env: envelopes.agents },
+    { name: 'Persistence', env: envelopes.persistence }
+  ];
+
+  const endpointStates = states.map(s => ({
+    name: s.name,
+    kind: s.env?.kind || 'loading' as TransportStateKind,
+    detail: s.env?.error || (s.env?.ok ? 'Connected' : 'Waiting for telemetry')
+  }));
+
+  const allOk = endpointStates.every(s => s.kind === 'success_populated' || s.kind === 'success_empty');
+  const someOk = endpointStates.some(s => s.kind === 'success_populated' || s.kind === 'success_empty');
+  const allFailed = states.every(s => !s.env?.ok && s.env?.kind !== 'loading');
+
+  let linkState: TransportViewModel['linkState'] = 'DEGRADED';
+  if (allOk) linkState = 'CONNECTED';
+  else if (allFailed) linkState = 'UNREACHABLE';
+  else if (someOk) linkState = 'PARTIAL';
 
   return {
-    ...SAFE_AGENT_DEFAULTS,
-    id: agent.id || 'anonymous',
-    role: agent.role || 'Unknown Agency',
-    status: agent.status || 'IDLE',
-    statusSeverity: mapAgentStatusToSeverity(agent.status, agent.system_blocker),
-    blocker: agent.system_blocker,
-    lastActive: agent.last_active || '---',
-    truthClass: agent.truth_class || 'DEGRADED',
-    source: agent.source || 'Unknown'
-  } as AgentViewModel;
+    linkState,
+    summary: allOk ? 'Substrate Link Healthy' : someOk ? 'Degraded Connectivity' : 'Transport Interrupted',
+    endpointStates
+  };
 };

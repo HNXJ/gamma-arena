@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState } from 'react';
 import { useArena } from '../context/ArenaContext';
 import { registry } from '../registry/core';
@@ -20,7 +20,7 @@ export const ExtendedBase: React.FC = () => {
         <div className="text-[#D4AF37] font-black text-2xl italic">Γ</div>
         <nav className="flex-1 flex flex-col space-y-4">
           {tabs.map(tab => {
-            const Icon = (LucideIcons as any)[tab.icon] || LucideIcons.HelpCircle;
+            const Icon = (LucideIcons as unknown as Record<string, React.FC<{ size?: number; className?: string }>>)[tab.icon] || LucideIcons.HelpCircle;
             const isActive = activeTabId === tab.id;
             return (
               <button
@@ -57,9 +57,9 @@ export const ExtendedBase: React.FC = () => {
           
           <div className="flex items-center space-x-6">
             <div className="text-right">
-              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Active Neurons</div>
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Official Neurons</div>
               <div className="text-sm font-black text-amber-500 font-mono tracking-tighter">
-                {viewModels.research.neuronCount} / {viewModels.research.targetCount}
+                {viewModels.research.officialNeuronCount} <span className="opacity-40">/ {viewModels.research.nextUnlockThreshold}</span>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ export const ExtendedBase: React.FC = () => {
           <div className="max-w-6xl mx-auto space-y-12">
              {/* We use a slot named after the tab ID to render its content */}
              <SlotRenderer 
-               slot={(activeTabId.toUpperCase() as any) as UISlot} 
+               slot={(activeTabId.toUpperCase() as UISlot) as UISlot} 
                data={viewModels} 
                state={viewModels} 
              />
