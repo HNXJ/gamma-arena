@@ -79,7 +79,7 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       agents,
       persistence,
       transport,
-      logs: logsEnv?.data || []
+      logs: Array.isArray(logsEnv?.data) ? logsEnv.data : []
     };
   }, [statusEnv, agentsEnv, persistenceEnv, logsEnv]);
 

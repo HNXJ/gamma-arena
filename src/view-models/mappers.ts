@@ -43,7 +43,7 @@ export const mapArenaState = (status: ArenaStatus | null): { system: SystemViewM
 };
 
 export const mapAgentsState = (agents: Agent[] | null): AgentViewModel[] => {
-  if (!agents) return [];
+  if (!agents || !Array.isArray(agents)) return [];
   return agents.map(a => ({
     id: a.id,
     role: a.role,
@@ -57,12 +57,13 @@ export const mapAgentsState = (agents: Agent[] | null): AgentViewModel[] => {
 };
 
 export const mapPersistenceState = (p: Persistence | null): PersistenceViewModel => {
+  const isDegraded = !p || (p as any).status === 'UNREACHABLE';
   return {
     bootType: p?.boot_type || 'Unknown',
     freshness: p?.freshness || 'Unknown',
     resumeCount: p?.resume_count || 0,
     lastCheckpoint: p?.last_checkpoint || 'None',
-    status: p ? 'GROUNDED' : 'UNAVAILABLE'
+    status: isDegraded ? 'UNAVAILABLE' : 'GROUNDED'
   };
 };
 

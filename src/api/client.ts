@@ -1,7 +1,7 @@
 import type { ArenaStatus, Agent, Persistence, RawLog, AgentLogResponse } from '../types/contract';
 import type { FetchEnvelope } from '../types/ui';
 
-const BASE_URL = 'http://localhost:3013';
+const BASE_URL = import.meta.env.VITE_GAMMA_API_BASE || 'https://glllmx.vercel.app';
 
 async function wrapFetch<T>(path: string): Promise<FetchEnvelope<T>> {
   const timestamp = new Date().toISOString();
@@ -54,22 +54,22 @@ async function wrapFetch<T>(path: string): Promise<FetchEnvelope<T>> {
 
 export const arenaClient = {
   async getStatus(): Promise<FetchEnvelope<ArenaStatus>> {
-    return wrapFetch<ArenaStatus>('/api/status');
+    return wrapFetch<ArenaStatus>('/api/v1/status');
   },
 
   async getAgents(): Promise<FetchEnvelope<Agent[]>> {
-    return wrapFetch<Agent[]>('/api/agents');
+    return wrapFetch<Agent[]>('/api/v1/agents');
   },
 
   async getPersistence(): Promise<FetchEnvelope<Persistence>> {
-    return wrapFetch<Persistence>('/api/persistence');
+    return wrapFetch<Persistence>('/api/v1/persistence');
   },
 
   async getRawLogs(): Promise<FetchEnvelope<RawLog[]>> {
-    return wrapFetch<RawLog[]>('/api/logs/raw');
+    return wrapFetch<RawLog[]>('/api/v1/events/recent');
   },
 
   async getAgentLogs(agentId: string): Promise<FetchEnvelope<AgentLogResponse>> {
-    return wrapFetch<AgentLogResponse>(`/api/logs/agent/${agentId}`);
+    return wrapFetch<AgentLogResponse>(`/api/v1/logs/agent/${agentId}`);
   }
 };
