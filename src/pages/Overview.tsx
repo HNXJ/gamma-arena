@@ -23,6 +23,7 @@ const Overview: React.FC = () => {
       setLoading(false);
       setError(null);
     } catch (err) {
+      console.error('Fetch error details:', err);
       setError('Connection Interrupted - Attempting Re-sync');
       setLoading(false);
     }

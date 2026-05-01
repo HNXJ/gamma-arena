@@ -6,17 +6,28 @@
 }
 
 :root {
-  color-scheme: dark;
+  --arena-bg: #1E2227;
+  --arena-panel: #2A2F36;
+  --arena-gold: #D4AF37;
+  --arena-gold-bright: #F6E27A;
+  --arena-gold-deep: #B88917;
+  --arena-purple: #7C5CFC;
+  --arena-cyan: #58E1FF;
+  --arena-white: #F5F7FA;
+  --arena-border: rgba(212, 175, 55, 0.35);
+
+  --text-0: var(--arena-white);
+  --text-1: #c8d0d8;
+  --text-2: #8d97a1;
 }
 
 body {
   margin: 0;
-  background-color: #0a0a0a;
-  color: #e5e5e5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--arena-bg);
+  color: var(--text-0);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
+
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {

@@ -5,7 +5,11 @@ import Arena from './pages/Arena';
 import Agents from './pages/Agents';
 import Persistence from './pages/Persistence';
 import Logs from './pages/Logs';
-import { LayoutDashboard, Activity, Users, Database, FileText, Shield, Terminal } from 'lucide-react';
+import { LayoutDashboard, Activity, Users, Database, FileText, Terminal } from 'lucide-react';
+
+const GammaGlyph = () => (
+  <span className="text-[32px] font-bold font-serif leading-none select-none">Γ</span>
+);
 
 const SidebarItem: React.FC<{ to: string, icon: any, label: string }> = ({ to, icon: Icon, label }) => (
   <NavLink
@@ -13,7 +17,7 @@ const SidebarItem: React.FC<{ to: string, icon: any, label: string }> = ({ to, i
     className={({ isActive }) =>
       `flex items-center space-x-4 px-6 py-4 transition-all duration-300 group border-r-2 ${
         isActive 
-          ? 'bg-amber-500/5 text-amber-500 border-amber-500 shadow-[inset_-10px_0_20px_-10px_rgba(245,158,11,0.2)]' 
+          ? 'bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37] shadow-[inset_-10px_0_20px_-10px_rgba(212,175,55,0.2)]' 
           : 'text-gray-500 border-transparent hover:bg-white/5 hover:text-gray-200'
       }`
     }
@@ -31,27 +35,29 @@ function App() {
         top: 0,
         left: 0,
         width: '100%',
-        height: '50px',
-        background: 'red',
-        color: 'white',
+        height: '40px',
+        background: '#171a1d',
+        color: '#00e0e0',
         zIndex: 9999,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '24px',
-        fontWeight: 'bold'
+        fontSize: '14px',
+        fontWeight: 'bold',
+        borderBottom: '1px solid #D4AF37',
+        letterSpacing: '0.2em'
       }}>
-        APP MOUNTED
+        SYSTEM MOUNTED :: OPERATIONAL
       </div>
-      <div className="flex h-screen bg-[#0a0a0a] text-gray-200 overflow-hidden selection:bg-amber-500/30">
+      <div className="flex h-screen bg-[#101214] text-[#c8d0d8] overflow-hidden selection:bg-[#800080]/30">
         {/* Sidebar */}
         <aside className="w-80 bg-[#0d0d0d] border-r border-white/5 flex flex-col shrink-0 shadow-2xl relative z-10">
           <div className="p-10 border-b border-white/5 flex flex-col space-y-2">
-            <div className="flex items-center space-x-3 text-amber-500">
-              <Shield size={32} strokeWidth={2.5} />
+            <div className="flex items-center space-x-3 text-[#D4AF37]">
+              <GammaGlyph />
               <div className="flex flex-col">
                 <span className="text-2xl font-black tracking-tighter leading-none italic uppercase">Gamma</span>
-                <span className="text-[10px] font-bold text-amber-600 uppercase tracking-[0.4em] leading-none ml-1">Arena</span>
+                <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-[0.4em] leading-none ml-1">Arena</span>
               </div>
             </div>
             <div className="pt-4 flex items-center space-x-2">
