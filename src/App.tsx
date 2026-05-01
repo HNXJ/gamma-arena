@@ -26,6 +26,23 @@ const SidebarItem: React.FC<{ to: string, icon: any, label: string }> = ({ to, i
 function App() {
   return (
     <Router>
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '50px',
+        background: 'red',
+        color: 'white',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '24px',
+        fontWeight: 'bold'
+      }}>
+        APP MOUNTED
+      </div>
       <div className="flex h-screen bg-[#0a0a0a] text-gray-200 overflow-hidden selection:bg-amber-500/30">
         {/* Sidebar */}
         <aside className="w-80 bg-[#0d0d0d] border-r border-white/5 flex flex-col shrink-0 shadow-2xl relative z-10">

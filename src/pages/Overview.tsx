@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArenaClient } from '../api/client';
-import { ArenaStatus, Agent } from '../types/contract';
+import type { ArenaStatus, Agent } from '../types/contract';
 import { StatusCard } from '../components/StatusCard';
 import { ProgressLadder } from '../components/ProgressLadder';
 import { AgentCard } from '../components/AgentCard';

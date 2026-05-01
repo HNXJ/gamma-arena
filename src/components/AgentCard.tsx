@@ -1,4 +1,4 @@
-import { Agent } from '../types/contract';
+import type { Agent } from '../types/contract';
 
 export const AgentCard = ({ agent }: { agent: Agent }) => (
   <div className="arena-panel p-3 flex justify-between items-center group hover:bg-amber-950/10 transition-colors">

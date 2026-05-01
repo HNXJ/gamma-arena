@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ArenaClient } from '../api/client';
-import { Progression, NetworkState } from '../types/contract';
+import type { Progression, NetworkState } from '../types/contract';
 import { ProgressLadder } from '../components/ProgressLadder';
 import { NetworkModel } from '../components/NetworkModel';
-import { Milestone, Trophy, Network, ShieldCheck, Zap, Activity } from 'lucide-react';
+import { Milestone, Network, Zap, Activity } from 'lucide-react';
 
 const Arena: React.FC = () => {
   const [progression, setProgression] = useState<Progression | null>(null);

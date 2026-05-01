@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArenaClient } from '../api/client';
-import { CouncilEvent, RawLog } from '../types/contract';
+import type { CouncilEvent, RawLog } from '../types/contract';
 import { FileText, Terminal, Activity, Info, Clock, AlertCircle } from 'lucide-react';
 
 const EventItem: React.FC<{ event: CouncilEvent }> = ({ event }) => {

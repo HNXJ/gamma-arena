@@ -1,5 +1,6 @@
 import React from 'react'
-import { LucideIcon, Info } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import { Info } from 'lucide-react'
 
 interface StatusCardProps {
   title: string;

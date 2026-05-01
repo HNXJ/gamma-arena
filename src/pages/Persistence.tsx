@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { ArenaClient } from '../api/client'
-import { Persistence as PersistenceType } from '../types/contract'
+import type { Persistence as PersistenceType } from '../types/contract'
 import { Database, RotateCcw, Save, ShieldAlert } from 'lucide-react'
 
 export default function Persistence() {

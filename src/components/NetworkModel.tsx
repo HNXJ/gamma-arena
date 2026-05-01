@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { NetworkState } from '../types/contract';
+import type { NetworkState } from '../types/contract';
 import { Share2, Info } from 'lucide-react';
 
 interface NetworkModelProps {

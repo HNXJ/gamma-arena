@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArenaClient } from '../api/client';
-import { Agent, AgentLogResponse } from '../types/contract';
+import type { Agent, AgentLogResponse } from '../types/contract';
 import { AgentCard } from '../components/AgentCard';
 import { ShieldCheck, History, Info, Terminal } from 'lucide-react';
 
