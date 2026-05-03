@@ -35,6 +35,22 @@ export const registerOverviewItems = () => {
 
       return (
         <div className="space-y-8">
+          {/* Mission Header */}
+          <div className="p-6 border border-emerald-500/20 bg-emerald-500/5 rounded-2xl space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h2 className="text-sm font-black text-emerald-500 uppercase tracking-[0.2em]">Continuous Growth Mission: N → N+1</h2>
+                <div className="text-[10px] text-emerald-500/60 font-bold uppercase">Add one biologically justified neuron, validate, receipt, repeat.</div>
+              </div>
+              <div className="px-3 py-1 bg-emerald-500/20 rounded text-[10px] font-black text-emerald-500 uppercase tracking-widest animate-pulse">
+                Active Mission
+              </div>
+            </div>
+            <div className="pt-3 border-t border-emerald-500/10 text-[9px] text-emerald-500/40 font-bold uppercase tracking-wider leading-relaxed">
+              Trial simulations are scratch artifacts. Only Judge-validated receipts can commit truth.
+            </div>
+          </div>
+
           <div className="flex items-center justify-between border-b border-white/5 pb-4">
             <div className="flex items-center space-x-4">
               <FeedCard 

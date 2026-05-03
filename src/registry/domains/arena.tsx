@@ -39,6 +39,19 @@ export const registerArenaItems = () => {
 
       return (
         <div className="space-y-12">
+          {/* Mission Context */}
+          <div className="p-6 border border-amber-500/20 bg-amber-500/5 rounded-2xl space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h2 className="text-sm font-black text-amber-500 uppercase tracking-[0.2em]">Growth Target: N ({research.officialNeuronCount}) → N+1 ({research.officialNeuronCount + 1})</h2>
+                <div className="text-[10px] text-amber-500/60 font-bold uppercase">Candidate expansion requires biological justification and canonical Judge PASS.</div>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-amber-500/10 text-[9px] text-amber-500/40 font-bold uppercase tracking-wider leading-relaxed">
+              Trial simulations and optimization attempts are scratch artifacts. Only Judge-validated receipts promote truth.
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <FeedCard 
               title="Official Neurons" 
