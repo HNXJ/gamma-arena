@@ -5,6 +5,14 @@ import { FeedCard } from '../../components/ui/FeedCard';
 import type { ArenaViewModelBundle } from '../../types/ui';
 
 export const registerOverviewItems = () => {
+  registry.registerTab({
+    id: 'lobby',
+    label: 'Mission Overview',
+    icon: 'Terminal',
+    priority: 100,
+    domain: 'LOBBY'
+  });
+
   registry.register({
     key: 'overview-status-strip',
     slot: 'LOBBY',
