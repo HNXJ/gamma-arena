@@ -54,22 +54,22 @@ async function wrapFetch<T>(path: string): Promise<FetchEnvelope<T>> {
 
 export const arenaClient = {
   async getStatus(): Promise<FetchEnvelope<ArenaStatus>> {
-    return wrapFetch<ArenaStatus>('/api/v1/status');
+    return wrapFetch<ArenaStatus>('/api/status');
   },
 
   async getAgents(): Promise<FetchEnvelope<Agent[]>> {
-    return wrapFetch<Agent[]>('/api/v1/agents');
+    return wrapFetch<Agent[]>('/api/agents');
   },
 
   async getPersistence(): Promise<FetchEnvelope<Persistence>> {
-    return wrapFetch<Persistence>('/api/v1/persistence');
+    return wrapFetch<Persistence>('/api/persistence');
   },
 
   async getRawLogs(): Promise<FetchEnvelope<RawLog[]>> {
-    return wrapFetch<RawLog[]>('/api/v1/events/recent');
+    return wrapFetch<RawLog[]>('/api/logs/raw');
   },
 
   async getAgentLogs(agentId: string): Promise<FetchEnvelope<AgentLogResponse>> {
-    return wrapFetch<AgentLogResponse>(`/api/v1/logs/agent/${agentId}`);
+    return wrapFetch<AgentLogResponse>(`/api/logs/agent/${agentId}`);
   }
 };
