@@ -56,7 +56,10 @@ export const registerPersistenceItems = () => {
           <div className="bg-black/40 rounded-2xl border border-white/5 p-8 space-y-6">
             <div className="flex items-center space-x-3 text-emerald-500/60 uppercase tracking-[0.2em] font-black text-[10px]">
               <CheckCircle size={14} />
-              <span>Authoritative Checkpoint Data</span>
+              <span>Observed Checkpoint Data</span>
+            </div>
+            <div className="text-[9px] font-bold text-gray-700 uppercase tracking-widest border-b border-white/5 pb-4">
+              Checkpoint displays are observational summaries. Backend receipts remain the authority for committed state.
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

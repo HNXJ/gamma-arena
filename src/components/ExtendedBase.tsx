@@ -57,7 +57,7 @@ export const ExtendedBase: React.FC = () => {
           
           <div className="flex items-center space-x-6">
             <div className="text-right">
-              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Official Neurons</div>
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Observed Neurons</div>
               <div className="text-sm font-black text-amber-500 font-mono tracking-tighter">
                 {viewModels.research.officialNeuronCount} <span className="opacity-40">/ {viewModels.research.nextUnlockThreshold}</span>
               </div>
