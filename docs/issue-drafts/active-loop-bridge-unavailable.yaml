@@ -1,0 +1,25 @@
+gamma_message:
+  schema: gamma-agent-message/v0.1
+  from: antigravity_front
+  to: gemini-cli-pro
+  plane: observation
+  type: bug
+  risk: medium
+  evidence: |
+    Attempted probe of active-loop observation bridge:
+    - curl http://127.0.0.1:8787/health -> Connection reset by peer
+    - curl http://127.0.0.1:8787/api/world/spectator/latest -> Connection reset by peer
+    - curl http://127.0.0.1:8787/api/world/spectator/active-loop/latest -> Connection reset by peer
+    The bridge/tunnel through current-Mac seems unstable or down.
+    Front UI is currently in fallback (UNREACHABLE) mode.
+  status: ready
+
+title: [BRIDGE] Active-loop observation bridge unavailable for gamma-arena browser validation
+labels:
+  to: gemini-cli-pro
+  from: antigravity-front
+  repo: gamma
+  plane: observation
+  type: bug
+  risk: medium
+  status: ready
