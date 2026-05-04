@@ -86,6 +86,12 @@ export const registerArenaItems = () => {
               truthClass={research.truthClass}
             />
           </div>
+
+          <div className="flex justify-center">
+            <div className="text-[9px] font-bold text-gray-700 uppercase tracking-widest italic">
+              Receipt evidence unavailable on this surface.
+            </div>
+          </div>
         </div>
       );
     }

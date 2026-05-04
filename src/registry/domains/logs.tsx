@@ -25,8 +25,11 @@ export const registerLogItems = () => {
 
       return (
         <div className="bg-black/40 rounded-2xl border border-white/5 p-8">
-          <div className="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] mb-8">
+          <div className="text-[10px] font-black text-gray-600 uppercase tracking-[0.4em] mb-4">
             System Provenance Stream
+          </div>
+          <div className="text-[9px] font-bold text-gray-700 uppercase tracking-widest mb-8 pb-4 border-b border-white/5">
+            Raw event visibility is observational. Events do not become truth without backend receipt acceptance.
           </div>
           
           <div className="space-y-4 font-mono text-[11px]">
