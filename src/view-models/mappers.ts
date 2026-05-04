@@ -57,7 +57,7 @@ export const mapAgentsState = (agents: Agent[] | null): AgentViewModel[] => {
 };
 
 export const mapPersistenceState = (p: Persistence | null): PersistenceViewModel => {
-  const isDegraded = !p || (p as any).status === 'UNREACHABLE';
+  const isDegraded = !p || p.status === 'UNREACHABLE';
   return {
     bootType: p?.boot_type || 'Unknown',
     freshness: p?.freshness || 'Unknown',

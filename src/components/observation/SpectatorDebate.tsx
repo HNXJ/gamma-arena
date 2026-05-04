@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 export const SpectatorDebate: React.FC = () => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

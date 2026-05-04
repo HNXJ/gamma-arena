@@ -32,6 +32,7 @@ export interface Persistence {
   freshness: string;
   resume_count: number;
   last_checkpoint?: string;
+  status?: 'ONLINE' | 'UNREACHABLE' | 'DEGRADED';
 }
 
 export interface Agent {
