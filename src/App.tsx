@@ -1,3 +1,4 @@
+import { SpectatorDebate } from "./components/observation/SpectatorDebate";
 import { useState } from 'react'
 import { ArenaProvider } from './context/ArenaContext';
 import { SafeBase } from './components/SafeBase';
@@ -34,10 +35,12 @@ function App() {
             <Layout size={14} />
             <span className="text-[10px] uppercase tracking-widest">Extended</span>
           </button>
+    <SpectatorDebate />
         </div>
 
         {/* Content Layer */}
         {mode === 'SAFE' ? <SafeBase /> : <ExtendedBase />}
+    <SpectatorDebate />
       </div>
     </ArenaProvider>
   );
