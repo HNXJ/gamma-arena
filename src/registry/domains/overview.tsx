@@ -79,7 +79,7 @@ export const registerOverviewItems = () => {
 
             <div className="flex items-center space-x-12 pr-4">
               <div className="text-right space-y-1">
-                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Official Level</div>
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Observed Level</div>
                 <div className="text-xl font-black text-emerald-500 font-mono tracking-tighter">
                   {research.officialNeuronCount} <span className="text-[10px] text-gray-600">N</span>
                 </div>
