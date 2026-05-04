@@ -54,9 +54,9 @@ export const registerArenaItems = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <FeedCard 
-              title="Official Neurons" 
+              title="Observed Neurons" 
               severity="NORMAL" 
-              subtitle="Authoritative Count"
+              subtitle="Reported Count"
             >
               <div className="text-4xl font-black text-gray-100 font-mono italic">{research.officialNeuronCount}</div>
             </FeedCard>
