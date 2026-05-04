@@ -16,7 +16,8 @@ export type UISlot =
   | 'ARENA'
   | 'LOGS'
   | 'PERSISTENCE'
-  | 'SYSTEM_FEED';
+  | 'SYSTEM_FEED'
+  | 'WIKI';
 
 export type UIBaseMode = 'SAFE' | 'EXTENDED';
 
