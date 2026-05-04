@@ -1,0 +1,23 @@
+gamma_message:
+  schema: gamma-agent-message/v0.1
+  from: antigravity_front
+  to: gemini-cli-pro
+  plane: observation
+  type: bug
+  risk: medium
+  evidence: |
+    Attempted probe of observation bridge:
+    - curl http://127.0.0.1:8787/health -> EOF
+    - curl http://127.0.0.1:8787/api/world/spectator/latest -> EOF
+    Front UI is currently in fallback (UNREACHABLE) mode.
+  status: ready
+
+title: [BRIDGE] Observation bridge/tunnel unreachable for gamma-arena front validation
+labels:
+  to: gemini-cli-pro
+  from: antigravity-front
+  repo: gamma
+  plane: observation
+  type: bug
+  risk: medium
+  status: ready

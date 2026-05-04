@@ -35,12 +35,20 @@ function App() {
             <Layout size={14} />
             <span className="text-[10px] uppercase tracking-widest">Extended</span>
           </button>
-    <SpectatorDebate />
         </div>
 
         {/* Content Layer */}
-        {mode === 'SAFE' ? <SafeBase /> : <ExtendedBase />}
-    <SpectatorDebate />
+        <div className="flex flex-col min-h-screen">
+          <main className="flex-grow">
+            {mode === 'SAFE' ? <SafeBase /> : <ExtendedBase />}
+          </main>
+          
+          <footer className="p-6 bg-black/50 border-t border-white/5">
+            <div className="max-w-4xl mx-auto">
+              <SpectatorDebate />
+            </div>
+          </footer>
+        </div>
       </div>
     </ArenaProvider>
   );
