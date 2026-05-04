@@ -22,32 +22,41 @@ export const SpectatorDebate: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchLatest = async () => {
-    try {
-      // Prefer active-loop/latest
-      let response = await fetch(`${import.meta.env.VITE_GAMMA_OBSERVATION_URL}/api/world/spectator/active-loop/latest`);
-      
-      // Fallback to spectator/latest if active-loop is 404 or fails
-      if (!response.ok) {
-        response = await fetch(`${import.meta.env.VITE_GAMMA_OBSERVATION_URL}/api/world/spectator/latest`);
-      }
-      
-      if (!response.ok) throw new Error(`Bridge error: ${response.statusText}`);
-      const json = await response.json();
-      setData(json);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Bridge Unreachable');
-      setData(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchLatest = async () => {
+      try {
+        let response = await fetch(`${import.meta.env.VITE_GAMMA_OBSERVATION_URL}/api/world/spectator/active-loop/latest`);
+        
+        if (!response.ok) {
+          response = await fetch(`${import.meta.env.VITE_GAMMA_OBSERVATION_URL}/api/world/spectator/latest`);
+        }
+        
+        if (!response.ok) throw new Error(`Bridge error: ${response.statusText}`);
+        const json = await response.json();
+        
+        if (isMounted) {
+          setData(json);
+          setError(null);
+          setLoading(false);
+        }
+      } catch (e) {
+        if (isMounted) {
+          setError(e instanceof Error ? e.message : 'Bridge Unreachable');
+          setData(null);
+          setLoading(false);
+        }
+      }
+    };
+
     fetchLatest();
     const interval = setInterval(fetchLatest, 5000);
-    return () => clearInterval(interval);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   return (
