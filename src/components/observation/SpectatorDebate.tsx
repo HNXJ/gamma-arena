@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 interface SpectatorMessage {
   participant: string;
-  status: string;
+  status?: string;
   timestamp: string;
   message?: string;
   response?: string;
+  msg?: string;
+  model_id?: string;
   source_path?: string;
 }
 
@@ -22,7 +24,14 @@ export const SpectatorDebate: React.FC = () => {
 
   const fetchLatest = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_GAMMA_OBSERVATION_URL}/api/world/spectator/latest`);
+      // Prefer active-loop/latest
+      let response = await fetch(`${import.meta.env.VITE_GAMMA_OBSERVATION_URL}/api/world/spectator/active-loop/latest`);
+      
+      // Fallback to spectator/latest if active-loop is 404 or fails
+      if (!response.ok) {
+        response = await fetch(`${import.meta.env.VITE_GAMMA_OBSERVATION_URL}/api/world/spectator/latest`);
+      }
+      
       if (!response.ok) throw new Error(`Bridge error: ${response.statusText}`);
       const json = await response.json();
       setData(json);
@@ -53,7 +62,7 @@ export const SpectatorDebate: React.FC = () => {
       </div>
       
       <p className="text-[10px] text-gray-500 mb-4 leading-relaxed">
-        This panel displays runtime spectator messages. It is not scientific truth and does not create receipts.
+        This is runtime observation only. It is not scientific truth and does not create receipts.
       </p>
 
       {loading && !data && <p className="animate-pulse">Connecting to bridge...</p>}
@@ -77,11 +86,18 @@ export const SpectatorDebate: React.FC = () => {
                 <span className="text-purple-400">{data.latest.participant}</span>
                 <span className="opacity-50">{data.latest.timestamp}</span>
               </div>
-              <div className="text-gray-400 mb-1 italic">
-                Status: {data.latest.status}
-              </div>
-              <div className="text-white/90 line-clamp-3">
-                {data.latest.message || data.latest.response || 'No content excerpt available'}
+              {data.latest.model_id && (
+                <div className="text-[9px] text-purple-400/50 mb-1">
+                  Model: {data.latest.model_id}
+                </div>
+              )}
+              {data.latest.status && (
+                <div className="text-gray-400 mb-1 italic">
+                  Status: {data.latest.status}
+                </div>
+              )}
+              <div className="text-white/90 line-clamp-3 whitespace-pre-wrap">
+                {data.latest.msg || data.latest.message || data.latest.response || 'No content excerpt available'}
               </div>
               {data.latest.source_path && (
                 <div className="mt-1 text-[9px] opacity-30 truncate">
@@ -101,3 +117,4 @@ export const SpectatorDebate: React.FC = () => {
     </div>
   );
 };
+
