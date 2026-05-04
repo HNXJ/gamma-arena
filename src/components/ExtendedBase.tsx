@@ -74,6 +74,16 @@ export const ExtendedBase: React.FC = () => {
                data={viewModels} 
                state={viewModels} 
              />
+
+             {/* Global Observation Disclaimer */}
+             <div className="pt-12 pb-8 border-t border-white/5 flex flex-col items-center space-y-2 opacity-30 group-hover:opacity-100 transition-opacity">
+               <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">
+                 Observation Surface Only
+               </div>
+               <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl">
+                 Gamma Arena is an observation surface. Scientific and game-state claims must be backed by committed backend truth and receipts.
+               </div>
+             </div>
           </div>
         </div>
 

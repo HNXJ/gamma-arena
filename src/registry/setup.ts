@@ -5,6 +5,7 @@ import { registerArenaItems } from './domains/arena';
 import { registerPersistenceItems } from './domains/persistence';
 import { registerLogItems } from './domains/logs';
 import { registerDemoItems } from './domains/demo';
+import { registerWikiItems } from './domains/wiki';
 
 /**
  * Initializes the global UI registry by loading domain-specific fragments.
@@ -20,4 +21,5 @@ export const initializeRegistry = () => {
   registerPersistenceItems();
   registerLogItems();
   registerDemoItems();
+  registerWikiItems();
 };

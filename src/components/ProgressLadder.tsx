@@ -31,7 +31,7 @@ export const ProgressLadder: React.FC<ProgressLadderProps> = ({
       <div className="flex-1 p-6 flex flex-col space-y-4">
         <div className="flex justify-between items-end">
           <div className="space-y-1">
-            <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Official Level</span>
+            <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Observed Level</span>
             <div className="text-4xl font-bold font-mono text-amber-500 tracking-tighter leading-none">
               {current}<span className="text-sm text-gray-600 ml-1 italic font-sans tracking-tight">neurons</span>
             </div>
