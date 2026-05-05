@@ -13,7 +13,7 @@ export const registerWikiItems = () => {
   registry.register({
     key: 'wiki-article-scientific-game',
     slot: 'WIKI',
-    label: 'Deep Research: Gamma Arena as Scientific Discovery Game',
+    label: 'Deep Research: Gamma Labyrinth 1.0.0 as Scientific Discovery Game',
     priority: 100,
     render: () => (
       <div className="space-y-12 pb-20">
@@ -24,10 +24,10 @@ export const registerWikiItems = () => {
             <span>Deep Research Synthesis // AI-Generated</span>
           </div>
           <h1 className="text-5xl font-black text-gray-100 tracking-tighter italic uppercase leading-none">
-            Gamma Arena as a <span className="text-amber-500 underline decoration-amber-500/20 underline-offset-8">Scientific Discovery Game</span>
+            Gamma Labyrinth 1.0.0 as a <span className="text-amber-500 underline decoration-amber-500/20 underline-offset-8">Scientific Discovery Game</span>
           </h1>
           <p className="text-xl text-gray-400 font-medium leading-relaxed max-w-4xl italic">
-            "Gamma Arena’s defensible novelty is not that it is the first autonomous scientist. Its novelty is that it turns scientific discovery into a protocolized, receipt-backed game where AI agents perform bounded, verifiable actions under explicit epistemological rules."
+            "Gamma Labyrinth 1.0.0’s defensible novelty is not that it is the first autonomous scientist. Its novelty is that it turns scientific discovery into a rule-governed, receipt-backed game where AI agents perform bounded, verifiable actions under explicit epistemological rules."
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export const registerWikiItems = () => {
           <div className="space-y-1">
             <h3 className="text-sm font-black text-amber-500 uppercase tracking-widest">Observation Surface Only</h3>
             <p className="text-xs text-amber-500/80 font-bold uppercase leading-relaxed">
-              Gamma Arena is an observation surface. Scientific and game-state claims must be backed by committed backend truth and receipts. 
+              Gamma Arena is the observation subsystem surface. Scientific and game-state claims must be backed by committed backend truth and receipts. 
               This article is research synthesis and design guidance, not a truth-plane commit.
             </p>
           </div>
@@ -56,7 +56,7 @@ export const registerWikiItems = () => {
                 Without a strict separation of concerns, the "hallucination gap" becomes a catastrophic risk to scientific integrity.
               </p>
               <p>
-                Gamma Arena addresses this by implementing a four-plane architecture that isolates intent from observation and execution from truth.
+                Gamma Labyrinth 1.0.0 addresses this by implementing a four-plane architecture that isolates intent from observation and execution from truth.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -150,7 +150,7 @@ export const registerWikiItems = () => {
             <h2 className="text-sm font-black uppercase tracking-[0.4em]">Claim Discipline</h2>
           </div>
           <p className="text-xl font-black text-gray-100 italic uppercase leading-relaxed relative z-10">
-            "Gamma should not claim to be the first autonomous scientist, the first literature-synthesis agent, or a source of biological truth. Gamma is a protocolized environment for bounded scientific agents and receipt-backed evidence workflows."
+            "Gamma should not claim to be the first autonomous scientist, the first literature-synthesis agent, or a source of biological truth. Gamma is a rule-governed environment for bounded scientific agents and receipt-backed evidence workflows."
           </p>
         </div>
 
@@ -294,14 +294,14 @@ export const registerWikiItems = () => {
       <div className="p-8 bg-white/[0.02] border border-white/5 rounded-3xl space-y-6">
         <div className="flex items-center space-x-3 text-gray-500 uppercase tracking-[0.4em] font-black text-[10px]">
           <BookOpen size={14} />
-          <span>Gamma Arena Knowledge Base</span>
+          <span>Gamma Labyrinth 1.0.0 Knowledge Base</span>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 bg-amber-500/5 border border-amber-500/10 rounded-2xl hover:bg-amber-500/10 transition-all cursor-default group">
-            <h3 className="text-sm font-black text-amber-500 uppercase tracking-widest mb-2">Deep Research: Gamma Arena as Scientific Discovery Game</h3>
+            <h3 className="text-sm font-black text-amber-500 uppercase tracking-widest mb-2">Deep Research: Gamma Labyrinth 1.0.0 as Scientific Discovery Game</h3>
             <p className="text-[11px] font-bold text-gray-500 uppercase leading-relaxed mb-4">
-              A strategic synthesis exploring the protocolized discovery architecture and the four-plane doctrine.
+              A strategic synthesis exploring the rule-governed discovery architecture and the four-plane doctrine.
             </p>
             <div className="text-[10px] font-black text-amber-500/60 uppercase tracking-widest group-hover:text-amber-500">
               ACTIVE ARTICLE :: SCROLL TO VIEW
@@ -309,7 +309,7 @@ export const registerWikiItems = () => {
           </div>
 
           <div className="p-6 bg-white/5 border border-white/10 rounded-2xl opacity-40 cursor-not-allowed">
-            <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">Biophysical Harness Protocols</h3>
+            <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">Biophysical Harness Rules</h3>
             <p className="text-[11px] font-bold text-gray-500 uppercase leading-relaxed mb-4">
               Documentation for L4+ Apical/Basal dendritic integration and laminar predictive routing.
             </p>
