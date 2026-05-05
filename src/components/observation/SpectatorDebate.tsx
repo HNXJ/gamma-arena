@@ -63,7 +63,7 @@ export const SpectatorDebate: React.FC = () => {
     <div className="bg-black/40 border border-purple-500/30 rounded-lg p-4 font-mono text-xs text-purple-300 backdrop-blur-sm">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-purple-400 font-bold uppercase tracking-widest">
-          Spectator Debate — Observation Only
+          Gamma Labyrinth 1.0.0 :: Spectator Debate — Observation Only
         </h3>
         <div className={`px-2 py-0.5 rounded-full text-[10px] ${error ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
           {error ? 'UNREACHABLE' : 'CONNECTED'}
@@ -71,7 +71,7 @@ export const SpectatorDebate: React.FC = () => {
       </div>
       
       <p className="text-[10px] text-gray-500 mb-4 leading-relaxed">
-        This is runtime observation only. It is not scientific truth and does not create receipts.
+        This is Observation-Plane telemetry only. It is not scientific truth and does not create receipts. Active truth requires committed backend gates.
       </p>
 
       {loading && !data && <p className="animate-pulse">Connecting to bridge...</p>}

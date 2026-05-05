@@ -29,7 +29,7 @@ export const SafeBase: React.FC = () => {
       <div className="flex justify-between items-center border-b border-emerald-500/20 pb-2">
         <div className="flex items-center space-x-3">
           <Terminal size={14} className="animate-pulse" />
-          <span className="font-black tracking-[0.3em] uppercase">Gamma Safe-Base v1.0</span>
+          <span className="font-black tracking-[0.3em] uppercase">Gamma Labyrinth 1.0.0</span>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
@@ -57,7 +57,7 @@ export const SafeBase: React.FC = () => {
       )}
 
       {/* Compact Status Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="p-4 border border-emerald-500/10 bg-emerald-500/5 rounded space-y-2">
           <div className="opacity-40 uppercase tracking-tighter">System State</div>
           <div className={`text-sm font-black uppercase ${system.statusSeverity === 'CRITICAL' ? 'text-rose-500' : 'text-emerald-400'}`}>
@@ -74,6 +74,14 @@ export const SafeBase: React.FC = () => {
         <div className="p-4 border border-emerald-500/10 bg-emerald-500/5 rounded space-y-2">
           <div className="opacity-40 uppercase tracking-tighter">Uptime</div>
           <div className="text-sm font-black">{system.uptime}</div>
+        </div>
+        <div className="p-4 border border-purple-500/20 bg-purple-500/5 rounded space-y-2">
+          <div className="opacity-40 uppercase tracking-tighter text-purple-400">Doctrine</div>
+          <div className="text-[9px] font-bold uppercase leading-tight text-purple-300">
+            Observation Surface Only.<br/>
+            Scientific state requires receipts.<br/>
+            Truth Mode: Unverified.
+          </div>
         </div>
       </div>
 
@@ -96,8 +104,9 @@ export const SafeBase: React.FC = () => {
         </div>
       </div>
 
-      <footer className="pt-4 opacity-20 text-[10px] uppercase text-center tracking-[0.4em]">
-        Operator Base-Layer :: BASTOS LAB / VANDERBILT
+      <footer className="pt-4 opacity-40 text-[9px] uppercase text-center tracking-[0.2em] space-y-1">
+        <div>Gamma Labyrinth :: Scientific Discovery Engine</div>
+        <div className="opacity-50">© 2026 HNXJ(H.Nejat) / BASTOSLAB / VANDERBILT UNIVERSITY</div>
       </footer>
     </div>
   );

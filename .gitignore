@@ -1,4 +1,5 @@
 
+!.env.example
 !.vscode/extensions.json
 # Editor directories and files
 # Logs
@@ -13,6 +14,7 @@
 *.sw?
 .DS_Store
 .env
+.env.*
 .idea
 .vscode/*
 dist
