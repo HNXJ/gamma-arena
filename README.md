@@ -83,3 +83,7 @@ The viewer will consume structured endpoints for:
 3. Build standalone viewer skeleton here
 4. Connect through SSH-forwarded live endpoints
 5. Iterate toward the full operator console
+
+## Coordination
+
+This repository follows the [GAMMA-BUS Coordination Doctrine](GEMINI.md). Agents should refer to `GEMINI.md` for specific instructions and coordination rules.
