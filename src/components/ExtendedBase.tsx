@@ -47,7 +47,7 @@ export const ExtendedBase: React.FC = () => {
         <header className="h-20 border-b border-white/5 px-10 flex items-center justify-between shrink-0 bg-black/40 backdrop-blur-md relative z-10">
           <div className="space-y-1">
             <h1 className="text-xl font-black uppercase tracking-tighter italic text-gray-100">
-              {activeTab?.label === 'Mission Overview' ? 'Gamma Labyrinth :: Overview' : activeTab?.label || 'Scientific Console'}
+              {activeTab?.label === 'Mission Overview' ? 'Gamma Labyrinth 1.0.0' : activeTab?.label || 'Scientific Console'}
             </h1>
             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center space-x-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />

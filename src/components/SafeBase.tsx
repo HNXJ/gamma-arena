@@ -29,7 +29,7 @@ export const SafeBase: React.FC = () => {
       <div className="flex justify-between items-center border-b border-emerald-500/20 pb-2">
         <div className="flex items-center space-x-3">
           <Terminal size={14} className="animate-pulse" />
-          <span className="font-black tracking-[0.3em] uppercase">Gamma Labyrinth :: Arena v1.1</span>
+          <span className="font-black tracking-[0.3em] uppercase">Gamma Labyrinth 1.0.0</span>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
