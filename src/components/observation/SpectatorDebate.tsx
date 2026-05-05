@@ -71,7 +71,7 @@ export const SpectatorDebate: React.FC = () => {
       </div>
       
       <p className="text-[10px] text-gray-500 mb-4 leading-relaxed">
-        This is runtime observation only. It is not scientific truth and does not create receipts.
+        This is Observation-Plane telemetry only. It is not scientific truth and does not create receipts. Active truth requires committed backend gates.
       </p>
 
       {loading && !data && <p className="animate-pulse">Connecting to bridge...</p>}

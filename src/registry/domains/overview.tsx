@@ -20,7 +20,7 @@ export const registerOverviewItems = () => {
     priority: 10,
     render: ({ data }: { data: ArenaViewModelBundle }) => {
       const { system, research, transport } = data;
-      
+
       const statusState = transport.endpointStates.find(s => s.name === 'System Status');
       const isUnavailable = statusState?.kind === 'http_error' || statusState?.kind === 'network_error';
 
@@ -47,30 +47,30 @@ export const registerOverviewItems = () => {
           <div className="p-6 border border-emerald-500/20 bg-emerald-500/5 rounded-2xl space-y-3">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <h2 className="text-sm font-black text-emerald-500 uppercase tracking-[0.2em]">Active Mission Pattern: Continuous Growth</h2>
-                <div className="text-[10px] text-emerald-500/60 font-bold uppercase">Observed directive: evaluate one biologically justified candidate expansion.</div>
+                <h2 className="text-sm font-black text-emerald-500 uppercase tracking-[0.2em]">Gamma Labyrinth :: Active Mission Pattern</h2>
+                <div className="text-[10px] text-emerald-500/60 font-bold uppercase">Observed directive: evaluate biologically justified candidate expansion via Gamma Council.</div>
               </div>
               <div className="px-3 py-1 bg-emerald-500/20 rounded text-[10px] font-black text-emerald-500 uppercase tracking-widest animate-pulse">
                 Active Protocol
               </div>
             </div>
             <div className="pt-3 border-t border-emerald-500/10 text-[9px] text-emerald-500/40 font-bold uppercase tracking-wider leading-relaxed">
-              Trial artifacts are non-authoritative until backed by accepted receipts. Only Judge-validated receipts can commit truth.
+              Trial artifacts are non-authoritative until backed by accepted receipts. Only Judge-validated receipts can commit truth to the Labyrinth.
             </div>
           </div>
 
           <div className="flex items-center justify-between border-b border-white/5 pb-4">
             <div className="flex items-center space-x-4">
-              <FeedCard 
-                title="System" 
-                severity={system.statusSeverity} 
+              <FeedCard
+                title="System"
+                severity={system.statusSeverity}
                 subtitle="Current Substrate State"
               >
                 <div className="text-2xl font-black text-gray-100 font-mono tracking-tighter uppercase">{system.status}</div>
               </FeedCard>
-              <FeedCard 
-                title="Heartbeat" 
-                severity="NORMAL" 
+              <FeedCard
+                title="Heartbeat"
+                severity="NORMAL"
                 subtitle="Pulse Synchronicity"
               >
                 <div className="text-2xl font-black text-gray-100 font-mono tracking-tighter uppercase">{system.heartbeat}</div>
@@ -111,5 +111,44 @@ export const registerOverviewItems = () => {
         </div>
       );
     }
+  });
+
+  registry.register({
+    key: 'overview-ecosystem',
+    slot: 'LOBBY',
+    label: 'Ecosystem and Coordination',
+    priority: 50,
+    render: () => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+        <div className="p-6 bg-purple-500/5 border border-purple-500/10 rounded-2xl space-y-4">
+          <div className="text-[10px] font-black text-purple-400 uppercase tracking-widest flex items-center space-x-2">
+            <Activity size={14} />
+            <span>Six-Repo Ecosystem</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-[9px] font-bold uppercase text-gray-400">
+            <div className="p-2 border border-white/5 rounded">gamma-labyrinth :: world skeleton</div>
+            <div className="p-2 border border-white/5 rounded text-purple-300">gamma-protocol :: doctrine</div>
+            <div className="p-2 border border-white/5 rounded">gamma :: execution + truth</div>
+            <div className="p-2 border border-white/5 rounded text-emerald-400">gamma-arena :: observation</div>
+            <div className="p-2 border border-white/5 rounded">gamma-analysis :: reports</div>
+            <div className="p-2 border border-white/5 rounded">gamma-science :: grounding</div>
+          </div>
+        </div>
+
+        <div className="p-6 bg-amber-500/5 border border-amber-500/10 rounded-2xl space-y-4">
+          <div className="text-[10px] font-black text-amber-500 uppercase tracking-widest flex items-center space-x-2">
+            <ShieldAlert size={14} />
+            <span>Agent Coordination</span>
+          </div>
+          <div className="space-y-2 text-[9px] font-bold uppercase text-gray-400 leading-relaxed">
+            <p>Gemini / Antigravity :: Shared Clone Root</p>
+            <p>Claude / Cowork :: Independent Clone Root</p>
+            <p className="pt-2 border-t border-white/5 text-amber-500/60">
+              GitHub Project "gamma" coordinates all Control-plane tasks.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
   });
 };

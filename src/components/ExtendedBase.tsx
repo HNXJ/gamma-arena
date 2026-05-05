@@ -47,17 +47,17 @@ export const ExtendedBase: React.FC = () => {
         <header className="h-20 border-b border-white/5 px-10 flex items-center justify-between shrink-0 bg-black/40 backdrop-blur-md relative z-10">
           <div className="space-y-1">
             <h1 className="text-xl font-black uppercase tracking-tighter italic text-gray-100">
-              {activeTab?.label || 'Scientific Console'}
+              {activeTab?.label === 'Mission Overview' ? 'Gamma Labyrinth :: Overview' : activeTab?.label || 'Scientific Console'}
             </h1>
             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center space-x-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Grounded Observation Mode</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
+              <span>Scientific Discovery Engine :: Observation</span>
             </div>
           </div>
           
           <div className="flex items-center space-x-6">
             <div className="text-right">
-              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Observed Neurons</div>
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-[#D4AF37]">Observed Neurons</div>
               <div className="text-sm font-black text-amber-500 font-mono tracking-tighter">
                 {viewModels.research.officialNeuronCount} <span className="opacity-40">/ {viewModels.research.nextUnlockThreshold}</span>
               </div>
@@ -78,10 +78,11 @@ export const ExtendedBase: React.FC = () => {
              {/* Global Observation Disclaimer */}
              <div className="pt-12 pb-8 border-t border-white/5 flex flex-col items-center space-y-2 opacity-30 group-hover:opacity-100 transition-opacity">
                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">
-                 Observation Surface Only
+                 Observation-Plane Display Only
                </div>
-               <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl">
-                 Gamma Arena is an observation surface. Scientific and game-state claims must be backed by committed backend truth and receipts.
+               <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl leading-relaxed">
+                 Gamma Arena is a live observation UI. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
+                 When no receipt is present: <span className="text-[#D4AF37]">truth_mode: truth_safe_unverified</span>.
                </div>
              </div>
           </div>
