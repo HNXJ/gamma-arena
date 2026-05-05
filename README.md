@@ -1,5 +1,25 @@
 # gamma-arena
 
+## Role in Gamma Labyrinth
+Observation UI/browser validation; no hardcoded unverified scientific truth.
+
+## Plane Classification
+Observation Plane.
+
+## Truth-Safety Note
+`truth_mode: truth_safe_unverified`. This repository provides visualization but does not store scientific truth.
+
+## Coordination
+Refer to GitHub Project `gamma` for tasks and issues.
+
+## Guidelines
+Agents must verify branch/status before work.
+
+## Ignore Rules
+This repository ignores `.DS_Store`, `*.npy`, and `*.mat`. (Note: `*.html` is NOT ignored as it is a frontend project).
+
+---
+
 Read-only operator console for the live Gamma Arena runtime.
 
 ## Status
