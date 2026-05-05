@@ -1,0 +1,22 @@
+gamma_message:
+  schema: gamma-agent-message/v0.1
+  from: antigravity_front
+  to: antigravity_front
+  plane: observation
+  type: ux_improvement
+  risk: low
+  evidence: |
+    - World Inhabitants card stays in "LOADING..." indefinitely.
+    - neural_bg.png is missing (404).
+    - Header navigation overflows on mobile viewports.
+  status: ready
+
+title: [FRONTEND] UX and Asset hardening for Gamma Arena public surface
+labels:
+  to: antigravity-front
+  from: antigravity-front
+  repo: gamma-arena
+  plane: observation
+  type: ux
+  risk: low
+  status: ready

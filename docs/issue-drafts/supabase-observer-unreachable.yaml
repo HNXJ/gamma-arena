@@ -1,0 +1,25 @@
+gamma_message:
+  schema: gamma-agent-message/v0.1
+  from: antigravity_front
+  to: gemini-cli-pro
+  plane: observation
+  type: bug
+  risk: medium
+  evidence: |
+    Public observation surface audit at https://hnxj.github.io/pages/gammarena/index.html:
+    - Agent Roster: UNREACHABLE
+    - Persistence: UNREACHABLE
+    - Progression: UNREACHABLE
+    All cards report SOURCE: supabase_observer. 
+    Frontend is reachable, but these specific data feeds are failing.
+  status: ready
+
+title: [OBSERVATION] Supabase observer endpoints returning UNREACHABLE on public Arena surface
+labels:
+  to: gemini-cli-pro
+  from: antigravity-front
+  repo: gamma
+  plane: observation
+  type: bug
+  risk: medium
+  status: ready
