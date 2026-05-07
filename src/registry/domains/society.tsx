@@ -1,7 +1,7 @@
 
 import { registry } from '../core';
 import type { ArenaViewModelBundle } from '../../types/ui';
-import { Shield, Activity, CheckCircle2, XCircle, AlertCircle, Cpu } from 'lucide-react';
+import { Shield, CheckCircle2, XCircle, AlertCircle, Cpu } from 'lucide-react';
 
 export const registerSocietyItems = () => {
   registry.registerTab({

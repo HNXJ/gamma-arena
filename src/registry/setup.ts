@@ -5,6 +5,7 @@ import { registerArenaItems } from './domains/arena';
 import { registerPersistenceItems } from './domains/persistence';
 import { registerLogItems } from './domains/logs';
 import { registerDemoItems } from './domains/demo';
+import { registerSocietyItems } from './domains/society';
 import { registerWikiItems } from './domains/wiki';
 
 /**
@@ -20,6 +21,7 @@ export const initializeRegistry = () => {
   registerArenaItems();
   registerPersistenceItems();
   registerLogItems();
+  registerSocietyItems();
   registerDemoItems();
   registerWikiItems();
 };
