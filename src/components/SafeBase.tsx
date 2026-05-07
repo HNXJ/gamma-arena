@@ -105,7 +105,7 @@ export const SafeBase: React.FC = () => {
       </div>
 
       <footer className="pt-4 opacity-40 text-[9px] uppercase text-center tracking-[0.2em] space-y-1">
-        <div>Gamma Labyrinth :: Scientific Discovery Engine</div>
+        <div>Gamma Arena :: Gamma Labyrinth Observation Surface</div>
         <div className="opacity-50">© 2026 HNXJ(H.Nejat) / BASTOSLAB / VANDERBILT UNIVERSITY</div>
       </footer>
     </div>

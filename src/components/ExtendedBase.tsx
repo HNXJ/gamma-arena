@@ -82,7 +82,7 @@ export const ExtendedBase: React.FC = () => {
                  Observation-Plane Display Only
                </div>
                <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl leading-relaxed">
-                 Gamma Labyrinth is a live observation engine. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
+                 Gamma Arena is the live observation surface for Gamma Labyrinth. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
                  When no receipt is present: <span className="text-[#D4AF37]">truth_mode: truth_safe_unverified</span>.
                </div>
              </div>
