@@ -129,7 +129,7 @@ export const registerOverviewItems = () => {
             <div className="p-2 border border-white/5 rounded">gamma-labyrinth :: world skeleton</div>
             <div className="p-2 border border-white/5 rounded text-purple-300">gamma-protocol :: rules</div>
             <div className="p-2 border border-white/5 rounded">gamma :: execution + truth</div>
-            <div className="p-2 border border-white/5 rounded text-emerald-400">gamma-arena :: observation</div>
+            <div className="p-2 border border-white/5 rounded text-emerald-400">gamma-labyrinth :: observation</div>
             <div className="p-2 border border-white/5 rounded">gamma-analysis :: reports</div>
             <div className="p-2 border border-white/5 rounded">gamma-science :: grounding</div>
           </div>

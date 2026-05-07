@@ -48,11 +48,11 @@ export const ExtendedBase: React.FC = () => {
         <header className="h-20 border-b border-white/5 px-10 flex items-center justify-between shrink-0 bg-black/40 backdrop-blur-md relative z-10">
           <div className="space-y-1">
             <h1 className="text-xl font-black uppercase tracking-tighter italic text-gray-100">
-              {activeTab?.label === 'Mission Overview' ? 'Gamma Labyrinth 1.0.0' : activeTab?.label || 'Scientific Console'}
+              Gamma Labyrinth 1.0.0
             </h1>
             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center space-x-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
-              <span>Scientific Discovery Engine :: Observation</span>
+              <span>{activeTab?.label || 'Observation Surface'} :: Scientific Discovery Engine</span>
             </div>
           </div>
           
@@ -82,7 +82,7 @@ export const ExtendedBase: React.FC = () => {
                  Observation-Plane Display Only
                </div>
                <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl leading-relaxed">
-                 Gamma Arena is a live observation UI. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
+                 Gamma Labyrinth is a live observation engine. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
                  When no receipt is present: <span className="text-[#D4AF37]">truth_mode: truth_safe_unverified</span>.
                </div>
              </div>

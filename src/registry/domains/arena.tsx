@@ -8,7 +8,7 @@ import { AlertTriangle } from 'lucide-react';
 export const registerArenaItems = () => {
   registry.registerTab({
     id: 'arena',
-    label: 'Research Arena',
+    label: 'Research Registry',
     icon: 'Activity',
     priority: 20,
     domain: 'ARENA'
