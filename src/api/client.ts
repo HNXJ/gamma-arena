@@ -74,7 +74,7 @@ export const arenaClient = {
   },
   
   async getAgentSociety(): Promise<FetchEnvelope<AgentSociety>> {
-    return wrapFetch<AgentSociety>('/api/world/agent-society/latest');
+    return wrapFetch<AgentSociety>('/api/lms/slots');
   },
 
   async getMissionLatest(): Promise<FetchEnvelope<MissionObservation>> {
