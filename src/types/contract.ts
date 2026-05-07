@@ -119,3 +119,40 @@ export interface AgentLogResponse {
   truth_class: string;
   source: string | null;
 }
+
+export interface LmsSlot {
+  slot_id: string;
+  lms_instance_id: string;
+  model_key: string;
+  role: 'receptionist' | 'worker_alpha' | 'worker_beta' | 'critic' | 'judge' | 'redaction_auditor' | 'receipt_verifier' | 'synthesizer';
+  backend_id: string;
+  base_url: string;
+  truth_mode: string;
+  truth_bearing_run: boolean;
+  vision_false_verified: boolean;
+  status: 'assigned_not_started' | 'echo_passed' | 'unavailable' | 'unknown';
+}
+
+export interface HarnessReadiness {
+  session_manifest_present: boolean;
+  transcript_present: boolean;
+  artifact_hashes_present: boolean;
+  receipt_present: boolean;
+  redaction_scan_pass: boolean;
+}
+
+export interface LmsSlotManifest {
+  manifest_id: string;
+  timestamp: string;
+  slots: LmsSlot[];
+  harness_readiness: HarnessReadiness;
+}
+
+export interface AgentSociety {
+  reported_slot_count: number;
+  accepted_echo_count: number;
+  rejected_count: number;
+  manifest: LmsSlotManifest | null;
+  truth_mode: string;
+  truth_bearing_run: boolean;
+}

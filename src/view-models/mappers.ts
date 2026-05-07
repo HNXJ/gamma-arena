@@ -1,9 +1,11 @@
-import type { ArenaStatus, Agent, Persistence, RawLog } from '../types/contract';
+import type { ArenaStatus, Agent, Persistence, RawLog, AgentSociety } from '../types/contract';
 import type { 
   SystemViewModel, 
   ResearchViewModel, 
   AgentViewModel, 
   PersistenceViewModel,
+  AgentSocietyViewModel,
+  SlotViewModel,
   TransportViewModel,
   FetchEnvelope,
   TransportStateKind
@@ -67,16 +69,52 @@ export const mapPersistenceState = (p: Persistence | null): PersistenceViewModel
   };
 };
 
+export const mapAgentSocietyState = (s: AgentSociety | null): AgentSocietyViewModel => {
+  const manifest = s?.manifest;
+  const h = manifest?.harness_readiness;
+  
+  const slots: SlotViewModel[] = (manifest?.slots || []).map(slot => ({
+    id: slot.slot_id,
+    lmsId: slot.lms_instance_id,
+    model: slot.model_key,
+    role: slot.role,
+    status: slot.status,
+    statusSeverity: slot.status === 'echo_passed' ? 'NORMAL' : slot.status === 'assigned_not_started' ? 'WARNING' : 'UNKNOWN',
+    truthMode: slot.truth_mode,
+    isVisionDisabled: slot.vision_false_verified
+  }));
+
+  return {
+    reportedCount: s?.reported_slot_count || 0,
+    acceptedCount: s?.accepted_echo_count || 0,
+    rejectedCount: s?.rejected_count || 0,
+    slots,
+    readiness: {
+      isReady: !!h && Object.values(h).every(v => v === true),
+      checks: [
+        { label: 'Session Manifest', ok: !!h?.session_manifest_present },
+        { label: 'Transcript', ok: !!h?.transcript_present },
+        { label: 'Artifact Hashes', ok: !!h?.artifact_hashes_present },
+        { label: 'Receipt', ok: !!h?.receipt_present },
+        { label: 'Redaction Scan', ok: !!h?.redaction_scan_pass }
+      ]
+    },
+    truthMode: s?.truth_mode || 'truth_safe_unverified'
+  };
+};
+
 export const mapTransportState = (envelopes: {
   status: FetchEnvelope<ArenaStatus> | null;
   agents: FetchEnvelope<Agent[]> | null;
   persistence: FetchEnvelope<Persistence> | null;
+  society: FetchEnvelope<AgentSociety> | null;
   logs: FetchEnvelope<RawLog[]> | null;
 }): TransportViewModel => {
   const states = [
     { name: 'System Status', env: envelopes.status },
     { name: 'Agent Roster', env: envelopes.agents },
     { name: 'Persistence', env: envelopes.persistence },
+    { name: 'Agent Society', env: envelopes.society },
     { name: 'Provenance Rail', env: envelopes.logs }
   ];
 

@@ -1,4 +1,4 @@
-import type { ArenaStatus, Agent, Persistence, RawLog, AgentLogResponse } from '../types/contract';
+import type { ArenaStatus, Agent, Persistence, RawLog, AgentLogResponse, AgentSociety } from '../types/contract';
 import type { FetchEnvelope } from '../types/ui';
 
 const BASE_URL = import.meta.env.VITE_GAMMA_API_BASE || 'https://glllmx.vercel.app';
@@ -71,5 +71,9 @@ export const arenaClient = {
 
   async getAgentLogs(agentId: string): Promise<FetchEnvelope<AgentLogResponse>> {
     return wrapFetch<AgentLogResponse>(`/api/logs/agent/${agentId}`);
+  },
+  
+  async getAgentSociety(): Promise<FetchEnvelope<AgentSociety>> {
+    return wrapFetch<AgentSociety>('/api/world/agent-society/latest');
   }
 };

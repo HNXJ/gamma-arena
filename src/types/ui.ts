@@ -16,6 +16,7 @@ export type UISlot =
   | 'ARENA'
   | 'LOGS'
   | 'PERSISTENCE'
+  | 'SOCIETY'
   | 'SYSTEM_FEED'
   | 'WIKI';
 
@@ -113,11 +114,37 @@ export interface PersistenceViewModel {
   status: string;
 }
 
+export interface SlotViewModel {
+  id: string;
+  lmsId: string;
+  model: string;
+  role: string;
+  status: string;
+  statusSeverity: 'NORMAL' | 'WARNING' | 'CRITICAL' | 'UNKNOWN';
+  truthMode: string;
+  isVisionDisabled: boolean;
+}
+
+export interface ReadinessViewModel {
+  isReady: boolean;
+  checks: Array<{ label: string, ok: boolean }>;
+}
+
+export interface AgentSocietyViewModel {
+  reportedCount: number;
+  acceptedCount: number;
+  rejectedCount: number;
+  slots: SlotViewModel[];
+  readiness: ReadinessViewModel;
+  truthMode: string;
+}
+
 export interface ArenaViewModelBundle {
   system: SystemViewModel;
   research: ResearchViewModel;
   agents: AgentViewModel[];
   persistence: PersistenceViewModel;
+  society: AgentSocietyViewModel;
   transport: TransportViewModel;
   logs: RawLog[];
 }
