@@ -3,6 +3,7 @@ import { registerOverviewItems } from './domains/overview';
 import { registerAgentItems } from './domains/agents';
 import { registerArenaItems } from './domains/arena';
 import { registerPersistenceItems } from './domains/persistence';
+import { registerMissionItems } from './domains/mission';
 import { registerLogItems } from './domains/logs';
 import { registerDemoItems } from './domains/demo';
 import { registerSocietyItems } from './domains/society';
@@ -20,6 +21,7 @@ export const initializeRegistry = () => {
   registerAgentItems();
   registerArenaItems();
   registerPersistenceItems();
+  registerMissionItems();
   registerLogItems();
   registerSocietyItems();
   registerDemoItems();

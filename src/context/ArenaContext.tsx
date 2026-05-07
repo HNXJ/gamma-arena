@@ -5,13 +5,14 @@ import {
   mapAgentsState, 
   mapPersistenceState,
   mapAgentSocietyState,
+  mapMissionState,
   mapTransportState 
 } from '../view-models/mappers';
 import type { 
   ArenaViewModelBundle, 
   FetchEnvelope, 
 } from '../types/ui';
-import type { ArenaStatus, Agent, Persistence, RawLog, AgentSociety } from '../types/contract';
+import type { ArenaStatus, Agent, Persistence, RawLog, AgentSociety, MissionObservation } from '../types/contract';
 
 interface ArenaContextType {
   viewModels: ArenaViewModelBundle;
@@ -20,6 +21,7 @@ interface ArenaContextType {
     agents: FetchEnvelope<Agent[]> | null;
     persistence: FetchEnvelope<Persistence> | null;
     society: FetchEnvelope<AgentSociety> | null;
+    mission: FetchEnvelope<MissionObservation> | null;
     logs: FetchEnvelope<RawLog[]> | null;
   };
   isLoading: boolean;
@@ -33,16 +35,18 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [agentsEnv, setAgentsEnv] = useState<FetchEnvelope<Agent[]> | null>(null);
   const [persistenceEnv, setPersistenceEnv] = useState<FetchEnvelope<Persistence> | null>(null);
   const [societyEnv, setSocietyEnv] = useState<FetchEnvelope<AgentSociety> | null>(null);
+  const [missionEnv, setMissionEnv] = useState<FetchEnvelope<MissionObservation> | null>(null);
   const [logsEnv, setLogsEnv] = useState<FetchEnvelope<RawLog[]> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const refresh = async () => {
     try {
-      const [s, a, p, soc, l] = await Promise.all([
+      const [s, a, p, soc, m, l] = await Promise.all([
         arenaClient.getStatus(),
         arenaClient.getAgents(),
         arenaClient.getPersistence(),
         arenaClient.getAgentSociety(),
+        arenaClient.getMissionLatest(),
         arenaClient.getRawLogs()
       ]);
       
@@ -50,6 +54,7 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       setAgentsEnv(a);
       setPersistenceEnv(p);
       setSocietyEnv(soc);
+      setMissionEnv(m);
       setLogsEnv(l);
     } catch (err) {
       console.error('Fatal fetch orchestration error:', err);
@@ -72,11 +77,13 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const agents = mapAgentsState(agentsEnv?.data || null);
     const persistence = mapPersistenceState(persistenceEnv?.data || null);
     const society = mapAgentSocietyState(societyEnv?.data || null);
+    const mission = mapMissionState(missionEnv?.data || null);
     const transport = mapTransportState({
       status: statusEnv,
       agents: agentsEnv,
       persistence: persistenceEnv,
       society: societyEnv,
+      mission: missionEnv,
       logs: logsEnv
     });
 
@@ -86,10 +93,11 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       agents,
       persistence,
       society,
+      mission,
       transport,
       logs: Array.isArray(logsEnv?.data) ? logsEnv.data : []
     };
-  }, [statusEnv, agentsEnv, persistenceEnv, societyEnv, logsEnv]);
+  }, [statusEnv, agentsEnv, persistenceEnv, societyEnv, missionEnv, logsEnv]);
 
   return (
     <ArenaContext.Provider value={{ 
@@ -99,6 +107,7 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         agents: agentsEnv, 
         persistence: persistenceEnv,
         society: societyEnv,
+        mission: missionEnv,
         logs: logsEnv
       },
       isLoading, 

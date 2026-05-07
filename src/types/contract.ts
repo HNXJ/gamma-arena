@@ -156,3 +156,39 @@ export interface AgentSociety {
   truth_mode: string;
   truth_bearing_run: boolean;
 }
+
+export interface MissionObservation {
+  mission_id: string;
+  mission_type: string;
+  model_family: 'Izhikevich';
+  not_model_family: 'HH' | 'Hodgkin-Huxley';
+  truth_mode: string;
+  truth_bearing_run: boolean;
+  status: string;
+  evidence_status: 'reported_unverified' | 'accepted_truth' | 'unavailable';
+  source: string;
+  slots: LmsSlotObservation[];
+  gates: MissionGateStatus[];
+  artifacts: MissionArtifactReference[];
+  message?: string;
+}
+
+export interface LmsSlotObservation {
+  id: string;
+  role: string;
+  status: string;
+  instance_id: string;
+}
+
+export interface MissionGateStatus {
+  gate_id: string;
+  status: 'PASS' | 'FAIL' | 'PENDING' | 'SKIPPED';
+  detail?: string;
+}
+
+export interface MissionArtifactReference {
+  name: string;
+  path: string;
+  hash?: string;
+  type: string;
+}

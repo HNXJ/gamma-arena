@@ -17,6 +17,7 @@ export type UISlot =
   | 'LOGS'
   | 'PERSISTENCE'
   | 'SOCIETY'
+  | 'MISSION'
   | 'SYSTEM_FEED'
   | 'WIKI';
 
@@ -139,12 +140,41 @@ export interface AgentSocietyViewModel {
   truthMode: string;
 }
 
+export interface ArtifactViewModel {
+  name: string;
+  path: string;
+  type: string;
+}
+
+export interface GateViewModel {
+  id: string;
+  status: 'PASS' | 'FAIL' | 'PENDING' | 'SKIPPED';
+  detail?: string;
+}
+
+export interface MissionViewModel {
+  missionId: string;
+  missionType: string;
+  modelFamily: 'Izhikevich';
+  notModelFamily: string;
+  truthMode: string;
+  truthBearingRun: boolean;
+  status: string;
+  evidenceStatus: 'reported_unverified' | 'accepted_truth' | 'unavailable';
+  source: string;
+  slots: Array<{ id: string, role: string, status: string, instance_id: string }>;
+  gates: GateViewModel[];
+  artifacts: ArtifactViewModel[];
+  message?: string;
+}
+
 export interface ArenaViewModelBundle {
   system: SystemViewModel;
   research: ResearchViewModel;
   agents: AgentViewModel[];
   persistence: PersistenceViewModel;
   society: AgentSocietyViewModel;
+  mission: MissionViewModel;
   transport: TransportViewModel;
   logs: RawLog[];
 }

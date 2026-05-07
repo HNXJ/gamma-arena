@@ -1,4 +1,4 @@
-import type { ArenaStatus, Agent, Persistence, RawLog, AgentSociety } from '../types/contract';
+import type { ArenaStatus, Agent, Persistence, RawLog, AgentSociety, MissionObservation } from '../types/contract';
 import type { 
   SystemViewModel, 
   ResearchViewModel, 
@@ -6,6 +6,8 @@ import type {
   PersistenceViewModel,
   AgentSocietyViewModel,
   SlotViewModel,
+  MissionViewModel,
+  GateViewModel,
   TransportViewModel,
   FetchEnvelope,
   TransportStateKind
@@ -103,11 +105,49 @@ export const mapAgentSocietyState = (s: AgentSociety | null): AgentSocietyViewMo
   };
 };
 
+export const mapMissionState = (m: MissionObservation | null): MissionViewModel => {
+  return {
+    missionId: m?.mission_id || 'IZH-SPECTRAL-OMISSION-MVS-01',
+    missionType: m?.mission_type || 'Spectral Omission',
+    modelFamily: m?.model_family || 'Izhikevich',
+    notModelFamily: m?.not_model_family || 'HH / Hodgkin-Huxley',
+    truthMode: m?.truth_mode || 'truth_safe_unverified',
+    truthBearingRun: m?.truth_bearing_run || false,
+    status: m?.status || 'awaiting mission-start gate',
+    evidenceStatus: m?.evidence_status || 'reported_unverified',
+    source: m?.source || 'CLI_REPORT',
+    slots: m?.slots || [
+      { id: 'receptionist', role: 'receptionist', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx' },
+      { id: 'worker_alpha', role: 'worker_alpha', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx:2' },
+      { id: 'worker_beta', role: 'worker_beta', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx:3' },
+      { id: 'critic', role: 'critic', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx:4' },
+      { id: 'judge', role: 'judge', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx:5' },
+      { id: 'redaction_auditor', role: 'redaction_auditor', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx:6' },
+      { id: 'receipt_verifier', role: 'receipt_verifier', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx:7' },
+      { id: 'synthesizer', role: 'synthesizer', status: 'reported_loaded', instance_id: 'gemma-4-e4b-it-mlx:8' },
+    ],
+    gates: (m?.gates || [
+      { gate_id: 'repo_preflight', status: 'PENDING' },
+      { gate_id: 'lms_slot_inventory', status: 'PENDING' },
+      { gate_id: 'harness_identity', status: 'PENDING' },
+      { gate_id: 'connectivity_audit', status: 'PENDING' },
+      { gate_id: 'poisson_activity_discovery', status: 'PENDING' },
+      { gate_id: 'jax_spectral_loss_validation', status: 'PENDING' },
+      { gate_id: 'nan_inf_gate', status: 'PENDING' },
+      { gate_id: 'artifact_manifest', status: 'PENDING' },
+      { gate_id: 'receipt_candidate', status: 'PENDING' }
+    ]).map(g => ({ id: g.gate_id, status: g.status as GateViewModel['status'], detail: g.detail })),
+    artifacts: (m?.artifacts || []).map(a => ({ name: a.name, path: a.path, type: a.type })),
+    message: m?.message || (m ? undefined : 'No receipt-backed live mission endpoint is available.')
+  };
+};
+
 export const mapTransportState = (envelopes: {
   status: FetchEnvelope<ArenaStatus> | null;
   agents: FetchEnvelope<Agent[]> | null;
   persistence: FetchEnvelope<Persistence> | null;
   society: FetchEnvelope<AgentSociety> | null;
+  mission: FetchEnvelope<MissionObservation> | null;
   logs: FetchEnvelope<RawLog[]> | null;
 }): TransportViewModel => {
   const states = [
@@ -115,6 +155,7 @@ export const mapTransportState = (envelopes: {
     { name: 'Agent Roster', env: envelopes.agents },
     { name: 'Persistence', env: envelopes.persistence },
     { name: 'Agent Society', env: envelopes.society },
+    { name: 'Mission Status', env: envelopes.mission },
     { name: 'Provenance Rail', env: envelopes.logs }
   ];
 
