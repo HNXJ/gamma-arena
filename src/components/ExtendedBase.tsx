@@ -26,6 +26,7 @@ export const ExtendedBase: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTabId(tab.id)}
+                data-testid={`tab-${tab.id}`}
                 className={`p-4 rounded-xl transition-all group relative ${
                   isActive ? 'text-[#D4AF37] bg-[#D4AF37]/10' : 'text-gray-500 hover:text-gray-300'
                 }`}

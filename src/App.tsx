@@ -28,6 +28,7 @@ function App() {
           </button>
           <button 
             onClick={() => setMode('EXTENDED')}
+            data-testid="extended-mode-toggle"
             className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
               mode === 'EXTENDED' ? 'bg-[#D4AF37] text-black font-black' : 'text-gray-500 hover:text-gray-300'
             }`}
