@@ -77,7 +77,7 @@ export const ProgressLadder: React.FC<ProgressLadderProps> = ({
         <span>Baseline</span>
         <div className="flex items-center space-x-2">
           <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-          <span className="text-amber-500/80">Grounded Ladder Active</span>
+          <span className="text-amber-500/80">Research Ladder Active</span>
         </div>
         <span>Target: {total}N</span>
       </div>
