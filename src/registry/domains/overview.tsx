@@ -82,13 +82,19 @@ export const registerOverviewItems = () => {
               <div className="text-right space-y-1">
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Observed Level</div>
                 <div className="text-xl font-black text-emerald-500 font-mono tracking-tighter">
-                  {research.officialNeuronCount} <span className="text-[10px] text-gray-600">N</span>
+                  {research.isReceiptBacked 
+                    ? research.officialNeuronCount 
+                    : <span className="text-[9px] opacity-40 italic">unverified</span>} 
+                  <span className="text-[10px] text-gray-600"> N</span>
                 </div>
               </div>
               <div className="text-right space-y-1">
                 <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Largest PASS Network</div>
                 <div className="text-xl font-black text-amber-500 font-mono tracking-tighter">
-                  {research.largestGroundedPassNetwork} <span className="text-[10px] text-gray-600">N</span>
+                  {research.largestGroundedPassNetwork > 0 
+                    ? research.largestGroundedPassNetwork 
+                    : <span className="text-[9px] opacity-40 italic">awaiting_truth</span>} 
+                  <span className="text-[10px] text-gray-600"> N</span>
                 </div>
               </div>
             </div>

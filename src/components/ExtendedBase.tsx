@@ -11,8 +11,6 @@ export const ExtendedBase: React.FC = () => {
   const tabs = registry.getTabs();
   const [activeTabId, setActiveTabId] = useState(tabs[0]?.id || 'lobby');
 
-  const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
-
   return (
     <div className="flex h-screen bg-black text-[#c8d0d8] overflow-hidden">
       {/* Sidebar Navigation */}
@@ -48,19 +46,21 @@ export const ExtendedBase: React.FC = () => {
         <header className="h-20 border-b border-white/5 px-10 flex items-center justify-between shrink-0 bg-black/40 backdrop-blur-md relative z-10">
           <div className="space-y-1">
             <h1 className="text-xl font-black uppercase tracking-tighter italic text-gray-100">
-              Gamma Labyrinth 1.0.0
+              Gamma Labyrinth 1.0.0 :: Gamma Arena
             </h1>
             <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center space-x-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
-              <span>{activeTab?.label || 'Observation Surface'} :: Scientific Discovery Engine</span>
+              <span>Observation System :: Live Feed</span>
             </div>
           </div>
           
           <div className="flex items-center space-x-6">
             <div className="text-right">
-              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-[#D4AF37]">Observed Neurons (Unverified)</div>
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-[#D4AF37]">
+                Truth Status
+              </div>
               <div className="text-sm font-black text-amber-500 font-mono tracking-tighter">
-                {viewModels.research.officialNeuronCount} <span className="opacity-40">/ {viewModels.research.nextUnlockThreshold}</span>
+                truth_safe_unverified
               </div>
             </div>
           </div>
@@ -69,21 +69,30 @@ export const ExtendedBase: React.FC = () => {
         {/* Dynamic Content Surface */}
         <div className="flex-1 overflow-auto p-10 relative z-10">
           <div className="max-w-6xl mx-auto space-y-12">
-             {/* We use a slot named after the tab ID to render its content */}
+             {/* Truth-Safe Disclaimer Panel */}
+             <div className="bg-[#1a1a1a] border border-[#D4AF37]/20 p-6 rounded-lg text-[#D4AF37]/80 text-xs">
+                <h3 className="font-bold uppercase tracking-widest mb-2">Observation surface only</h3>
+                <p className="leading-relaxed">
+                  This interface may display live, stale, fallback, or truth_safe_unverified state. Scientific truth requires manifests, hashes, validation gates, and Truth-plane receipts. Do not treat dashboard text, mock output, transcript summaries, or UI state as accepted biological truth.
+                </p>
+                <div className="mt-4 text-[10px] font-bold uppercase text-red-500/80">
+                  Warning: No harness identity means no valid player run. Mock output is not live evidence.
+                </div>
+             </div>
+
              <SlotRenderer 
                slot={(activeTabId.toUpperCase() as UISlot) as UISlot} 
                data={viewModels} 
                state={viewModels} 
              />
 
-             {/* Global Observation Disclaimer */}
-             <div className="pt-12 pb-8 border-t border-white/5 flex flex-col items-center space-y-2 opacity-30 group-hover:opacity-100 transition-opacity">
+             {/* Footer Attribution */}
+             <div className="pt-12 pb-8 border-t border-white/5 flex flex-col items-center space-y-2 opacity-30 group-hover:opacity-100 transition-opacity text-center">
                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">
-                 Observation-Plane Display Only
+                 © 2026 HNXJ(H.Nejat) / BASTOSLAB / VANDERBILT UNIVERSITY
                </div>
-               <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl leading-relaxed">
-                Gamma Labyrinth 1.0.0 is the live observation surface for the Gamma system. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
-                When no receipt is present: <span className="text-[#D4AF37]">truth_mode: truth_safe_unverified</span>.
+               <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 max-w-2xl leading-relaxed">
+                 Observation-Plane Display :: Gamma Arena :: Gamma Labyrinth 1.0.0
               </div>
              </div>
           </div>

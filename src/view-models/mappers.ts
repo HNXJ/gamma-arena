@@ -12,7 +12,8 @@ import type {
   LabyrinthViewModelBundle,
   FetchEnvelope,
   TransportStateKind,
-  RealtimeReport
+  RealtimeReport,
+  TruthMode
 } from '../types/ui';
 
 export const mapLabyrinthState = (status: LabyrinthStatus | null): { system: SystemViewModel, research: ResearchViewModel } => {
@@ -42,7 +43,8 @@ export const mapLabyrinthState = (status: LabyrinthStatus | null): { system: Sys
       : 0,
     topic: research?.mission_topic || 'Unknown Research Path',
     activePatch: research?.active_patch || '---',
-    lastBlock: status?.persistence?.last_checkpoint
+    lastBlock: status?.persistence?.last_checkpoint,
+    isReceiptBacked: progression?.truth_class === 'GROUNDED'
   };
 
   return { system: systemVM, research: researchVM };
@@ -187,7 +189,8 @@ export const mapRealtimeReport = (
   transport: TransportViewModel, 
   system: SystemViewModel,
   agents: AgentViewModel[],
-  society: AgentSocietyViewModel
+  society: AgentSocietyViewModel,
+  lastObservedAt: string | null
 ): RealtimeReport => {
   const isVercelHealthy = transport.linkState === 'CONNECTED' || transport.linkState === 'PARTIAL';
   
@@ -210,11 +213,25 @@ export const mapRealtimeReport = (
       summary: s.status
     }));
 
+  const now = new Date().getTime();
+  const observedTime = lastObservedAt ? new Date(lastObservedAt).getTime() : 0;
+  const isFresh = observedTime > 0 && (now - observedTime) < 30000; // 30s threshold
+
+  let freshness: RealtimeReport['freshness'];
+  if (transport.linkState !== 'CONNECTED' && transport.linkState !== 'PARTIAL') {
+    freshness = 'fallback';
+  } else if (isFresh) {
+    freshness = 'live';
+  } else {
+    freshness = 'stale';
+  }
+
   return {
     generatedAt: new Date().toISOString(),
+    lastObservedAt: lastObservedAt || '---',
     source: transport.linkState === 'CONNECTED' ? 'api' : 'mock_fallback',
-    freshness: transport.linkState === 'CONNECTED' ? 'live' : 'fallback',
-    truthMode: society.truthMode as TruthMode,
+    freshness,
+    truthMode: (society.truthMode as TruthMode) || 'unknown',
     service: {
       supabase: 'unknown', // Not explicitly tracked in transport yet
       vercelApi: isVercelHealthy ? 'healthy' : 'unavailable'

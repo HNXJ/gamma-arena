@@ -41,7 +41,7 @@ export const TechTreeNodeCard: React.FC<TechTreeNodeCardProps> = ({
   style 
 }) => {
   const iconName = KIND_ICONS[node.kind] || 'HelpCircle';
-  const Icon = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
+  const Icon = (LucideIcons as unknown as Record<string, React.ElementType>)[iconName] || LucideIcons.HelpCircle;
   const colorClass = TRUTH_COLORS[node.truthStatus] || TRUTH_COLORS.unknown;
 
   return (

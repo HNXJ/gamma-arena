@@ -48,7 +48,7 @@ export const registerDemoItems = () => {
             The Phase 4 hardening pass has successfully sealed the operator console's structural boundaries.
           </p>
           <div className="text-[10px] font-bold text-gray-600 uppercase">
-            Official Level: {data.research.officialNeuronCount}N
+            Reported Level: {data.research.isReceiptBacked ? data.research.officialNeuronCount + 'N' : 'truth_safe_unverified'}
           </div>
         </div>
       </div>

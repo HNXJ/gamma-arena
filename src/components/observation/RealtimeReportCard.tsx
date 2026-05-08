@@ -13,14 +13,17 @@ export const RealtimeReportCard: React.FC<Props> = ({ report }) => {
       <div className="flex flex-wrap gap-4 items-center justify-between bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full animate-pulse ${report.freshness === 'live' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500'}`} />
+            <div className={`w-2 h-2 rounded-full animate-pulse ${
+              report.freshness === 'live' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 
+              report.freshness === 'stale' ? 'bg-amber-500' : 'bg-rose-500'
+            }`} />
             <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
-              {report.freshness} Observation
+              {report.freshness} Observation :: {report.source}
             </span>
           </div>
           <div className="h-4 w-px bg-white/10" />
           <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center space-x-2">
-            <Shield size={12} className="text-amber-500" />
+            <Shield size={12} className={report.truthMode === 'receipt_backed' ? 'text-emerald-500' : 'text-amber-500'} />
             <span>{report.truthMode}</span>
           </div>
         </div>
@@ -38,7 +41,12 @@ export const RealtimeReportCard: React.FC<Props> = ({ report }) => {
           </div>
           <div className="flex items-center space-x-2 text-gray-600">
             <Clock size={12} />
-            <span>{new Date(report.generatedAt).toLocaleTimeString()}</span>
+            <div className="flex flex-col items-end leading-none">
+              <span>GEN: {new Date(report.generatedAt).toLocaleTimeString()}</span>
+              {report.lastObservedAt !== '---' && (
+                <span className="text-[8px] opacity-60 mt-1">OBS: {new Date(report.lastObservedAt).toLocaleTimeString()}</span>
+              )}
+            </div>
           </div>
         </div>
       </div>

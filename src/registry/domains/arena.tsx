@@ -58,7 +58,11 @@ export const registerArenaItems = () => {
               severity="NORMAL" 
               subtitle="Reported Count"
             >
-              <div className="text-4xl font-black text-gray-100 font-mono italic">{research.officialNeuronCount}</div>
+              <div className="text-4xl font-black text-gray-100 font-mono italic">
+                {research.isReceiptBacked 
+                  ? research.officialNeuronCount 
+                  : <span className="text-sm opacity-40 uppercase">unverified</span>}
+              </div>
             </FeedCard>
 
             <FeedCard 

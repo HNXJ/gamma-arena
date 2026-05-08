@@ -24,7 +24,7 @@ export const registerMissionItems = () => {
       const isUnavailable = missionState?.kind === 'http_error' || missionState?.kind === 'network_error' || missionState?.kind === 'payload_error';
       const isLoading = missionState?.kind === 'loading';
 
-      if (isLoading) {
+      if (isLoading && !mission.missionId) {
         return (
           <div className="p-12 text-center text-emerald-500/40 animate-pulse uppercase font-black tracking-widest flex flex-col items-center">
             <Rocket className="mb-4 animate-spin" size={32} />

@@ -46,16 +46,24 @@ export const registerAgentItems = () => {
       }
       
       return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {agents.length > 0 ? (
-            agents.map(agent => (
-              <AgentCard key={agent.id} agent={agent} />
-            ))
-          ) : (
-            <div className="p-12 border border-white/5 bg-white/[0.02] rounded-2xl text-center text-gray-500 font-bold uppercase tracking-widest col-span-full">
-              No Agents Detected in Current Substrate
-            </div>
-          )}
+        <div className="space-y-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {agents.length > 0 ? (
+              agents.map(agent => (
+                <AgentCard key={agent.id} agent={agent} />
+              ))
+            ) : (
+              <div className="p-12 border border-white/5 bg-white/[0.02] rounded-2xl text-center text-gray-500 font-bold uppercase tracking-widest col-span-full">
+                No Agents Detected in Current Substrate
+              </div>
+            )}
+          </div>
+
+          <div className="pt-8 border-t border-white/5 opacity-40">
+            <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest text-center">
+              Agent status is observational. Liveness and truth-class are reported by the harness and remain unverified until receipt-backed.
+            </p>
+          </div>
         </div>
       );
     }

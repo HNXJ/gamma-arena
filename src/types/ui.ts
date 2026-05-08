@@ -95,6 +95,7 @@ export interface ResearchViewModel {
   topic: string;
   activePatch: string;
   lastBlock?: string;
+  isReceiptBacked: boolean;
 }
 
 export interface AgentViewModel {
@@ -175,6 +176,7 @@ export type ServiceStatus = "healthy" | "degraded" | "unavailable" | "auth_block
 
 export interface RealtimeReport {
   generatedAt: string;
+  lastObservedAt: string;
   source: "supabase" | "api" | "mock_fallback" | "static_fallback" | "unknown";
   freshness: ObservationFreshness;
   truthMode: TruthMode;

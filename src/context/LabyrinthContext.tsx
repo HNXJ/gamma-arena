@@ -88,7 +88,7 @@ export const LabyrinthProvider: React.FC<{ children: ReactNode }> = ({ children 
       logs: logsEnv
     });
 
-    const realtimeReport = mapRealtimeReport(transport, system, agents, society);
+    const realtimeReport = mapRealtimeReport(transport, system, agents, society, statusEnv?.receivedAt || null);
     
     return {
       system,
