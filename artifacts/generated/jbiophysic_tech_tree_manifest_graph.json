@@ -1,0 +1,319 @@
+{
+  "schema_version": "tech_tree_manifest_graph_v0.1",
+  "truth_mode": "truth_safe_unverified",
+  "truth_bearing_run": false,
+  "source_repo": "jbiophysic",
+  "source_branch": "main",
+  "source_head": "jbiophysic-main-enhanced",
+  "generated_at": "2026-05-08T03:07:00Z",
+  "artifact_status": "observation_manifest_candidate",
+  "nodes": [
+    {
+      "id": "repo-jbiophysic",
+      "label": "jbiophysic",
+      "kind": "repo",
+      "status": "observed",
+      "plane": "Science",
+      "description": "Differentiable modeling and simulation suite for neuroscience.",
+      "source_files": ["D:/drive/analysis/jbiophys/jbiophysic-main-enhanced.zip"],
+      "claim_status": "unverified",
+      "risk": "medium"
+    },
+    {
+      "id": "pkg-jbiophysics",
+      "label": "jbiophysics",
+      "kind": "module",
+      "status": "prototype",
+      "plane": "Execution",
+      "description": "Core package layer with differentiable modeling abstractions.",
+      "source_files": ["jbiophysics/"],
+      "claim_status": "validated_by_compile_only",
+      "risk": "low"
+    },
+    {
+      "id": "mod-specs",
+      "label": "specs.py",
+      "kind": "module",
+      "status": "prototype",
+      "plane": "Execution",
+      "description": "Backend-agnostic specification layer for neuron templates and networks.",
+      "source_files": ["jbiophysics/specs.py"],
+      "claim_status": "validated_by_compile_only",
+      "risk": "low"
+    },
+    {
+      "id": "mod-cell-library",
+      "label": "cell_library.py",
+      "kind": "module",
+      "status": "prototype",
+      "plane": "Science",
+      "description": "Cortical cell templates: L2/3 Pyr, L5 Pyr, PV, SST, VIP.",
+      "source_files": ["jbiophysics/cell_library.py"],
+      "claim_status": "validated_by_compile_only",
+      "risk": "low"
+    },
+    {
+      "id": "mod-network-library",
+      "label": "network_library.py",
+      "kind": "module",
+      "status": "prototype",
+      "plane": "Execution",
+      "description": "Area and hierarchy builders for multi-area network composition.",
+      "source_files": ["jbiophysics/network_library.py"],
+      "claim_status": "validated_by_compile_only",
+      "risk": "low"
+    },
+    {
+      "id": "mod-jaxley-adapter",
+      "label": "jaxley_adapter.py",
+      "kind": "module",
+      "status": "prototype",
+      "plane": "Execution",
+      "description": "Jaxley materialization layer for differentiable biophysics.",
+      "source_files": ["jbiophysics/jaxley_adapter.py"],
+      "claim_status": "unverified",
+      "risk": "high"
+    },
+    {
+      "id": "mod-spectral",
+      "label": "analysis/spectral.py",
+      "kind": "module",
+      "status": "prototype",
+      "plane": "Science",
+      "description": "Reusable analysis layer for power bands, 1/f slope, and peak frequency.",
+      "source_files": ["jbiophysics/analysis/spectral.py"],
+      "claim_status": "validated_by_smoke_only",
+      "risk": "low"
+    },
+    {
+      "id": "concept-izhikevich",
+      "label": "Izhikevich point-process network",
+      "kind": "concept",
+      "status": "observed",
+      "plane": "Science",
+      "description": "Point-process spiking neuron model for large-scale dynamics.",
+      "claim_status": "unverified",
+      "risk": "low"
+    },
+    {
+      "id": "concept-tfne",
+      "label": "TFNE field bridge",
+      "kind": "concept",
+      "status": "planned",
+      "plane": "Science",
+      "description": "Transient Field Neural Ensemble bridge for field-spiking interaction.",
+      "claim_status": "unverified",
+      "risk": "high"
+    },
+    {
+      "id": "concept-fields",
+      "label": "phi_i / phi_e / V_m fields",
+      "kind": "concept",
+      "status": "prototype",
+      "plane": "Science",
+      "description": "Scalar field representations of inhibitory, excitatory, and membrane potentials.",
+      "claim_status": "unverified",
+      "risk": "medium"
+    },
+    {
+      "id": "concept-csd",
+      "label": "CSD / current-density outputs",
+      "kind": "artifact",
+      "status": "observed",
+      "plane": "Observation",
+      "description": "Current Source Density profiles derived from field dynamics.",
+      "claim_status": "unverified",
+      "risk": "low"
+    },
+    {
+      "id": "concept-coupling",
+      "label": "spike-driven synaptic-state coupling",
+      "kind": "method",
+      "status": "prototype",
+      "plane": "Execution",
+      "description": "Event-driven coupling between discrete spikes and continuous synaptic fields.",
+      "claim_status": "unverified",
+      "risk": "medium"
+    },
+    {
+      "id": "plan-agsdr",
+      "label": "AGSDR training plan",
+      "kind": "artifact",
+      "status": "planned",
+      "plane": "Control",
+      "description": "Adversarial Generative Spectral Dynamics Reconstruction training protocol.",
+      "claim_status": "unverified",
+      "risk": "high"
+    },
+    {
+      "id": "plan-figure8",
+      "label": "Figure-8-lite replication plan",
+      "kind": "artifact",
+      "status": "planned",
+      "plane": "Control",
+      "description": "Strategy for replicating Figure 8 spectral dynamics in a reduced model.",
+      "claim_status": "unverified",
+      "risk": "medium"
+    },
+    {
+      "id": "val-ladder",
+      "label": "TFNE validation ladder",
+      "kind": "validation",
+      "status": "observed",
+      "plane": "Execution",
+      "description": "Hierarchical verification steps for field-bridge integrity.",
+      "claim_status": "unverified",
+      "risk": "low"
+    },
+    {
+      "id": "val-synapse",
+      "label": "synapse integrity",
+      "kind": "validation",
+      "status": "prototype",
+      "plane": "Execution",
+      "description": "Verification of synaptic weight and connectivity distribution.",
+      "claim_status": "validated_by_smoke_only",
+      "risk": "low"
+    },
+    {
+      "id": "val-finite",
+      "label": "field finite-output smoke",
+      "kind": "validation",
+      "status": "observed",
+      "plane": "Execution",
+      "description": "Smoke test ensuring non-NaN/Inf field outputs during simulation.",
+      "claim_status": "validated_by_smoke_only",
+      "risk": "low"
+    },
+    {
+      "id": "blocked-receipt",
+      "label": "real receipt-backed validation",
+      "kind": "validation",
+      "status": "blocked",
+      "plane": "Truth",
+      "description": "Verification via Truth-plane commit/receipt.",
+      "claim_status": "blocked",
+      "risk": "high"
+    },
+    {
+      "id": "blocked-active-cable",
+      "label": "active cable benchmark",
+      "kind": "validation",
+      "status": "blocked",
+      "plane": "Science",
+      "description": "Benchmarking of active dendritic cable properties.",
+      "claim_status": "blocked",
+      "risk": "high"
+    }
+  ],
+  "edges": [
+    {
+      "source": "repo-jbiophysic",
+      "target": "pkg-jbiophysics",
+      "relation": "contains",
+      "description": "Primary package layer."
+    },
+    {
+      "source": "pkg-jbiophysics",
+      "target": "mod-specs",
+      "relation": "contains",
+      "description": "Modeling specification."
+    },
+    {
+      "source": "pkg-jbiophysics",
+      "target": "mod-cell-library",
+      "relation": "contains",
+      "description": "Prebuilt cell templates."
+    },
+    {
+      "source": "pkg-jbiophysics",
+      "target": "mod-network-library",
+      "relation": "contains",
+      "description": "Area composition tools."
+    },
+    {
+      "source": "mod-network-library",
+      "target": "mod-specs",
+      "relation": "depends_on",
+      "description": "Uses model specs."
+    },
+    {
+      "source": "mod-network-library",
+      "target": "mod-cell-library",
+      "relation": "depends_on",
+      "description": "Uses cell templates."
+    },
+    {
+      "source": "pkg-jbiophysics",
+      "target": "mod-jaxley-adapter",
+      "relation": "contains",
+      "description": "Jaxley backend integration."
+    },
+    {
+      "source": "mod-jaxley-adapter",
+      "target": "mod-specs",
+      "relation": "depends_on",
+      "description": "Materializes specs."
+    },
+    {
+      "source": "mod-jaxley-adapter",
+      "target": "concept-coupling",
+      "relation": "generates",
+      "description": "Implements coupling logic."
+    },
+    {
+      "source": "concept-coupling",
+      "target": "concept-izhikevich",
+      "relation": "feeds",
+      "description": "Drives spiking network."
+    },
+    {
+      "source": "concept-coupling",
+      "target": "concept-fields",
+      "relation": "feeds",
+      "description": "Drives field dynamics."
+    },
+    {
+      "source": "concept-fields",
+      "target": "concept-csd",
+      "relation": "generates",
+      "description": "CSD derivation."
+    },
+    {
+      "source": "pkg-jbiophysics",
+      "target": "mod-spectral",
+      "relation": "contains",
+      "description": "Analysis utilities."
+    },
+    {
+      "source": "val-ladder",
+      "target": "concept-tfne",
+      "relation": "validates",
+      "description": "Bridge verification."
+    },
+    {
+      "source": "val-synapse",
+      "target": "pkg-jbiophysics",
+      "relation": "validates",
+      "description": "Structure check."
+    },
+    {
+      "source": "val-finite",
+      "target": "concept-fields",
+      "relation": "validates",
+      "description": "Stability check."
+    }
+  ],
+  "blocked_items": [
+    {
+      "id": "blocked-receipt",
+      "reason": "No Truth-plane consensus established for model parameters.",
+      "next_action": "Execute adversarial validation on Figure-8-lite."
+    },
+    {
+      "id": "blocked-active-cable",
+      "reason": "Jaxley adapter not yet fully compartment-aware.",
+      "next_action": "Enhance jaxley_adapter.py with compartment mapping."
+    }
+  ]
+}
