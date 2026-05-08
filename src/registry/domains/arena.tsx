@@ -1,6 +1,6 @@
 
 import { registry } from '../core';
-import type { ArenaViewModelBundle } from '../../types/ui';
+import type { LabyrinthViewModelBundle } from '../../types/ui';
 import { FeedCard } from '../../components/ui/FeedCard';
 import { ProgressLadder } from '../../components/ProgressLadder';
 import { AlertTriangle } from 'lucide-react';
@@ -19,7 +19,7 @@ export const registerArenaItems = () => {
     slot: 'ARENA',
     label: 'Neuron Growth',
     priority: 10,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { research, transport } = data;
       
       const statusState = transport.endpointStates.find(s => s.name === 'System Status');

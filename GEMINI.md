@@ -1,4 +1,4 @@
-# Workspace Digest: Gamma Arena
+# Workspace Digest: Gamma Labyrinth
 
 ## Purpose
 This repository contains the observation UI and browser validation components for the Gamma Labyrinth. It is the primary observation-plane surface for monitoring mission status and agent society activity.

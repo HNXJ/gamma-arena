@@ -1,5 +1,5 @@
 
-import type { ArenaViewModelBundle, UIRegistryItem, UISlot, UITab } from '../types/ui';
+import type { LabyrinthViewModelBundle, UIRegistryItem, UISlot, UITab } from '../types/ui';
 
 class UIRegistry {
   private items: Map<string, UIRegistryItem> = new Map();
@@ -13,7 +13,7 @@ class UIRegistry {
     this.tabs.set(tab.id, tab);
   }
 
-  getItemsForSlot(slot: UISlot, state?: ArenaViewModelBundle): UIRegistryItem[] {
+  getItemsForSlot(slot: UISlot, state?: LabyrinthViewModelBundle): UIRegistryItem[] {
     return Array.from(this.items.values())
       .filter(item => {
         if (item.slot !== slot) return false;

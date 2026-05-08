@@ -1,7 +1,7 @@
 
 import { registry } from '../core';
 import { AgentCard } from '../../components/AgentCard';
-import type { ArenaViewModelBundle } from '../../types/ui';
+import type { LabyrinthViewModelBundle } from '../../types/ui';
 import { AlertCircle } from 'lucide-react';
 
 export const registerAgentItems = () => {
@@ -18,7 +18,7 @@ export const registerAgentItems = () => {
     slot: 'AGENTS',
     label: 'Active Agents',
     priority: 10,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { agents, transport } = data;
       
       const agentState = transport.endpointStates.find(s => s.name === 'Agent Roster');

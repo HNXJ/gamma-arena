@@ -1,4 +1,4 @@
-import type { ArenaStatus, Agent, Persistence, RawLog, AgentSociety, MissionObservation } from '../types/contract';
+import type { LabyrinthStatus, Agent, Persistence, RawLog, AgentSociety, MissionObservation } from '../types/contract';
 import type { 
   SystemViewModel, 
   ResearchViewModel, 
@@ -9,11 +9,12 @@ import type {
   MissionViewModel,
   GateViewModel,
   TransportViewModel,
+  LabyrinthViewModelBundle,
   FetchEnvelope,
   TransportStateKind
 } from '../types/ui';
 
-export const mapArenaState = (status: ArenaStatus | null): { system: SystemViewModel, research: ResearchViewModel } => {
+export const mapLabyrinthState = (status: LabyrinthStatus | null): { system: SystemViewModel, research: ResearchViewModel } => {
   const safeStatus = status?.system?.status || 'STALLED';
   const research = status?.research;
   const progression = status?.progression;
@@ -143,7 +144,7 @@ export const mapMissionState = (m: MissionObservation | null): MissionViewModel 
 };
 
 export const mapTransportState = (envelopes: {
-  status: FetchEnvelope<ArenaStatus> | null;
+  status: FetchEnvelope<LabyrinthStatus> | null;
   agents: FetchEnvelope<Agent[]> | null;
   persistence: FetchEnvelope<Persistence> | null;
   society: FetchEnvelope<AgentSociety> | null;

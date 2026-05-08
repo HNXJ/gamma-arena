@@ -2,7 +2,7 @@
 import { registry } from '../core';
 import { ShieldAlert, Activity } from 'lucide-react';
 import { FeedCard } from '../../components/ui/FeedCard';
-import type { ArenaViewModelBundle } from '../../types/ui';
+import type { LabyrinthViewModelBundle } from '../../types/ui';
 
 export const registerOverviewItems = () => {
   registry.registerTab({
@@ -18,7 +18,7 @@ export const registerOverviewItems = () => {
     slot: 'LOBBY',
     label: 'System Status Strip',
     priority: 10,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { system, research, transport } = data;
 
       const statusState = transport.endpointStates.find(s => s.name === 'System Status');

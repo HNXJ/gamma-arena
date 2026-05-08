@@ -1,11 +1,11 @@
 import React from 'react';
-import type { UISlot, ArenaViewModelBundle } from '../types/ui';
+import type { UISlot, LabyrinthViewModelBundle } from '../types/ui';
 import { registry } from './core';
 
 interface SlotRendererProps {
   slot: UISlot;
-  data: ArenaViewModelBundle;
-  state?: ArenaViewModelBundle;
+  data: LabyrinthViewModelBundle;
+  state?: LabyrinthViewModelBundle;
 }
 
 export const SlotRenderer: React.FC<SlotRendererProps> = ({ slot, data, state }) => {

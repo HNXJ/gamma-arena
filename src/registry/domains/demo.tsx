@@ -1,7 +1,7 @@
 
 import { registry } from '../core';
 import { Layout, MessageSquare } from 'lucide-react';
-import type { ArenaViewModelBundle } from '../../types/ui';
+import type { LabyrinthViewModelBundle } from '../../types/ui';
 
 export const registerDemoItems = () => {
   // Gate demo content to development mode only
@@ -33,7 +33,7 @@ export const registerDemoItems = () => {
     slot: 'MAIN_FEED',
     label: 'Research Milestone (DEV)',
     priority: 5,
-    render: ({ data }: { data: ArenaViewModelBundle }) => (
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => (
       <div className="p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
           <Layout size={48} className="text-amber-500" />

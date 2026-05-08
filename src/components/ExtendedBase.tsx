@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
-import { useArena } from '../context/ArenaContext';
+import { useLabyrinth } from '../context/LabyrinthContext';
 import { registry } from '../registry/core';
 import type { UISlot } from '../types/ui';
 import { SlotRenderer } from '../registry/index';
 import * as LucideIcons from 'lucide-react';
 
 export const ExtendedBase: React.FC = () => {
-  const { viewModels } = useArena();
+  const { viewModels } = useLabyrinth();
   const tabs = registry.getTabs();
   const [activeTabId, setActiveTabId] = useState(tabs[0]?.id || 'lobby');
 
@@ -82,7 +82,7 @@ export const ExtendedBase: React.FC = () => {
                  Observation-Plane Display Only
                </div>
                <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl leading-relaxed">
-                 Gamma Arena is the live observation surface for Gamma Labyrinth. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
+                 Gamma Labyrinth is the live observation surface for Gamma Labyrinth. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
                  When no receipt is present: <span className="text-[#D4AF37]">truth_mode: truth_safe_unverified</span>.
                </div>
              </div>

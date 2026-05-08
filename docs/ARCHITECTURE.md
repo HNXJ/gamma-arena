@@ -1,7 +1,7 @@
-# Gamma Arena: Two-Base Operator Console Architecture
+# Gamma Labyrinth: Two-Base Operator Console Architecture
 
 ## Overview
-The Gamma Arena frontend mirrors the backend's two-base pattern, providing a dual-layer operator product designed for both high-reliability monitoring and modular scientific expansion.
+The Gamma Labyrinth frontend mirrors the backend's two-base pattern, providing a dual-layer operator product designed for both high-reliability monitoring and modular scientific expansion.
 
 ## 1. Safe-Base (Safe Landing Tab)
 **Safe-Base** is a minimal, terminal-like lobby designed for extreme stability under degraded backend conditions.
@@ -13,23 +13,23 @@ The Gamma Arena frontend mirrors the backend's two-base pattern, providing a dua
 ## 2. Extended-Base (Scientific Social Layer)
 **Extended-Base** is the scalable growth surface for rich research telemetry, agent feeds, and interactive modules.
 - **Surface**: Tabbed, modular, feed-oriented.
-- **Focus**: Extensible scientific social-media (Council roster, Research arena, Provenance logs).
+- **Focus**: Extensible scientific social-media (Council roster, Research Labyrinth, Provenance logs).
 - **Composition**: Slot-based rendering within registry-driven tabs.
 
 ## 3. Core Mechanisms
 
-### Shared Data Orchestration (`ArenaProvider`)
-Both bases share a unified data layer. The `ArenaProvider` handles:
-- **Hardened Fetching**: Centralized polling from `ArenaClient`.
+### Shared Data Orchestration (`LabyrinthProvider`)
+Both bases share a unified data layer. The `LabyrinthProvider` handles:
+- **Hardened Fetching**: Centralized polling from `labyrinthClient`.
 - **View-Model Mapping**: Applying `SAFE_DEFAULTS` via `mappers.ts`.
-- **Global Distribution**: Providing consistent state to all components via `useArena()`.
+- **Global Distribution**: Providing consistent state to all components via `useLabyrinth()`.
 
 ### Registry-Driven Tabs
 Tabs are not hardcoded in the shell. They are registered via domain fragments:
 ```typescript
 registry.registerTab({
   id: 'research',
-  label: 'Research Arena',
+  label: 'Research Labyrinth',
   icon: 'Activity',
   priority: 20,
   domain: 'ARENA'

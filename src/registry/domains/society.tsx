@@ -1,6 +1,6 @@
 
 import { registry } from '../core';
-import type { ArenaViewModelBundle, AgentSocietyViewModel } from '../../types/ui';
+import type { LabyrinthViewModelBundle, AgentSocietyViewModel } from '../../types/ui';
 import { Shield, CheckCircle2, XCircle, AlertCircle, Cpu, Database } from 'lucide-react';
 
 const REPORTED_OBSERVATION_SNAPSHOT: AgentSocietyViewModel = {
@@ -44,7 +44,7 @@ export const registerSocietyItems = () => {
     slot: 'SOCIETY',
     label: 'LMS Agent Society',
     priority: 10,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { society: liveSociety, transport } = data;
       
       const societyState = transport.endpointStates.find(s => s.name === 'Agent Society');

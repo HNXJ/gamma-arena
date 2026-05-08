@@ -37,7 +37,7 @@ export const registerWikiItems = () => {
           <div className="space-y-1">
             <h3 className="text-sm font-black text-amber-500 uppercase tracking-widest">Observation Surface Only</h3>
             <p className="text-xs text-amber-500/80 font-bold uppercase leading-relaxed">
-              Gamma Arena is the live observation surface for Gamma Labyrinth. Scientific and game-state claims must be backed by committed backend truth and receipts. 
+              Gamma Labyrinth is the live observation surface for Gamma Labyrinth. Scientific and game-state claims must be backed by committed backend truth and receipts. 
               This article is research synthesis and design guidance, not a truth-plane commit.
             </p>
           </div>

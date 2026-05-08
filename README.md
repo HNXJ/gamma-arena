@@ -20,7 +20,7 @@ This repository ignores `.DS_Store`, `*.npy`, and `*.mat`. (Note: `*.html` is NO
 
 ---
 
-Read-only operator console for the live Gamma Arena runtime.
+Read-only operator console for the live Gamma Labyrinth runtime.
 
 ## Status
 
@@ -28,7 +28,7 @@ Under construction.
 
 ## Purpose
 
-`gamma-arena` is a separate viewer application for the live `gamma` runtime. Its job is to render authoritative Arena state, progression, persistence, agent activity, and debugging proof without mutating the scientific game.
+`gamma-arena` is a separate viewer application for the live `gamma` runtime. Its job is to render authoritative Labyrinth state, progression, persistence, agent activity, and debugging proof without mutating the scientific game.
 
 ## Scope
 
@@ -74,7 +74,7 @@ The viewer will consume structured endpoints for:
 
 ## Safety Model
 
-`gamma-arena` is read-only by design. It must never be able to halt, mutate, or steer the live Arena directly.
+`gamma-arena` is read-only by design. It must never be able to halt, mutate, or steer the live Labyrinth directly.
 
 ## Migration Plan
 

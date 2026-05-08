@@ -1,6 +1,6 @@
 import { SpectatorDebate } from "./components/observation/SpectatorDebate";
 import { useState } from 'react'
-import { ArenaProvider } from './context/ArenaContext';
+import { LabyrinthProvider } from './context/LabyrinthContext';
 import { SafeBase } from './components/SafeBase';
 import { ExtendedBase } from './components/ExtendedBase';
 import { initializeRegistry } from './registry/setup';
@@ -13,7 +13,7 @@ function App() {
   const [mode, setMode] = useState<'SAFE' | 'EXTENDED'>('SAFE');
 
   return (
-    <ArenaProvider>
+    <LabyrinthProvider>
       <div className="relative">
         {/* Universal Mode Toggle (Operator Only) */}
         <div className="fixed bottom-6 right-6 z-[9999] flex items-center bg-black/80 backdrop-blur border border-white/10 rounded-full p-1 shadow-2xl">
@@ -51,7 +51,7 @@ function App() {
           </footer>
         </div>
       </div>
-    </ArenaProvider>
+    </LabyrinthProvider>
   );
 }
 

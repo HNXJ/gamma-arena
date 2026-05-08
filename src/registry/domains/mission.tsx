@@ -1,6 +1,6 @@
 
 import { registry } from '../core';
-import type { ArenaViewModelBundle } from '../../types/ui';
+import type { LabyrinthViewModelBundle } from '../../types/ui';
 import { Shield, XCircle, AlertCircle, Rocket, FileText, Zap } from 'lucide-react';
 
 export const registerMissionItems = () => {
@@ -17,7 +17,7 @@ export const registerMissionItems = () => {
     slot: 'MISSION',
     label: 'Izhikevich Mission Control',
     priority: 10,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { mission, transport } = data;
       
       const missionState = transport.endpointStates.find(s => s.name === 'Mission Status');

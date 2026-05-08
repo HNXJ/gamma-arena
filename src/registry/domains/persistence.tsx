@@ -2,7 +2,7 @@
 import { registry } from '../core';
 import { RefreshCw, CheckCircle, Clock, Database } from 'lucide-react';
 import { FeedCard } from '../../components/ui/FeedCard';
-import type { ArenaViewModelBundle } from '../../types/ui';
+import type { LabyrinthViewModelBundle } from '../../types/ui';
 
 export const registerPersistenceItems = () => {
   registry.registerTab({
@@ -18,7 +18,7 @@ export const registerPersistenceItems = () => {
     slot: 'PERSISTENCE',
     label: 'Persistence Metrics',
     priority: 10,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { persistence, transport } = data;
       
       const persistState = transport.endpointStates.find(s => s.name === 'Persistence');
@@ -99,7 +99,7 @@ export const registerPersistenceItems = () => {
     slot: 'SAFE_STATUS',
     label: 'Persistence Summary',
     priority: 50,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { persistence, transport } = data;
       
       const persistState = transport.endpointStates.find(s => s.name === 'Persistence');

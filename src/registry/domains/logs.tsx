@@ -1,6 +1,6 @@
 
 import { registry } from '../core';
-import type { ArenaViewModelBundle } from '../../types/ui';
+import type { LabyrinthViewModelBundle } from '../../types/ui';
 
 export const registerLogItems = () => {
   registry.registerTab({
@@ -16,7 +16,7 @@ export const registerLogItems = () => {
     slot: 'LOGS',
     label: 'Event Stream',
     priority: 10,
-    render: ({ data }: { data: ArenaViewModelBundle }) => {
+    render: ({ data }: { data: LabyrinthViewModelBundle }) => {
       const { transport, logs } = data;
       
       const logState = transport.endpointStates.find(s => s.name === 'Provenance Rail');

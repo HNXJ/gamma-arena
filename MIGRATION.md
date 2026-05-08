@@ -1,7 +1,7 @@
-# Gamma Arena Migration Plan
+# Gamma Labyrinth Migration Plan
 
 ## Mission
-Move the Arena UI out of `gamma` and into `gamma-arena`, keeping `gamma` as the live truth source on the Office Mac.
+Move the Labyrinth UI out of `gamma` and into `gamma-arena`, keeping `gamma` as the live truth source on the Office Mac.
 
 ## Core Rule: Read-Only Console
 `gamma-arena` is a **read-only** operator console.

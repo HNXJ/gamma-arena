@@ -1,5 +1,5 @@
 import React from 'react';
-import { useArena } from '../context/ArenaContext';
+import { useLabyrinth } from '../context/LabyrinthContext';
 import { SlotRenderer } from '../registry/index';
 import { Activity, ShieldAlert, Wifi, Terminal, AlertTriangle, AlertCircle } from 'lucide-react';
 
@@ -10,7 +10,7 @@ const StatusIcon: React.FC<{ linkState: string }> = ({ linkState }) => {
 };
 
 export const SafeBase: React.FC = () => {
-  const { viewModels } = useArena();
+  const { viewModels } = useLabyrinth();
   const { transport, system } = viewModels;
 
   const getStatusColor = () => {
@@ -105,7 +105,7 @@ export const SafeBase: React.FC = () => {
       </div>
 
       <footer className="pt-4 opacity-40 text-[9px] uppercase text-center tracking-[0.2em] space-y-1">
-        <div>Gamma Arena :: Gamma Labyrinth Observation Surface</div>
+        <div>Gamma Labyrinth :: Gamma Labyrinth Observation Surface</div>
         <div className="opacity-50">© 2026 HNXJ(H.Nejat) / BASTOSLAB / VANDERBILT UNIVERSITY</div>
       </footer>
     </div>
