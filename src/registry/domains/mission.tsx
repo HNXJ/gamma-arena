@@ -1,7 +1,7 @@
 
 import { registry } from '../core';
 import type { LabyrinthViewModelBundle } from '../../types/ui';
-import { Shield, XCircle, AlertCircle, Rocket, FileText, Zap } from 'lucide-react';
+import { Shield, XCircle, AlertCircle, Rocket, FileText, Zap, Activity } from 'lucide-react';
 
 export const registerMissionItems = () => {
   registry.registerTab({
@@ -77,27 +77,27 @@ export const registerMissionItems = () => {
                  </div>
                </div>
 
-               <div className="space-y-4">
-                 <div className="flex items-center space-x-3">
-                   <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-amber-500">
-                     <AlertCircle size={20} />
-                   </div>
-                   <div>
-                     <div className="text-[9px] font-black text-gray-500 uppercase">Truth Mode</div>
-                     <div className="text-xs font-black text-amber-500 uppercase tracking-widest">{mission.truthMode}</div>
-                   </div>
-                 </div>
-                 <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
-                      <div className={`w-2 h-2 rounded-full ${mission.truthBearingRun ? 'bg-emerald-500' : 'bg-gray-700'}`} />
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-emerald-500">
+                      <Activity size={20} />
                     </div>
                     <div>
-                      <div className="text-[9px] font-black text-gray-500 uppercase">Truth-Bearing Run</div>
-                      <div className="text-xs font-black text-gray-300 uppercase">{mission.truthBearingRun ? 'AUTHORIZED' : 'FALSE'}</div>
+                      <div className="text-[9px] font-black text-gray-500 uppercase">E/I Balance Goal</div>
+                      <div className="text-xs font-black text-gray-200 uppercase tracking-wider">Spectral Omission</div>
                     </div>
-                 </div>
-               </div>
-            </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                     <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
+                       <div className={`w-2 h-2 rounded-full ${mission.truthBearingRun ? 'bg-emerald-500' : 'bg-gray-700'}`} />
+                     </div>
+                     <div>
+                       <div className="text-[9px] font-black text-gray-500 uppercase">Truth-Bearing Run</div>
+                       <div className="text-xs font-black text-gray-300 uppercase">{mission.truthBearingRun ? 'AUTHORIZED' : 'FALSE'}</div>
+                     </div>
+                  </div>
+                </div>
+             </div>
           </div>
 
           {/* Mission Progress / Gates */}

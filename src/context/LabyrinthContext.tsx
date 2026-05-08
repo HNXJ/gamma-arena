@@ -7,6 +7,7 @@ import {
   mapAgentSocietyState,
   mapMissionState,
   mapTransportState,
+  mapRealtimeReport,
   type LabyrinthViewModelBundle 
 } from '../view-models/mappers';
 import type { 
@@ -87,6 +88,8 @@ export const LabyrinthProvider: React.FC<{ children: ReactNode }> = ({ children 
       logs: logsEnv
     });
 
+    const realtimeReport = mapRealtimeReport(transport, system, agents, society);
+    
     return {
       system,
       research,
@@ -95,6 +98,7 @@ export const LabyrinthProvider: React.FC<{ children: ReactNode }> = ({ children 
       society,
       mission,
       transport,
+      realtimeReport,
       logs: Array.isArray(logsEnv?.data) ? logsEnv.data : []
     };
   }, [statusEnv, agentsEnv, persistenceEnv, societyEnv, missionEnv, logsEnv]);

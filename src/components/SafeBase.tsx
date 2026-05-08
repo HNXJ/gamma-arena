@@ -45,7 +45,7 @@ export const SafeBase: React.FC = () => {
       {/* Connectivity Detail (Debug/Operator) */}
       {transport.linkState !== 'CONNECTED' && (
         <div className="p-2 border border-amber-500/20 bg-amber-500/5 rounded text-[10px] space-y-1">
-          {transport.endpointStates.map((s: any, i: number) => (
+          {transport.endpointStates.map((s, i) => (
             <div key={i} className="flex justify-between items-center">
               <span className="opacity-60">{s.name}</span>
               <span className={s.kind === 'success_populated' || s.kind === 'success_empty' ? 'text-emerald-500' : 'text-rose-500 font-bold'}>
@@ -105,7 +105,7 @@ export const SafeBase: React.FC = () => {
       </div>
 
       <footer className="pt-4 opacity-40 text-[9px] uppercase text-center tracking-[0.2em] space-y-1">
-        <div>Gamma Labyrinth :: Gamma Labyrinth Observation Surface</div>
+        <div>Gamma Labyrinth :: Observation Surface</div>
         <div className="opacity-50">© 2026 HNXJ(H.Nejat) / BASTOSLAB / VANDERBILT UNIVERSITY</div>
       </footer>
     </div>

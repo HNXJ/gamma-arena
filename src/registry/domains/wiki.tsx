@@ -284,6 +284,55 @@ export const registerWikiItems = () => {
     )
   });
 
+  // World Laws Article
+  registry.register({
+    key: 'wiki-article-world-laws',
+    slot: 'WIKI',
+    label: 'World Laws and Plane Separation',
+    priority: 90,
+    render: () => (
+      <div className="space-y-12 pb-20 border-t border-white/5 pt-20">
+        <div className="space-y-6">
+          <div className="flex items-center space-x-3 text-emerald-500 font-black uppercase tracking-[0.3em] text-xs italic">
+            <Shield size={16} />
+            <span>Doctrine // Gamma Protocol Alignment</span>
+          </div>
+          <h2 className="text-4xl font-black text-gray-100 tracking-tighter uppercase leading-none">
+            World Laws & <span className="text-emerald-500">Plane Separation</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           <div className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-4">
+             <h3 className="text-sm font-black text-gray-200 uppercase tracking-widest">Law 1: Control</h3>
+             <p className="text-[11px] font-bold text-gray-400 uppercase leading-relaxed">
+               Missions and tasks are defined in the Control plane (GitHub Project/Issues). Control is not truth.
+             </p>
+           </div>
+           <div className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-4">
+             <h3 className="text-sm font-black text-gray-200 uppercase tracking-widest">Law 2: Execution</h3>
+             <p className="text-[11px] font-bold text-gray-400 uppercase leading-relaxed">
+               Logic runs in the Execution plane (harnesses). Execution status is not biological truth.
+             </p>
+           </div>
+           <div className="p-6 bg-white/5 border border-white/10 rounded-2xl space-y-4">
+             <h3 className="text-sm font-black text-gray-200 uppercase tracking-widest">Law 3: Truth</h3>
+             <p className="text-[11px] font-bold text-gray-400 uppercase leading-relaxed">
+               Truth requires receipts (artifacts/hashes). No discovery exists without a committed receipt.
+             </p>
+           </div>
+        </div>
+
+        <div className="p-10 bg-emerald-500/5 border border-emerald-500/20 rounded-3xl space-y-4">
+          <div className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Observation Surface Rule</div>
+          <p className="text-sm font-bold text-gray-300 uppercase leading-relaxed italic">
+            "The Observation plane (this dashboard) must never hardcode scientific truth. It reflects reported state, stale telemetry, or fallback models. Always check the truth_mode label."
+          </p>
+        </div>
+      </div>
+    )
+  });
+
   // Wiki Index Item
   registry.register({
     key: 'wiki-index-deep-research',

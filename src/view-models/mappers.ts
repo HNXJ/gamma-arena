@@ -11,7 +11,8 @@ import type {
   TransportViewModel,
   LabyrinthViewModelBundle,
   FetchEnvelope,
-  TransportStateKind
+  TransportStateKind,
+  RealtimeReport
 } from '../types/ui';
 
 export const mapLabyrinthState = (status: LabyrinthStatus | null): { system: SystemViewModel, research: ResearchViewModel } => {
@@ -179,6 +180,48 @@ export const mapTransportState = (envelopes: {
     linkState,
     summary: allOk ? 'Substrate Link Healthy' : someOk ? 'Degraded Connectivity' : 'Transport Interrupted',
     endpointStates
+  };
+};
+
+export const mapRealtimeReport = (
+  transport: TransportViewModel, 
+  system: SystemViewModel,
+  agents: AgentViewModel[],
+  society: AgentSocietyViewModel
+): RealtimeReport => {
+  const isVercelHealthy = transport.linkState === 'CONNECTED' || transport.linkState === 'PARTIAL';
+  
+  // Simplified derivation for observation surface
+  const players = agents.map(a => ({
+    id: a.id,
+    label: a.role,
+    role: a.role,
+    backend: a.source,
+    liveness: (a.status === 'ACTIVE' ? 'active' : a.status === 'IDLE' ? 'idle' : 'offline') as RealtimeReport['players'][0]['liveness'],
+    harnessStatus: (a.truthClass === 'GROUNDED' ? 'verified' : 'unknown') as RealtimeReport['players'][0]['harnessStatus']
+  }));
+
+  const judges = society.slots
+    .filter(s => s.role === 'judge')
+    .map(s => ({
+      id: s.id,
+      label: 'LMS Judge',
+      status: (s.status === 'echo_passed' ? 'clear' : 'warning') as RealtimeReport['judges'][0]['status'],
+      summary: s.status
+    }));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: transport.linkState === 'CONNECTED' ? 'api' : 'mock_fallback',
+    freshness: transport.linkState === 'CONNECTED' ? 'live' : 'fallback',
+    truthMode: society.truthMode as TruthMode,
+    service: {
+      supabase: 'unknown', // Not explicitly tracked in transport yet
+      vercelApi: isVercelHealthy ? 'healthy' : 'unavailable'
+    },
+    players,
+    judges,
+    warnings: system.blockers
   };
 };
 

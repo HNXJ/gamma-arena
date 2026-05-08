@@ -58,7 +58,7 @@ export const ExtendedBase: React.FC = () => {
           
           <div className="flex items-center space-x-6">
             <div className="text-right">
-              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-[#D4AF37]">Observed Neurons</div>
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-[#D4AF37]">Observed Neurons (Unverified)</div>
               <div className="text-sm font-black text-amber-500 font-mono tracking-tighter">
                 {viewModels.research.officialNeuronCount} <span className="opacity-40">/ {viewModels.research.nextUnlockThreshold}</span>
               </div>
@@ -82,9 +82,9 @@ export const ExtendedBase: React.FC = () => {
                  Observation-Plane Display Only
                </div>
                <div className="text-[9px] font-bold uppercase tracking-widest text-gray-600 text-center max-w-2xl leading-relaxed">
-                 Gamma Labyrinth is the live observation surface for Gamma Labyrinth. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
-                 When no receipt is present: <span className="text-[#D4AF37]">truth_mode: truth_safe_unverified</span>.
-               </div>
+                Gamma Labyrinth 1.0.0 is the live observation surface for the Gamma system. Scientific state claims require Truth-plane receipts and committed backend gates.<br/>
+                When no receipt is present: <span className="text-[#D4AF37]">truth_mode: truth_safe_unverified</span>.
+              </div>
              </div>
           </div>
         </div>

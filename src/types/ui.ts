@@ -169,6 +169,38 @@ export interface MissionViewModel {
   message?: string;
 }
 
+export type ObservationFreshness = "live" | "stale" | "fallback" | "unknown";
+export type TruthMode = "truth_safe_unverified" | "receipt_backed" | "unknown";
+export type ServiceStatus = "healthy" | "degraded" | "unavailable" | "auth_blocked" | "unknown";
+
+export interface RealtimeReport {
+  generatedAt: string;
+  source: "supabase" | "api" | "mock_fallback" | "static_fallback" | "unknown";
+  freshness: ObservationFreshness;
+  truthMode: TruthMode;
+  service: {
+    supabase: ServiceStatus;
+    vercelApi: ServiceStatus;
+  };
+  players: Array<{
+    id: string;
+    label: string;
+    role?: string;
+    backend?: string;
+    liveness: "active" | "idle" | "stalled" | "offline" | "unknown";
+    lastTurnAt?: string;
+    harnessStatus: "verified" | "missing" | "unknown";
+  }>;
+  judges: Array<{
+    id: string;
+    label: string;
+    status: "clear" | "warning" | "spectator_required" | "hard_stop" | "unknown";
+    lastVerdictAt?: string;
+    summary?: string;
+  }>;
+  warnings: string[];
+}
+
 export interface LabyrinthViewModelBundle {
   system: SystemViewModel;
   research: ResearchViewModel;
@@ -177,5 +209,7 @@ export interface LabyrinthViewModelBundle {
   society: AgentSocietyViewModel;
   mission: MissionViewModel;
   transport: TransportViewModel;
+  realtimeReport: RealtimeReport;
   logs: RawLog[];
 }
+

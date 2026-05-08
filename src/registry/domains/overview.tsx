@@ -2,6 +2,7 @@
 import { registry } from '../core';
 import { ShieldAlert, Activity } from 'lucide-react';
 import { FeedCard } from '../../components/ui/FeedCard';
+import { RealtimeReportCard } from '../../components/observation/RealtimeReportCard';
 import type { LabyrinthViewModelBundle } from '../../types/ui';
 
 export const registerOverviewItems = () => {
@@ -108,6 +109,11 @@ export const registerOverviewItems = () => {
               Receipt evidence unavailable on this surface.
             </div>
           </div>
+
+          <div className="pt-8 border-t border-white/5">
+             <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Realtime Observation Report</h3>
+             <RealtimeReportCard report={data.realtimeReport} />
+          </div>
         </div>
       );
     }
@@ -127,9 +133,9 @@ export const registerOverviewItems = () => {
           </div>
           <div className="grid grid-cols-2 gap-2 text-[9px] font-bold uppercase text-gray-400">
             <div className="p-2 border border-white/5 rounded">gamma-labyrinth :: world skeleton</div>
-            <div className="p-2 border border-white/5 rounded text-purple-300">gamma-protocol :: rules</div>
+            <div className="p-2 border border-white/5 rounded text-purple-300">gamma-protocol :: world rules</div>
             <div className="p-2 border border-white/5 rounded">gamma :: execution + truth</div>
-            <div className="p-2 border border-white/5 rounded text-emerald-400">gamma-arena :: Gamma Labyrinth observation surface</div>
+            <div className="p-2 border border-white/5 rounded text-emerald-400">gamma-arena :: observation surface</div>
             <div className="p-2 border border-white/5 rounded">gamma-analysis :: reports</div>
             <div className="p-2 border border-white/5 rounded">gamma-science :: grounding</div>
           </div>
