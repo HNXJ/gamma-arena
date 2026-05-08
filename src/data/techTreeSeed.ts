@@ -10,45 +10,45 @@ export const techTreeSeed: TechTreeGraph = {
       truthStatus: 'observation_only'
     },
     {
-      id: 'repo-jbiophysic',
-      label: 'jbiophysic',
+      id: 'repo-science-source',
+      label: 'science-source-repo',
       kind: 'repo',
-      repo: 'jbiophysic',
+      repo: 'science-source',
       url: 'https://github.com/HNXJ/jbiophysic',
-      description: 'Primary science-source for Izhikevich neural modeling.',
+      description: 'Demo science-source repository (placeholder).',
       truthStatus: 'truth_safe_unverified'
     },
     {
-      id: 'dir-jbiophysic-models',
+      id: 'dir-models',
       label: 'models/',
       kind: 'directory',
-      repo: 'jbiophysic',
+      repo: 'science-source',
       path: 'models/',
       truthStatus: 'truth_safe_unverified'
     },
     {
-      id: 'file-izhikevich-core',
-      label: 'izhikevich_core.py',
+      id: 'file-model-core',
+      label: 'model_core.py',
       kind: 'file',
-      repo: 'jbiophysic',
-      path: 'models/izhikevich_core.py',
-      description: 'Core spiking neuron implementation.',
+      repo: 'science-source',
+      path: 'models/model_core.py',
+      description: 'Core simulation logic (demo placeholder).',
       truthStatus: 'truth_safe_unverified'
     },
     {
-      id: 'func-izh-step',
-      label: 'step()',
+      id: 'func-step',
+      label: 'step_function()',
       kind: 'function',
-      repo: 'jbiophysic',
-      path: 'models/izhikevich_core.py',
-      description: 'Single timestep integration of membrane potential.',
+      repo: 'science-source',
+      path: 'models/model_core.py',
+      description: 'Iterative integration step (demo placeholder).',
       truthStatus: 'truth_safe_unverified'
     },
     {
-      id: 'eq-izh-v',
-      label: 'dv/dt = 0.04v² + 5v + 140 - u + I',
+      id: 'eq-placeholder',
+      label: 'f(x, t) = [MODEL_EQUATION_PLACEHOLDER]',
       kind: 'equation',
-      description: 'The membrane potential recovery equation.',
+      description: 'Example scientific equation (manifest pending).',
       truthStatus: 'truth_safe_unverified'
     },
     {
@@ -64,35 +64,35 @@ export const techTreeSeed: TechTreeGraph = {
     {
       id: 'e1',
       source: 'root-labyrinth',
-      target: 'repo-jbiophysic',
+      target: 'repo-science-source',
       kind: 'contains',
       truthStatus: 'observation_only'
     },
     {
       id: 'e2',
-      source: 'repo-jbiophysic',
-      target: 'dir-jbiophysic-models',
+      source: 'repo-science-source',
+      target: 'dir-models',
       kind: 'contains',
       truthStatus: 'truth_safe_unverified'
     },
     {
       id: 'e3',
-      source: 'dir-jbiophysic-models',
-      target: 'file-izhikevich-core',
+      source: 'dir-models',
+      target: 'file-model-core',
       kind: 'contains',
       truthStatus: 'truth_safe_unverified'
     },
     {
       id: 'e4',
-      source: 'file-izhikevich-core',
-      target: 'func-izh-step',
+      source: 'file-model-core',
+      target: 'func-step',
       kind: 'contains',
       truthStatus: 'truth_safe_unverified'
     },
     {
       id: 'e5',
-      source: 'func-izh-step',
-      target: 'eq-izh-v',
+      source: 'func-step',
+      target: 'eq-placeholder',
       kind: 'implements',
       truthStatus: 'truth_safe_unverified'
     },
