@@ -19,6 +19,7 @@ export type UISlot =
   | 'SOCIETY'
   | 'MISSION'
   | 'SYSTEM_FEED'
+  | 'TECH_TREE'
   | 'WIKI';
 
 export type UIBaseMode = 'SAFE' | 'EXTENDED';

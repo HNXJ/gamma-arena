@@ -8,6 +8,7 @@ import { registerLogItems } from './domains/logs';
 import { registerDemoItems } from './domains/demo';
 import { registerSocietyItems } from './domains/society';
 import { registerWikiItems } from './domains/wiki';
+import { registerTechnologyItems } from './domains/technology';
 
 /**
  * Initializes the global UI registry by loading domain-specific fragments.
@@ -26,4 +27,5 @@ export const initializeRegistry = () => {
   registerSocietyItems();
   registerDemoItems();
   registerWikiItems();
+  registerTechnologyItems();
 };

@@ -181,3 +181,14 @@ export const mapTransportState = (envelopes: {
     endpointStates
   };
 };
+
+export type { 
+  SystemViewModel, 
+  ResearchViewModel, 
+  AgentViewModel, 
+  PersistenceViewModel, 
+  AgentSocietyViewModel, 
+  MissionViewModel, 
+  TransportViewModel, 
+  LabyrinthViewModelBundle 
+};
