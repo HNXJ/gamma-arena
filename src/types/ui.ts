@@ -65,9 +65,9 @@ export interface UIRegistryItem {
   priority: number;
   timestamp?: string;
   metadata?: Record<string, unknown>;
-  render: (props: { data: ArenaViewModelBundle; state?: ArenaViewModelBundle }) => React.ReactNode;
+  render: (props: { data: LabyrinthViewModelBundle; state?: LabyrinthViewModelBundle }) => React.ReactNode;
   stickiness?: 'PINNED' | 'NORMAL'; // PINNED items stay at top
-  visibilityRule?: (state?: ArenaViewModelBundle) => boolean;
+  visibilityRule?: (state?: LabyrinthViewModelBundle) => boolean;
   interaction?: {
     mode: 'STATIC' | 'EXPANDABLE' | 'DETAIL_LINK';
     linkTo?: string;
@@ -168,7 +168,7 @@ export interface MissionViewModel {
   message?: string;
 }
 
-export interface ArenaViewModelBundle {
+export interface LabyrinthViewModelBundle {
   system: SystemViewModel;
   research: ResearchViewModel;
   agents: AgentViewModel[];

@@ -1,4 +1,4 @@
-export interface ArenaStatus {
+export interface LabyrinthStatus {
   system: {
     status: 'ONLINE' | 'STANDBY' | 'CRASHED';
     monitor_uptime_seconds: number;

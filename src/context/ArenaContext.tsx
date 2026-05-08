@@ -1,23 +1,23 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
-import { arenaClient } from '../api/client';
+import { labyrinthClient } from '../api/client';
 import { 
-  mapArenaState, 
+  mapLabyrinthState, 
   mapAgentsState, 
   mapPersistenceState,
   mapAgentSocietyState,
   mapMissionState,
-  mapTransportState 
+  mapTransportState,
+  type LabyrinthViewModelBundle 
 } from '../view-models/mappers';
 import type { 
-  ArenaViewModelBundle, 
   FetchEnvelope, 
 } from '../types/ui';
-import type { ArenaStatus, Agent, Persistence, RawLog, AgentSociety, MissionObservation } from '../types/contract';
+import type { LabyrinthStatus, Agent, Persistence, RawLog, AgentSociety, MissionObservation } from '../types/contract';
 
-interface ArenaContextType {
-  viewModels: ArenaViewModelBundle;
-  envelopes: {
-    status: FetchEnvelope<ArenaStatus> | null;
+interface LabyrinthContextType {
+  viewModels: LabyrinthViewModelBundle;
+  transport: {
+    status: FetchEnvelope<LabyrinthStatus> | null;
     agents: FetchEnvelope<Agent[]> | null;
     persistence: FetchEnvelope<Persistence> | null;
     society: FetchEnvelope<AgentSociety> | null;
@@ -28,10 +28,10 @@ interface ArenaContextType {
   refresh: () => Promise<void>;
 }
 
-const ArenaContext = createContext<ArenaContextType | undefined>(undefined);
+const LabyrinthContext = createContext<LabyrinthContextType | undefined>(undefined);
 
-export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [statusEnv, setStatusEnv] = useState<FetchEnvelope<ArenaStatus> | null>(null);
+export const LabyrinthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [statusEnv, setStatusEnv] = useState<FetchEnvelope<LabyrinthStatus> | null>(null);
   const [agentsEnv, setAgentsEnv] = useState<FetchEnvelope<Agent[]> | null>(null);
   const [persistenceEnv, setPersistenceEnv] = useState<FetchEnvelope<Persistence> | null>(null);
   const [societyEnv, setSocietyEnv] = useState<FetchEnvelope<AgentSociety> | null>(null);
@@ -42,12 +42,12 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const refresh = async () => {
     try {
       const [s, a, p, soc, m, l] = await Promise.all([
-        arenaClient.getStatus(),
-        arenaClient.getAgents(),
-        arenaClient.getPersistence(),
-        arenaClient.getAgentSociety(),
-        arenaClient.getMissionLatest(),
-        arenaClient.getRawLogs()
+        labyrinthClient.getStatus(),
+        labyrinthClient.getAgents(),
+        labyrinthClient.getPersistence(),
+        labyrinthClient.getAgentSociety(),
+        labyrinthClient.getMissionLatest(),
+        labyrinthClient.getRawLogs()
       ]);
       
       setStatusEnv(s);
@@ -73,7 +73,7 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, []);
 
   const bundle = useMemo(() => {
-    const { system, research } = mapArenaState(statusEnv?.data || null);
+    const { system, research } = mapLabyrinthState(statusEnv?.data || null);
     const agents = mapAgentsState(agentsEnv?.data || null);
     const persistence = mapPersistenceState(persistenceEnv?.data || null);
     const society = mapAgentSocietyState(societyEnv?.data || null);
@@ -100,9 +100,9 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [statusEnv, agentsEnv, persistenceEnv, societyEnv, missionEnv, logsEnv]);
 
   return (
-    <ArenaContext.Provider value={{ 
+    <LabyrinthContext.Provider value={{ 
       viewModels: bundle, 
-      envelopes: { 
+      transport: { 
         status: statusEnv, 
         agents: agentsEnv, 
         persistence: persistenceEnv,
@@ -114,13 +114,13 @@ export const ArenaProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       refresh 
     }}>
       {children}
-    </ArenaContext.Provider>
+    </LabyrinthContext.Provider>
   );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useArena = () => {
-  const context = useContext(ArenaContext);
-  if (!context) throw new Error('useArena must be used within ArenaProvider');
+export const useLabyrinth = () => {
+  const context = useContext(LabyrinthContext);
+  if (!context) throw new Error('useLabyrinth must be used within LabyrinthProvider');
   return context;
 };

@@ -1,4 +1,4 @@
-import type { ArenaStatus, Agent, Persistence, RawLog, AgentLogResponse, AgentSociety, MissionObservation } from '../types/contract';
+import type { LabyrinthStatus, Agent, Persistence, RawLog, AgentLogResponse, AgentSociety, MissionObservation } from '../types/contract';
 import type { FetchEnvelope } from '../types/ui';
 
 const BASE_URL = import.meta.env.VITE_GAMMA_API_BASE || 'https://glllmx.vercel.app';
@@ -52,9 +52,9 @@ async function wrapFetch<T>(path: string): Promise<FetchEnvelope<T>> {
   }
 }
 
-export const arenaClient = {
-  async getStatus(): Promise<FetchEnvelope<ArenaStatus>> {
-    return wrapFetch<ArenaStatus>('/api/status');
+export const labyrinthClient = {
+  async getStatus(): Promise<FetchEnvelope<LabyrinthStatus>> {
+    return wrapFetch<LabyrinthStatus>('/api/status');
   },
 
   async getAgents(): Promise<FetchEnvelope<Agent[]>> {
