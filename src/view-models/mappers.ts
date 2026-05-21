@@ -142,7 +142,13 @@ export const mapMissionState = (m: MissionObservation | null): MissionViewModel 
       { gate_id: 'receipt_candidate', status: 'PENDING' }
     ]).map(g => ({ id: g.gate_id, status: g.status as GateViewModel['status'], detail: g.detail })),
     artifacts: (m?.artifacts || []).map(a => ({ name: a.name, path: a.path, type: a.type })),
-    message: m?.message || (m ? undefined : 'No receipt-backed live mission endpoint is available.')
+    message: m?.message || (m ? undefined : 'No receipt-backed live mission endpoint is available.'),
+    // Observation fallback fields for mission recipe
+    admittedPlayerStack: 'published',
+    missionRecipe: 'EVT_JAXFNE_LATENT_DYNAMICS_PROXY_MISSION_01',
+    claimType: 'simulation_result',
+    fieldClaimLevel: 'proxy_readout_only',
+    excludedTools: ['Kilosort4', 'raw_data', 'spike_sorting']
   };
 };
 

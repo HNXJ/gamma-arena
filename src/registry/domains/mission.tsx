@@ -122,6 +122,69 @@ export const registerMissionItems = () => {
             </div>
           </div>
 
+          {/* Mission Recipe & Admitted Stack */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="p-6 border border-amber-500/20 bg-amber-500/5 rounded-2xl space-y-4">
+               <div className="flex items-center space-x-2">
+                 <Rocket className="text-amber-500" size={16} />
+                 <h3 className="text-xs font-black text-amber-500 uppercase tracking-widest">Mission Recipe (Observed)</h3>
+               </div>
+
+               <div className="space-y-3">
+                 <div className="flex items-center justify-between">
+                   <span className="text-[10px] font-bold text-gray-500 uppercase">Recipe ID</span>
+                   <span className="text-[10px] font-black text-gray-200 font-mono">{mission.missionRecipe}</span>
+                 </div>
+                 <div className="flex items-center justify-between">
+                   <span className="text-[10px] font-bold text-gray-500 uppercase">Claim Type</span>
+                   <span className="text-[10px] font-black text-gray-200 font-mono">{mission.claimType}</span>
+                 </div>
+                 <div className="flex items-center justify-between">
+                   <span className="text-[10px] font-bold text-gray-500 uppercase">Field Claim Level</span>
+                   <span className="text-[10px] font-black text-blue-400 font-mono">{mission.fieldClaimLevel}</span>
+                 </div>
+                 <div className="pt-2 border-t border-white/5">
+                   <div className="text-[9px] font-bold text-rose-500/60 uppercase mb-2">Prohibited Tools</div>
+                   <div className="flex flex-wrap gap-2">
+                     {mission.excludedTools?.map(tool => (
+                       <span key={tool} className="px-2 py-0.5 bg-rose-500/10 border border-rose-500/20 text-rose-500 text-[8px] font-black rounded uppercase">
+                         {tool}
+                       </span>
+                     ))}
+                   </div>
+                 </div>
+               </div>
+
+               <div className="p-3 bg-black/40 border border-amber-500/20 rounded-xl">
+                 <p className="text-[9px] font-bold text-amber-500/80 leading-relaxed italic uppercase">
+                   Observation-plane display only. This is not biological truth and does not imply live runtime execution.
+                 </p>
+               </div>
+            </div>
+
+            <div className="p-6 border border-blue-500/20 bg-blue-500/5 rounded-2xl space-y-4">
+               <div className="flex items-center space-x-2">
+                 <Zap className="text-blue-500" size={16} />
+                 <h3 className="text-xs font-black text-blue-500 uppercase tracking-widest">Player Admission Stack</h3>
+               </div>
+
+               <div className="flex items-center justify-between p-4 bg-black/40 border border-white/5 rounded-xl">
+                 <div className="space-y-1">
+                   <div className="text-[10px] font-black text-gray-200 uppercase tracking-widest">Harness Registry :: LMS Bridge</div>
+                   <div className="text-[8px] font-bold text-gray-500 uppercase italic">Status: Verified Deployment</div>
+                 </div>
+                 <div className="px-2 py-1 bg-emerald-500/20 border border-emerald-500/40 text-emerald-500 text-[9px] font-black rounded uppercase">
+                   {mission.admittedPlayerStack}
+                 </div>
+               </div>
+
+               <div className="text-[9px] font-bold text-gray-500 uppercase leading-relaxed">
+                 The player admission stack is published and aligned with Gamma office-dev.
+                 Observing recipe state for EVT_JAXFNE_LATENT_DYNAMICS_PROXY_MISSION_01.
+               </div>
+            </div>
+          </div>
+
           {/* LMS Society Observation */}
           <div className="p-6 border border-white/5 bg-white/[0.02] rounded-2xl">
             <div className="flex items-center justify-between mb-6">

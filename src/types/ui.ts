@@ -168,6 +168,12 @@ export interface MissionViewModel {
   gates: GateViewModel[];
   artifacts: ArtifactViewModel[];
   message?: string;
+  // Observation fallback fields for mission recipe
+  admittedPlayerStack?: string;
+  missionRecipe?: string;
+  claimType?: string;
+  fieldClaimLevel?: string;
+  excludedTools?: string[];
 }
 
 export type ObservationFreshness = "live" | "stale" | "fallback" | "unknown";
