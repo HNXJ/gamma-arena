@@ -1,7 +1,49 @@
 ﻿import { registry } from '../core';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Activity } from 'lucide-react';
 
 export const registerStatusItems = () => {
+  registry.register({
+    key: 'live-runtime-cadence-validated-20260526',
+    slot: 'MAIN_FEED',
+    label: 'Live Cadence Validated',
+    priority: 2, // Appear above previous ledger sync
+    render: () => (
+      <div className="p-6 bg-blue-500/5 border border-blue-500/20 rounded-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+          <Activity size={48} className="text-blue-500" />
+        </div>
+        <div className="space-y-4 relative z-10">
+          <div className="flex items-center space-x-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 italic">Live Runtime Milestone</span>
+          </div>
+          <h3 className="text-lg font-black tracking-tighter text-gray-100 uppercase">Live Runtime Cadence Validated :: Four-Model 10-Turn Smoke</h3>
+          
+          <div className="space-y-2">
+            <p className="text-xs text-gray-400 font-medium leading-relaxed max-w-xl">
+              Gamma live runtime ledger records a bounded four-model 10-turn cadence smoke after prompt/harness repair: 10 coordinated live turns completed, measured at 114.9 coordinated turns/hour, with 0 drift events and 0 truth-safety failures. Status: truth_safe_unverified. This is runtime cadence evidence only, not a scientific result, not one-hour live endurance, not Truth-plane promotion, and not N=4 unlock.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+            <div className="px-2 py-1 bg-white/5 rounded text-[9px] font-black text-gray-400 uppercase tracking-widest">
+              Source: gamma
+            </div>
+            <div className="px-2 py-1 bg-white/5 rounded text-[9px] font-black text-gray-400 uppercase tracking-widest font-mono">
+              Commit: 03b2b65
+            </div>
+            <div className="px-2 py-1 bg-amber-500/10 rounded text-[9px] font-black text-amber-500 uppercase tracking-widest">
+              truth_safe_unverified
+            </div>
+            <div className="px-2 py-1 bg-blue-500/10 rounded text-[9px] font-black text-blue-400 uppercase tracking-widest">
+              live_runtime_cadence_evidence
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  });
+
   registry.register({
     key: 'control-ledger-proxy-readout-sync-20260523',
     slot: 'MAIN_FEED',
